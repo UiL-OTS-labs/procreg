@@ -39,7 +39,7 @@ msgstr "Logout"
 #. Translators: This is the title that will end up in the header (in blue)
 #: main/templates/base/site_header.html:4
 msgid "site:header:title"
-msgstr "Welcome to your new Django app"
+msgstr "Data Processing Registry"
 
 #. Translators: This is the title that will end up in the tab of the browser
 #: main/templates/base/site_title.html:5
