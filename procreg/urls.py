@@ -25,7 +25,11 @@ handler400 = 'main.error_views.error_400'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # Application namespaces
     path('', include('main.urls')),
+    path('registrations/', include('registrations.urls')),
+
 
     path('impersonate/', include('impersonate.urls')),
     path('uilcore/', include('uil.core.urls')),
