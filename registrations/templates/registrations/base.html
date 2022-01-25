@@ -1,0 +1,26 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+{% load i18n %}
+
+
+{% block html_head %}
+<link href="{% static 'uil.questions/questions.css' %}" rel="stylesheet" />
+<link href="{% static 'uil.questions/prereg.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="uu-inner-container">
+
+    <div class="col-8">
+        {% block main %}
+        {% endblock %}
+    </div>
+
+    <div class="col-4">
+        {% block sidebar %}
+        {% endblock %}
+    </div>
+
+
+{% endblock %}
