@@ -58,11 +58,14 @@ INSTALLED_APPS = [
 
     # UiL Core libraries
     'uil.core',
+    'uil.questions',
     # 'uil.rest', # Rest client
     # 'uil.vue',  # Vue support
 
     # Local apps
     'main',
+    'registrations',
+    'procreg',
 ]
 
 MIDDLEWARE = [
@@ -86,8 +89,7 @@ ROOT_URLCONF = 'procreg.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
