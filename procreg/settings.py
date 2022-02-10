@@ -8,6 +8,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -160,10 +161,20 @@ PASSWORD_HASHERS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'nl'
+LANGUAGE_CODE = 'en'
 LANGUAGES = (
     ('nl', _('lang:nl')),
     ('en', _('lang:en')),
+)
+
+
+LOCALE_PATHS = (
+
+    # Merges all translations files into one
+    os.path.join(BASE_DIR, 'locale'),
+
+    # For per-app translations files
+    #'locale',
 )
 
 TIME_ZONE = 'UTC'
