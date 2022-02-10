@@ -7,9 +7,13 @@ from .forms import NewRegistrationQuestion
 # Create your views here.
 
 
-class RegistrationsHomeView(generic.TemplateView):
+class RegistrationsHomeView(generic.ListView):
 
     template_name = 'registrations/home.html'
+
+    def get_queryset(self,):
+
+        return Registration.objects.all()
 
 
 class RegistrationCreateView(generic.CreateView):
