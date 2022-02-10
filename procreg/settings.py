@@ -65,7 +65,6 @@ INSTALLED_APPS = [
     # Local apps
     'main',
     'registrations',
-    'procreg',
 ]
 
 MIDDLEWARE = [
@@ -213,3 +212,8 @@ CSP_IMG_SRC = ["'self'", 'data:', "*"]  # Remove the last one if you
 
 MENU_SELECT_PARENTS = True
 MENU_HIDE_EMPTY = False
+
+
+# Default media directory (served statically!)
+MEDIA_ROOT = 'media'
+MEDIA_URL = '/media/'
