@@ -1,0 +1,35 @@
+{% extends "registrations/base.html" %}
+{% load i18n %}
+
+{% block main %}
+<h2>{% trans "registrations:main:home" %}</h2>
+
+
+<div class="projects_list">
+    {% for object in object_list %}
+    <div class="item">
+        <h5>{{object.title}}</h5>
+    </div>
+    {% empty %}
+    <div class="item">
+        <h5>{% trans "registrations:home:list_empty" %}</h5>
+    </div>
+
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
+
+{% block sidebar %}
+<h6>sidebar</h6>
+<a href="{% url 'registrations:new_registration' %}">
+    {% trans "registrations:actions:new_registration" %}
+</a>
+
+<p>Objects:{{object_list}}</p>
+
+
+
+{% endblock %}
