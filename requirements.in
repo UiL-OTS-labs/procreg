@@ -10,3 +10,4 @@ cryptography # Not needed if not using encrypted DB fields
 pip-tools
 mysqlclient
 -e git+https://github.com/UiL-OTS-labs/django-shared-core.git@questions#egg=uil-django-core
+bpython
