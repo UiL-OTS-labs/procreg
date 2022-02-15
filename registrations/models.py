@@ -12,14 +12,16 @@ class Registration(models.Model):
                              help_text="models:registration_title_help_text",
                              )
     created_by = models.ForeignKey(USER_MODEL,
-                                   default=None,
                                    on_delete=models.SET_DEFAULT,
                                    related_name="registrations_created",
+                                   blank=True,
+                                   null=True,
+                                   default=None,
                                    )
     created_on = models.DateTimeField(auto_now=True)
     applicants = models.ManyToManyField(USER_MODEL,
-                                        default=None,
                                         related_name="applicant_for",
+                                        blank=True,
                                         )
     date_start = models.DateField(blank=True,
                                   null=True,
