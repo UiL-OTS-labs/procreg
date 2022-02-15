@@ -7,17 +7,18 @@
 {% block html_head %}
 <link href="{% static 'uil.questions/questions.css' %}" rel="stylesheet" />
 <link href="{% static 'uil.questions/prereg.css' %}" rel="stylesheet" />
+<link href="{% static 'css/procreg.css' %}" rel="stylesheet" />
 {% endblock %}
 
 {% block content %}
 <div class="uu-inner-container">
 
-    <div class="col-8">
+    <div class="col-8 pr-main">
         {% block main %}
         {% endblock %}
     </div>
 
-    <div class="col-4">
+    <div class="col-4 pr-sidebar">
         {% block sidebar %}
         {% endblock %}
     </div>

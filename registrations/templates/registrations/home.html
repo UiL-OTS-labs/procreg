@@ -8,7 +8,18 @@
 <div class="projects_list">
     {% for object in object_list %}
     <div class="item">
-        <h5>{{object.title}}</h5>
+        <a href="{% url 'registrations:overview' object.pk %}">
+            <h5>{{object.title}}</h5>
+        </a>
+        <ul>
+            <li><a href="{% url 'registrations:overview' object.pk %}">
+                {% trans "registration:actions:overview" %}
+            </a></li>
+            <li><a href="#delete">
+                {% trans "registration:actions:delete" %}
+            </a></li>
+        </ul>
+
     </div>
     {% empty %}
     <div class="item">
