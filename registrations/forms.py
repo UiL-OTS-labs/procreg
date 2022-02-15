@@ -44,3 +44,6 @@ class NewRegistrationQuestion(RegistrationQuestionMixin,
         segments.append(self._field_to_segment('title'))
 
         return segments
+
+
+QUESTIONS = {'new_registration': NewRegistrationQuestion}
