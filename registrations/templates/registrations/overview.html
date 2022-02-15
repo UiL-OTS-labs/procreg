@@ -1,0 +1,24 @@
+{% extends "registrations/base.html" %}
+{% load i18n %}
+
+{% block main %}
+<h3>{{object.title}}</h3>
+{% endblock %}
+
+{% block sidebar %}
+
+<h4>
+    {% trans "registrations:actions:header" %}
+</h4>
+
+
+<ul>
+    <li>
+        <a href {% url "registrations:delete" object.pk %}>
+            {% trans "registrations:actions:delete" %}
+        </a>
+    </li>
+</ul>
+
+
+{% endblock %}
