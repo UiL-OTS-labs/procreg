@@ -23,9 +23,25 @@ class Registration(models.Model):
                                         related_name="applicant_for",
                                         blank=True,
                                         )
+    faculty = models.CharField(max_length=100,
+                               blank=True,
+                               default=None,
+                               null=True,
+                               )
     date_start = models.DateField(blank=True,
                                   null=True,
                                   )
     date_end = models.DateField(blank=True,
                                 null=True,
                                 )
+
+class ParticipantCategory(models.Model):
+
+    name = models.CharField(max_length=100,
+                            blank=True,
+                            null=True,
+                            )
+    number = models.PositiveIntegerField(blank=True,
+                                         null=True,
+                                         )
+    has_consented = models.BooleanField(default=False)
