@@ -1,8 +1,15 @@
 {% extends "registrations/base.html" %}
 {% load i18n %}
+{% load question_tags %}
 
 {% block main %}
 <h3>{{object.title}}</h3>
+
+{% for question in top_questions %}
+{% display_question question %}
+{% endfor %}
+
+
 {% endblock %}
 
 {% block sidebar %}
@@ -14,7 +21,7 @@
 
 <ul>
     <li>
-        <a href {% url "registrations:delete" object.pk %}>
+        <a href {% url "registrations:delete" reg_pk=view.object.pk %}>
             {% trans "registrations:actions:delete" %}
         </a>
     </li>
