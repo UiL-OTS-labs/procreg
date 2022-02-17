@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from uil.questions.views import BlueprintView, QuestionEditView
 
 from .models import Registration
-from .forms import NewRegistrationQuestion
+from .forms import NewRegistrationQuestion, FacultyQuestion
 from .blueprints import RegistrationBlueprint
 
 
@@ -32,6 +32,23 @@ class RegistrationOverview(BlueprintView):
 
         return self.model.objects.get(
             pk=self.kwargs.get(self.pk_url_kwarg))
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+
+        top_questions = [
+            NewRegistrationQuestion,
+            FacultyQuestion,
+        ]
+
+        context['top_questions'] = [
+            q(instance=self.object) for q in top_questions
+        ]
+
+
+        return context
 
 class RegistrationQuestionEditView(QuestionEditView,):
 
