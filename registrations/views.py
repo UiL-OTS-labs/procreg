@@ -4,8 +4,8 @@ from django.urls import reverse_lazy
 
 from uil.questions.views import BlueprintView, QuestionEditView
 
-from .models import Registration
-from .forms import NewRegistrationQuestion, FacultyQuestion
+from .models import Registration, ParticipantCategory
+from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
 from .blueprints import RegistrationBlueprint
 
 
@@ -37,7 +37,6 @@ class RegistrationOverview(BlueprintView):
 
         context = super().get_context_data(**kwargs)
 
-
         top_questions = [
             NewRegistrationQuestion,
             FacultyQuestion,
@@ -47,6 +46,11 @@ class RegistrationOverview(BlueprintView):
             q(instance=self.object) for q in top_questions
         ]
 
+        categories = ParticipantCategory.objects.filter(
+            registration=self.object)
+
+        context['categories'] = [CategoryQuestion(instance=cat) for cat in categories]
+
 
         return context
 
@@ -54,9 +58,16 @@ class RegistrationQuestionEditView(QuestionEditView,):
 
     def get_success_url(self):
 
-        return reverse('registrations:overview',
+        return reverse_lazy('registrations:overview',
                        kwargs={'reg_pk': self.kwargs.get('reg_pk')}
         )
+
+    def get_form_kwargs(self):
+
+        kwargs = super().get_form_kwargs()
+        reg_pk = self.kwargs.get('reg_pk')
+        kwargs.update({'reg_pk': reg_pk})
+        return kwargs
 
 
 class RegistrationCreateView(generic.CreateView):
