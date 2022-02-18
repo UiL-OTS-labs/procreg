@@ -45,3 +45,6 @@ class ParticipantCategory(models.Model):
                                          null=True,
                                          )
     has_consented = models.BooleanField(default=False)
+    registration = models.ForeignKey(Registration,
+                                     on_delete=models.CASCADE,
+                                     )
