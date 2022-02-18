@@ -9,6 +9,12 @@ from .models import Registration, ParticipantCategory
 
 class RegistrationQuestionMixin:
 
+    def __init__(self, *args, **kwargs):
+
+        self.reg_pk = kwargs.pop('reg_pk', None)
+        return super().__init__(*args, **kwargs)
+
+
     def get_edit_url(self):
 
         if not hasattr(self.instance, 'registration'):
@@ -77,15 +83,32 @@ class CategoryQuestion(RegistrationQuestionMixin, questions.Question):
             'has_consented',
         ]
 
+    title = "registrations:forms:category_question_title"
     is_editable = True
     slug = "category"
     model = ParticipantCategory
 
+    def get_segments(self):
+
+        segments = []
+        segments.append(self._field_to_segment('name'))
+        segments.append(self._field_to_segment('number'))
+        segments.append(self._field_to_segment('has_consented'))
+
+
+        return segments
+
+    def save(self, *args, **kwargs):
+
+        reg = Registration.objects.get(pk=self.reg_pk)
+        self.instance.registration = reg
+        return super().save(*args, **kwargs)
 
 
 
 Q_LIST = [NewRegistrationQuestion,
           FacultyQuestion,
+          CategoryQuestion,
           ]
 
 QUESTIONS = {q.slug: q for q in Q_LIST}
