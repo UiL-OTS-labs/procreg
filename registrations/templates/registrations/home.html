@@ -15,7 +15,7 @@
             <li><a href="{% url 'registrations:overview' object.pk %}">
                 {% trans "registration:actions:overview" %}
             </a></li>
-            <li><a href="#delete">
+            <li><a href="{% url 'registrations:delete' object.pk %}">
                 {% trans "registration:actions:delete" %}
             </a></li>
         </ul>
