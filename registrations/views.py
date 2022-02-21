@@ -9,10 +9,12 @@ from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
 from .blueprints import RegistrationBlueprint
 
 
-# Create your views here.
+
 
 
 class RegistrationsHomeView(generic.ListView):
+
+    "Lists a user's available registrations"
 
     model = Registration
     template_name = 'registrations/home.html'
@@ -23,6 +25,9 @@ class RegistrationsHomeView(generic.ListView):
         return qs
 
 class RegistrationOverview(BlueprintView):
+
+    "The main page which shows basic Registration info as editable
+    questions and progress."
 
     blueprint = RegistrationBlueprint
     pk_url_kwarg = "reg_pk"
@@ -56,6 +61,8 @@ class RegistrationOverview(BlueprintView):
 
 class RegistrationQuestionEditView(QuestionEditView,):
 
+    "Edit a question relating to a Registration or a submodel"
+
     def get_success_url(self):
 
         return reverse_lazy('registrations:overview',
@@ -63,6 +70,8 @@ class RegistrationQuestionEditView(QuestionEditView,):
         )
 
     def get_form_kwargs(self):
+
+        "Send the parent reg_pk to the Question's __init__()"
 
         kwargs = super().get_form_kwargs()
         reg_pk = self.kwargs.get('reg_pk')
@@ -72,12 +81,16 @@ class RegistrationQuestionEditView(QuestionEditView,):
 
 class RegistrationCreateView(generic.CreateView):
 
+    "Create a new Registration object using the title question."
+
     model = Registration
     template_name = 'registrations/new_registration.html'
     form_class = NewRegistrationQuestion
     success_url = reverse_lazy("registrations:home")
 
 class RegistrationDeleteView(generic.DeleteView):
+
+    "Basic Django "
 
     model = Registration
     template_name = "registrations/delete_registration.html"
