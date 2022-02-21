@@ -14,8 +14,9 @@ from .mixins import RegistrationMixin
 
 
 
-class RegistrationsHomeView(generic.ListView,
-                            LoginRequiredMixin):
+class RegistrationsHomeView(LoginRequiredMixin,
+                            generic.ListView,
+                            ):
 
     "Lists a user's available registrations"
 
