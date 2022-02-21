@@ -12,18 +12,39 @@ class Registration(models.Model):
                              help_text="models:registration_title_help_text",
                              )
     created_by = models.ForeignKey(USER_MODEL,
-                                   default=None,
                                    on_delete=models.SET_DEFAULT,
                                    related_name="registrations_created",
+                                   blank=True,
+                                   null=True,
+                                   default=None,
                                    )
     created_on = models.DateTimeField(auto_now=True)
     applicants = models.ManyToManyField(USER_MODEL,
-                                        default=None,
                                         related_name="applicant_for",
+                                        blank=True,
                                         )
+    faculty = models.CharField(max_length=100,
+                               blank=True,
+                               default=None,
+                               null=True,
+                               )
     date_start = models.DateField(blank=True,
                                   null=True,
                                   )
     date_end = models.DateField(blank=True,
                                 null=True,
                                 )
+
+class ParticipantCategory(models.Model):
+
+    name = models.CharField(max_length=100,
+                            blank=True,
+                            null=True,
+                            )
+    number = models.PositiveIntegerField(blank=True,
+                                         null=True,
+                                         )
+    has_consented = models.BooleanField(default=False)
+    registration = models.ForeignKey(Registration,
+                                     on_delete=models.CASCADE,
+                                     )

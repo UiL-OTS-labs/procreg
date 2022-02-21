@@ -1,0 +1,52 @@
+{% extends "registrations/base.html" %}
+{% load i18n %}
+{% load question_tags %}
+
+{% block main %}
+<h3>{{object.title}}</h3>
+
+{% for question in top_questions %}
+{% display_question question %}
+{% endfor %}
+
+<div class="categories">
+    <h3>Categoriën betrokkenen</h3>
+    {% for cat in categories %}
+    {% display_question cat %}
+    {% empty %}
+    <p>U heeft nog geen categoriën betrokkenen toegevoegd. Voeg er minstens één toe om verder te gaan</p>
+    {% endfor %}
+
+        <a href="{% url "registrations:create_question" reg_pk=view.object.pk question='category' %}">
+            <h4>{% trans "registrations:actions:add_category" %}</h4>
+        </a>
+
+
+</div>
+
+
+
+{% endblock %}
+
+{% block sidebar %}
+
+<h4>
+    {% trans "registrations:actions:header" %}
+</h4>
+
+
+<ul>
+    <li>
+        <a href="{% url "registrations:delete" reg_pk=view.object.pk %}">
+            {% trans "registrations:actions:delete" %}
+        </a>
+    </li>
+    <li>
+        <a href="{% url "registrations:create_question" reg_pk=view.object.pk question='category' %}">
+            {% trans "registrations:actions:add_category" %}
+        </a>
+    </li>
+</ul>
+
+
+{% endblock %}
