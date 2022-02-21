@@ -1,18 +1,21 @@
 from django.shortcuts import render
 from django.views import generic
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from uil.questions.views import BlueprintView, QuestionEditView
 
 from .models import Registration, ParticipantCategory
 from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
 from .blueprints import RegistrationBlueprint
+from .mixins import RegistrationMixin
 
 
 
 
 
-class RegistrationsHomeView(generic.ListView):
+class RegistrationsHomeView(generic.ListView,
+                            LoginRequiredMixin):
 
     "Lists a user's available registrations"
 
@@ -24,10 +27,11 @@ class RegistrationsHomeView(generic.ListView):
         qs = Registration.objects.all()
         return qs
 
-class RegistrationOverview(BlueprintView):
+class RegistrationOverview(RegistrationMixin,
+                           BlueprintView):
 
-    "The main page which shows basic Registration info as editable
-    questions and progress."
+    """The main page which shows basic Registration info as editable
+    questions and progress."""
 
     blueprint = RegistrationBlueprint
     pk_url_kwarg = "reg_pk"
@@ -35,8 +39,7 @@ class RegistrationOverview(BlueprintView):
 
     def get_object(self,):
 
-        return self.model.objects.get(
-            pk=self.kwargs.get(self.pk_url_kwarg))
+        return self.get_registration()
 
     def get_context_data(self, **kwargs):
 
@@ -59,7 +62,8 @@ class RegistrationOverview(BlueprintView):
 
         return context
 
-class RegistrationQuestionEditView(QuestionEditView,):
+class RegistrationQuestionEditView(QuestionEditView,
+                                   RegistrationMixin):
 
     "Edit a question relating to a Registration or a submodel"
 
@@ -79,7 +83,8 @@ class RegistrationQuestionEditView(QuestionEditView,):
         return kwargs
 
 
-class RegistrationCreateView(generic.CreateView):
+class RegistrationCreateView(generic.CreateView,
+                             LoginRequiredMixin):
 
     "Create a new Registration object using the title question."
 
@@ -88,9 +93,10 @@ class RegistrationCreateView(generic.CreateView):
     form_class = NewRegistrationQuestion
     success_url = reverse_lazy("registrations:home")
 
-class RegistrationDeleteView(generic.DeleteView):
+class RegistrationDeleteView(generic.DeleteView,
+                             RegistrationMixin):
 
-    "Basic Django "
+    "Basic Django delete view for Registrations"
 
     model = Registration
     template_name = "registrations/delete_registration.html"
