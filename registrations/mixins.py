@@ -69,3 +69,10 @@ class RegistrationMixin(UsersOrGroupsAllowedMixin):
         allowed.append(super().get_allowed_users())
 
         return allowed
+
+    def get_context_data(self, *args, **kwargs):
+
+        context = super().get_context_data(*args, **kwargs)
+
+        context['registration'] = self.get_registration()
+        return context
