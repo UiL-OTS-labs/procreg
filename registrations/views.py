@@ -3,7 +3,8 @@ from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from uil.questions.views import BlueprintView, QuestionEditView
+from uil.questions.views import BlueprintView, QuestionEditView, \
+    QuestionDeleteView, QuestionCreateView
 
 from .models import Registration, ParticipantCategory
 from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
@@ -103,3 +104,31 @@ class RegistrationDeleteView(generic.DeleteView,
     template_name = "registrations/delete_registration.html"
     success_url = reverse_lazy("registrations:home")
     pk_url_kwarg = 'reg_pk'
+
+
+class MinimalCategoryView(generic.TemplateView,
+                          RegistrationMixin):
+
+    template_name = "registrations/minimal/categories.html"
+
+    def get_context_data(self, *args, **kwargs):
+
+        context = super().get_context_data(*args, **kwargs)
+        registration = self.get_registration()
+        cat_qs = ParticipantCategory.objects.filter(
+            registration=registration)
+
+        context['categories'] = cat_qs
+        return context
+
+class MinimalDeleteView(QuestionDeleteView,
+                        RegistrationMixin,
+                        ):
+
+    model = ParticipantCategory
+    template_name = "registrations/minimal/delete.html"
+    success_url = reverse_lazy('main:empty')
+
+    def get_context_data(self, *args, **kwargs):
+
+        context = super().get_context_data(*args, **kwargs)
