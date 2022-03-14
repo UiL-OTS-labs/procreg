@@ -1,0 +1,24 @@
+<div id="categories_div">
+    <table>
+        {% for cat in categories %}
+        <tr id="cat-pk-{{cat.pk}}">
+            <td>{{cat.name}}</td>
+            <td>
+                <button hx-get="{% url 'registrations:minimal_delete' pk=cat.pk %}"
+                   hx-trigger="click"
+                   hx-target="#cat-pk-{{cat.pk}}">
+                    Delete
+                    </button>
+            </td>
+        </tr>
+        {% empty %}
+
+        <tr>
+            <td>registrations:category:empty</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td>registrations:actions:add_category</td>
+        </tr>
+    </table>
+</div>

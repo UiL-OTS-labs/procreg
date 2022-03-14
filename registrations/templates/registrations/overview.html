@@ -21,6 +21,16 @@
             <h4>{% trans "registrations:actions:add_category" %}</h4>
         </a>
 
+        <div id="categories_div">
+            <a hx-get="{% url 'registrations:minimal_categories' reg_pk=view.object.pk%}"
+               hx-target="#categories_div"
+               hx-trigger="click"
+               href="#">
+                Load categories
+                </a>
+        </div>
+
+
 
 </div>
 
