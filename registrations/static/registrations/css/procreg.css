@@ -1,3 +1,51 @@
 .pr-main h3 {
   margin-top: 2rem;
 }
+
+.summary-questions {
+  width: 100%;
+  padding-left: 4rem;
+}
+
+.question-display-small {
+  margin-bottom: 1rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.question-display-small a {
+  text-decoration: none;
+}
+
+.question-display-small .edit {
+  position: absolute;
+  right: 4rem;
+}
+
+.edit button {
+  background-color: #888888;
+}
+
+.question-display-small .content {
+  padding-left: 1rem;
+  align-items: center;
+}
+
+.content p {
+  margin: 0px;
+}
+
+.icon {
+  height: 100%;
+  width: auto;
+  aspect-ratio: 1;
+  background-color: #cccccc;
+  border-radius: 100%;
+}
+
+.flex-end {
+  align-self: flex-end;
+}

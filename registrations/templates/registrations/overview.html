@@ -1,13 +1,21 @@
 {% extends "registrations/base.html" %}
 {% load i18n %}
 {% load question_tags %}
+{% load registration_tags %}
 
 {% block main %}
-<h3>{{object.title}}</h3>
+<h3>{% trans "registrations:overview:page_title" %}</h3>
 
+<p>
+    {% trans "registrations:overview:page_description" %}
+</p>
+
+<div class="summary-questions">
 {% for question in top_questions %}
-{% display_question question %}
+{% display_question_small question %}
 {% endfor %}
+
+   </div>
 
 <div class="categories">
     <h3>Categoriën betrokkenen</h3>
