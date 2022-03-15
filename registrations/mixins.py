@@ -2,6 +2,7 @@ from django.core.exceptions import PermissionDenied
 
 
 from .models import Registration
+from .blueprints import RegistrationBlueprint
 
 class UsersOrGroupsAllowedMixin():
 
@@ -60,6 +61,7 @@ class RegistrationMixin(UsersOrGroupsAllowedMixin):
 
         self.registration = Registration.objects.get(
             pk=self.kwargs.get('reg_pk'))
+        self.blueprint = RegistrationBlueprint(self.registration)
 
         return self.registration
 
@@ -75,4 +77,6 @@ class RegistrationMixin(UsersOrGroupsAllowedMixin):
         context = super().get_context_data(*args, **kwargs)
 
         context['registration'] = self.get_registration()
+        context['blueprint'] = self.blueprint
+        self.blueprint.desired_next = 'asdf'
         return context

@@ -58,9 +58,7 @@ class RegistrationOverview(RegistrationMixin,
 
         categories = ParticipantCategory.objects.filter(
             registration=self.object)
-
         context['categories'] = [CategoryQuestion(instance=cat) for cat in categories]
-
 
         return context
 

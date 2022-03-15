@@ -49,3 +49,11 @@
 .flex-end {
   align-self: flex-end;
 }
+
+.pr-main {
+  min-height: 600px;
+}
+
+.space-top {
+  margin-top: 3rem;
+}
