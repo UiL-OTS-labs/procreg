@@ -57,3 +57,22 @@
 .space-top {
   margin-top: 3rem;
 }
+
+.grey {
+  background-color: #dddddd;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.grey p {
+  padding-left: 1rem;
+}
+
+.question-display-header {
+  margin: 1rem;
+}
+
+.buttons {
+  display: flex;
+  justify-content: end;
+}

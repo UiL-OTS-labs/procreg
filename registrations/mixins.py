@@ -54,6 +54,8 @@ class UsersOrGroupsAllowedMixin():
 
 class RegistrationMixin(UsersOrGroupsAllowedMixin):
 
+    blueprint = RegistrationBlueprint
+
     """Allow the owner of a registration to access and edit it.
     In the future, this will include collaborators."""
 
@@ -78,5 +80,4 @@ class RegistrationMixin(UsersOrGroupsAllowedMixin):
 
         context['registration'] = self.get_registration()
         context['blueprint'] = self.blueprint
-        self.blueprint.desired_next = 'asdf'
         return context

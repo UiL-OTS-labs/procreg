@@ -20,23 +20,20 @@
 <div class="space-top">
     <h3>{% trans "registrations:overview:progress_title" %}</h3>
     {% if blueprint.desired_next %}
-    <p>{{blueprint.desired_next}}</p>
+    <p>Vervolg uw aanvraag hier:</p>
+    {% display_question_header blueprint.desired_next %}
+    <div class="buttons">
+    <a href="{{blueprint.get_desired_next_url}}">
+        <button>
+            {% trans "registrations:actions:continue" %}
+        </button>
+    </a>
+    </div>
+
     {% else %}
-    <p>Vul alle gegevens hierboven in om verder te gaan ({{blueprint.desired_next}})</p>
+    <p>Vul alle gegevens hierboven in om verder te gaan.</p>
     {% endif %}
 
-        <a href="{% url "registrations:create_question" reg_pk=view.object.pk question='category' %}">
-            <h4>{% trans "registrations:actions:add_category" %}</h4>
-        </a>
-
-        <div id="categories_div">
-            <a hx-get="{% url 'registrations:minimal_categories' reg_pk=view.object.pk%}"
-               hx-target="#categories_div"
-               hx-trigger="click"
-               href="#">
-                Load categories
-                </a>
-        </div>
 
 
 
@@ -65,6 +62,9 @@
         </a>
     </li>
 </ul>
+
+<h4>Debug</h4>
+{{view.blueprint}}
 
 
 {% endblock %}

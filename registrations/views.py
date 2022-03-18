@@ -35,7 +35,6 @@ class RegistrationOverview(RegistrationMixin,
     """The main page which shows basic Registration info as editable
     questions and progress."""
 
-    blueprint = RegistrationBlueprint
     pk_url_kwarg = "reg_pk"
     template_name = "registrations/overview.html"
 

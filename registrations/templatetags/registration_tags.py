@@ -17,3 +17,14 @@ def display_question_small(question, title=None):
                    }
 
     return tag_context
+
+@register.inclusion_tag("registrations/templatetags/display_question_header.html")
+def display_question_header(question):
+    """Display a question's header and description without
+    fields"""
+
+    tag_context = {
+        'question': question,
+    }
+
+    return tag_context

@@ -5,7 +5,7 @@ from .forms import NewRegistrationQuestion, CategoryQuestion
 
 
 
-class RegistrationBlueprint(Blueprint):
+class RegistrationBlueprint():
 
     model = Registration
     primary_questions = [NewRegistrationQuestion,
@@ -36,6 +36,7 @@ class RegistrationBlueprint(Blueprint):
         next_consumers = current.consume(self) + consumers[1:]
 
         return self.evaluate(consumers=next_consumers)
+
 
 class BasicDetailsConsumer:
 
