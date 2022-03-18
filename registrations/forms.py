@@ -29,6 +29,10 @@ class RegistrationQuestionMixin:
             }
         )
 
+    def instantiate_from_blueprint(blueprint):
+
+        return super()(instance=blueprint.registration)
+
 
 class NewRegistrationQuestion(RegistrationQuestionMixin,
         questions.Question,):
@@ -73,6 +77,32 @@ class FacultyQuestion(RegistrationQuestionMixin, questions.Question):
         return segments
 
 
+class TraversalQuestion(RegistrationQuestionMixin, questions.Question):
+
+    class Meta:
+        model = Registration
+        fields = [
+            'date_start',
+            'date_end',
+        ]
+
+    title = _("registrations:forms:traversal_question_title")
+    title = _("registrations:forms:traversal_question_description")
+    model = Registration
+    slug = "traversal"
+    is_editable = True
+
+
+    def get_segments(self):
+
+        segments = []
+        segments.append(self._field_to_segment('date_start'))
+        segments.append(self._field_to_segment('date_end'))
+
+        return segments
+
+
+
 class CategoryQuestion(RegistrationQuestionMixin, questions.Question):
 
     class Meta:
@@ -84,6 +114,7 @@ class CategoryQuestion(RegistrationQuestionMixin, questions.Question):
         ]
 
     title = "registrations:forms:category_question_title"
+    description = "registrations:forms:category_question_description"
     is_editable = True
     slug = "category"
     model = ParticipantCategory
@@ -109,6 +140,7 @@ class CategoryQuestion(RegistrationQuestionMixin, questions.Question):
 Q_LIST = [NewRegistrationQuestion,
           FacultyQuestion,
           CategoryQuestion,
+          TraversalQuestion,
           ]
 
 QUESTIONS = {q.slug: q for q in Q_LIST}

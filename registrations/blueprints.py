@@ -1,7 +1,10 @@
+from django.urls import reverse
+
 from uil.questions.blueprints import Blueprint
 
 from .models import Registration
-from .forms import NewRegistrationQuestion, CategoryQuestion
+from .forms import NewRegistrationQuestion, CategoryQuestion, \
+    TraversalQuestion, QUESTIONS
 
 
 
@@ -17,6 +20,7 @@ class RegistrationBlueprint():
 
         self.consumers = [BasicDetailsConsumer]
         self.registration = registration
+        self.desired_next = None
 
         self.evaluate()
 
@@ -37,13 +41,26 @@ class RegistrationBlueprint():
 
         return self.evaluate(consumers=next_consumers)
 
+    def get_desired_next_url(self):
+        if self.desired_next in QUESTIONS.values():
+            if self.desired_next.model == Registration:
+                question = self.desired_next(instance=self.registration)
+                print(question.instance)
+                return question.get_edit_url()
+        return reverse(
+            "registrations:overview",
+            kwargs={
+                "reg_pk": self.registration.pk,
+            })
+
+
 
 class BasicDetailsConsumer:
 
     def consume(self, blueprint):
 
         if self.check_details(blueprint.registration):
-            blueprint.desired_next = CategoryQuestion
+            blueprint.desired_next = TraversalQuestion
 
         return []
 
