@@ -35,7 +35,6 @@ class RegistrationOverview(RegistrationMixin,
     """The main page which shows basic Registration info as editable
     questions and progress."""
 
-    blueprint = RegistrationBlueprint
     pk_url_kwarg = "reg_pk"
     template_name = "registrations/overview.html"
 
@@ -58,9 +57,7 @@ class RegistrationOverview(RegistrationMixin,
 
         categories = ParticipantCategory.objects.filter(
             registration=self.object)
-
         context['categories'] = [CategoryQuestion(instance=cat) for cat in categories]
-
 
         return context
 

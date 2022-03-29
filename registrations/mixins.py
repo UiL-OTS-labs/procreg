@@ -2,6 +2,7 @@ from django.core.exceptions import PermissionDenied
 
 
 from .models import Registration
+from .blueprints import RegistrationBlueprint
 
 class UsersOrGroupsAllowedMixin():
 
@@ -53,6 +54,8 @@ class UsersOrGroupsAllowedMixin():
 
 class RegistrationMixin(UsersOrGroupsAllowedMixin):
 
+    blueprint = RegistrationBlueprint
+
     """Allow the owner of a registration to access and edit it.
     In the future, this will include collaborators."""
 
@@ -60,6 +63,7 @@ class RegistrationMixin(UsersOrGroupsAllowedMixin):
 
         self.registration = Registration.objects.get(
             pk=self.kwargs.get('reg_pk'))
+        self.blueprint = RegistrationBlueprint(self.registration)
 
         return self.registration
 
@@ -75,4 +79,5 @@ class RegistrationMixin(UsersOrGroupsAllowedMixin):
         context = super().get_context_data(*args, **kwargs)
 
         context['registration'] = self.get_registration()
+        context['blueprint'] = self.blueprint
         return context
