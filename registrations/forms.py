@@ -9,6 +9,8 @@ from .models import Registration, ParticipantCategory
 
 class RegistrationQuestionMixin:
 
+    show_progress = False
+
     def __init__(self, *args, **kwargs):
 
         self.reg_pk = kwargs.pop('reg_pk', None)
@@ -78,6 +80,8 @@ class FacultyQuestion(RegistrationQuestionMixin, questions.Question):
 
 
 class TraversalQuestion(RegistrationQuestionMixin, questions.Question):
+
+    show_progress = True
 
     class Meta:
         model = Registration

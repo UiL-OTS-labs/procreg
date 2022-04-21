@@ -63,9 +63,6 @@ class RegistrationQuestionEditView(QuestionEditView,
 
     "Edit a question relating to a Registration or a submodel"
 
-    # Some primary questions should not show the progress bar
-    hide_progress = False
-
     def get_success_url(self):
 
         return reverse_lazy('registrations:overview',
@@ -89,7 +86,7 @@ class RegistrationQuestionEditView(QuestionEditView,
 
         template_names.insert(0, "registrations/question.html")
 
-        if not self.hide_progress:
+        if self.question.show_progress:
             template_names.insert(0, "registrations/question_progress.html")
         print(template_names)
         return template_names
