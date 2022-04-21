@@ -12,9 +12,6 @@ from .blueprints import RegistrationBlueprint
 from .mixins import RegistrationMixin
 
 
-
-
-
 class RegistrationsHomeView(LoginRequiredMixin,
                             generic.ListView,
                             ):
@@ -66,6 +63,9 @@ class RegistrationQuestionEditView(QuestionEditView,
 
     "Edit a question relating to a Registration or a submodel"
 
+    # Some primary questions should not show the progress bar
+    hide_progress = False
+
     def get_success_url(self):
 
         return reverse_lazy('registrations:overview',
@@ -80,6 +80,18 @@ class RegistrationQuestionEditView(QuestionEditView,
         reg_pk = self.kwargs.get('reg_pk')
         kwargs.update({'reg_pk': reg_pk})
         return kwargs
+
+    def get_template_names(self):
+
+        "Insert the preferred procreg templates for questions"
+
+        template_names = super().get_template_names()
+
+        template_names.insert(0, "registrations/question.html")
+
+        if not self.hide_progress:
+            template_names.insert(0, "registrations/progress_question.html")
+        return template_names
 
 
 class RegistrationCreateView(generic.CreateView,
