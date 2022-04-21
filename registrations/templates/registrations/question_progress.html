@@ -1,0 +1,41 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load question_tags %}
+
+{% block html_head %}
+<link href="{% static 'uil.questions/questions.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="uu-inner-container">
+    <div class="col-2 progresss">
+        <div class="col-12">
+            <h4>Progress bar</h4>
+            <ul>
+                <li>Step</li>
+                <li>Step</li>
+                <li>Step</li>
+                <li>Step</li>
+                <li>Step</li>
+                <li>Step</li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-7 gt-left">
+        <div class="col-12">
+            <h2>Editing a question</h2>
+            <p>This page facilitates both the creation and editing of Questions.</p>
+
+            <br />
+            {% ask_question form %}
+            <br />
+        </div>
+    </div>
+    <div class="col-3 help">
+        Question help goes here!
+        </div>
+</div>
+
+{% endblock %}

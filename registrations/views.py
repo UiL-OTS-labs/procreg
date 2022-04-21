@@ -90,7 +90,8 @@ class RegistrationQuestionEditView(QuestionEditView,
         template_names.insert(0, "registrations/question.html")
 
         if not self.hide_progress:
-            template_names.insert(0, "registrations/progress_question.html")
+            template_names.insert(0, "registrations/question_progress.html")
+        print(template_names)
         return template_names
 
 
