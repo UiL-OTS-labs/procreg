@@ -8,6 +8,7 @@
 <link href="{% static 'uil.questions/questions.css' %}" rel="stylesheet" />
 <link href="{% static 'uil.questions/prereg.css' %}" rel="stylesheet" />
 <link href="{% static 'registrations/css/procreg.css' %}" rel="stylesheet" />
+<link href="{% static 'registrations/css/progress.css' %}" rel="stylesheet" />
 
 {% endblock %}
 
@@ -23,6 +24,7 @@
     <div class="col-2 pr-progress">
         {% block progress %}
         {% endblock %}
+    </div>
     <div class="col-7 pr-main">
     {% else %}
         <div class="col-9 pr-main">

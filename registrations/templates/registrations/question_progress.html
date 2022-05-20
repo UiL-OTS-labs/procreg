@@ -4,14 +4,11 @@
 {% load i18n %}
 {% load question_tags %}
 
-{% block html_head %}
-<link href="{% static 'uil.questions/questions.css' %}" rel="stylesheet" />
-{% endblock %}
 
 {% block progress %}
         <div class="col-12">
             <h4>Progress bar</h4>
-            <ul>
+            <ul id="progress">
                 <li>Step</li>
                 <li>Step</li>
                 <li>Step</li>
@@ -24,7 +21,7 @@
 {% block main %}
         <div class="col-12">
             <h2>Editing a question</h2>
-            <p>This page facilitates both the creation and editing of Questions.</p>
+            <p>This page facilitates both the creation and editing of Questions. Now with progress bar.</p>
 
             <br />
             {% ask_question form %}
