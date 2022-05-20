@@ -78,6 +78,14 @@ class RegistrationQuestionEditView(QuestionEditView,
         kwargs.update({'reg_pk': reg_pk})
         return kwargs
 
+    def get_context_data(self, *args, **kwargs):
+
+        context = super().get_context_data(*args, **kwargs)
+
+        context['show_progress'] = True
+
+        return context
+
     def get_template_names(self):
 
         "Insert the preferred procreg templates for questions"
