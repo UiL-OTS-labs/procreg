@@ -82,7 +82,7 @@ MIDDLEWARE = [
 
 if DEBUG and ENABLE_DEBUG_TOOLBAR:
     INSTALLED_APPS.append('debug_toolbar')
-    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware', )
+    MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
 
 ROOT_URLCONF = 'procreg.urls'
 
@@ -104,11 +104,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'procreg.wsgi.application'
 
-# Email
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 2525
-EMAIL_FROM = 'T.D.Mees@uu.nl'
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = '/tmp/django-email'
+else:        
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'localhost'
+    EMAIL_PORT = 2525
+    EMAIL_FROM = 'T.D.Mees@uu.nl'
 
 
 # Database
@@ -189,7 +196,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
 
 # Security
