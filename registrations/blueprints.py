@@ -1,10 +1,13 @@
 from django.urls import reverse
+import logging
+
+info = logging.info
 
 from uil.questions.blueprints import Blueprint
 
 from .models import Registration
 from .forms import NewRegistrationQuestion, CategoryQuestion, \
-    TraversalQuestion, QUESTIONS
+    TraversalQuestion, QUESTIONS, FacultyQuestion
 
 
 
@@ -35,9 +38,9 @@ class RegistrationBlueprint():
         if consumers == []:
             return True
 
-        current = consumers[0]()
+        current = consumers[0](self)
 
-        next_consumers = current.consume(self) + consumers[1:]
+        next_consumers = current.consume() + consumers[1:]
 
         return self.evaluate(consumers=next_consumers)
 
@@ -45,7 +48,7 @@ class RegistrationBlueprint():
         if self.desired_next in QUESTIONS.values():
             if self.desired_next.model == Registration:
                 question = self.desired_next(instance=self.registration)
-                print(question.instance)
+                info(question.instance)
                 return question.get_edit_url()
         return reverse(
             "registrations:overview",
@@ -54,23 +57,82 @@ class RegistrationBlueprint():
             })
 
 
+def instantiate_question(registration, question):
+    """Take a question and registration, and return an
+    instantiated question for validation and introspection
+    """
+    q_model_name = question.model.__name__
+    q_object = getattr(registration, q_model_name)
+    return question(instance=q_object)
 
-class BasicDetailsConsumer:
 
-    def consume(self, blueprint):
+class BaseConsumer:
 
-        if self.check_details(blueprint.registration):
-            blueprint.desired_next = TraversalQuestion
+    def __init__(self, blueprint):
 
-        return []
+        self.blueprint = blueprint
 
-    def check_details(self, registration):
+class BaseQuestionConsumer(BaseConsumer):
+
+    def get_question_errors(self):
+
+        self.question = instantiate_question(
+            self.registration,
+            self.question,
+        )
+
+        errors = self.question.errors
+        info(f'Errors in question {self.question}: {errors}')
+
+        return errors
+
+class BasicDetailsConsumer(BaseConsumer):
+
+    def consume(self):
+
+        if self.check_details():
+            self.blueprint.desired_next = TraversalQuestion
+        else:
+            return []
+
+        return [TraversalConsumer]
+
+    def check_details(self):
+
+        registration = self.blueprint.registration
 
         for field in [registration.title,
                       registration.faculty,
                       ]:
-            if field in ['', None]:
-                print(field, 'was not filled in')
-                return False
+            info(field)
 
-        return True
+        return fields_not_empty(
+            [registration.title,
+             registration.faculty,
+            ]
+        )
+
+class TraversalConsumer(BaseQuestionConsumer):
+
+    question = TraversalQuestion
+
+    def consume(self):
+
+        if self.check_details():
+            self.blueprint.desired_next = FacultyQuestion
+
+        return []
+
+    def check_details(self):
+
+        return fields_not_empty(self.question.Meta.fields)
+
+        
+
+        
+def fields_not_empty(fields):
+    for f in fields:
+        if f in ['', None]:
+            info(f, 'was not filled in')
+            return False
+    return True

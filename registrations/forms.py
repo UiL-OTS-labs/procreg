@@ -91,7 +91,7 @@ class TraversalQuestion(RegistrationQuestionMixin, questions.Question):
         ]
 
     title = _("registrations:forms:traversal_question_title")
-    title = _("registrations:forms:traversal_question_description")
+    description = _("registrations:forms:traversal_question_description")
     model = Registration
     slug = "traversal"
     is_editable = True
