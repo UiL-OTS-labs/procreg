@@ -2,16 +2,18 @@ from django.urls import reverse
 import logging
 
 info = logging.info
+debug = logging.debug
 
 from uil.questions.blueprints import Blueprint
 
 from .models import Registration
+from .progress import RegistrationProgressBar
 from .forms import NewRegistrationQuestion, CategoryQuestion, \
     TraversalQuestion, QUESTIONS, FacultyQuestion
 
 
 
-class RegistrationBlueprint():
+class RegistrationBlueprint:
 
     model = Registration
     primary_questions = [NewRegistrationQuestion,
