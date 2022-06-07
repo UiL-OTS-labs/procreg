@@ -61,8 +61,9 @@ class RegistrationOverview(RegistrationMixin,
 
         return context
 
-class RegistrationQuestionEditView(QuestionEditView,
-                                   RegistrationMixin):
+class RegistrationQuestionEditView(RegistrationMixin,
+                                   QuestionEditView,
+                                   ):
 
     "Edit a question relating to a Registration or a submodel"
 
