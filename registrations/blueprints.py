@@ -22,19 +22,18 @@ class RegistrationBlueprint:
     def __init__(self, registration):
 
         self.required = []
+        self.completed = []
+        self.progress_bar = RegistrationProgressBar(self)
 
-        self.consumers = [BasicDetailsConsumer]
+        self.starting_consumers = [BasicDetailsConsumer]
+        self.errors = dict()
         self.registration = registration
         self.desired_next = None
 
-        self.evaluate()
+        self.evaluate(self.starting_consumers)
 
-    def evaluate(self, consumers=None):
+    def evaluate(self, consumers):
         """Go through the list of consumers and try to satisfy their needs"""
-
-        # First run, get all consumers
-        if consumers == None:
-            consumers = self.consumers
 
         # We've run out of consumers
         if consumers == []:
@@ -84,16 +83,50 @@ class BaseQuestionConsumer(BaseConsumer):
         )
 
         errors = self.question.errors
-        info(f'Errors in question {self.question}: {errors}')
+        debug(f'Errors in question {self.question}: {errors}')
 
         return errors
 
-class BasicDetailsConsumer(BaseConsumer):
+    def complete(self):
+
+        self.blueprint.completed.append(self.question)
+
+class BasicDetailsConsumer(BaseQuestionConsumer):
+
+    question = NewRegistrationQuestion
+
+    def consume(self):
+
+        if self.check_details():
+            self.blueprint.desired_next = FacultyQuestion
+            self.complete()
+        else:
+            return []
+
+        return [FacultyConsumer]
+
+    def check_details(self):
+
+        registration = self.blueprint.registration
+
+        empty = has_empty_fields(
+            [
+                registration.title,
+             ]
+        )
+        self.blueprint.errors[self.question] = empty
+
+        return not empty
+
+class FacultyConsumer(BaseQuestionConsumer):
+
+    question = FacultyQuestion
 
     def consume(self):
 
         if self.check_details():
             self.blueprint.desired_next = TraversalQuestion
+            self.complete()
         else:
             return []
 
@@ -103,16 +136,20 @@ class BasicDetailsConsumer(BaseConsumer):
 
         registration = self.blueprint.registration
 
-        for field in [registration.title,
-                      registration.faculty,
-                      ]:
-            info(field)
-
-        return fields_not_empty(
+        empty = has_empty_fields(
             [registration.title,
              registration.faculty,
             ]
         )
+
+        if empty:
+            self.blueprint.errors[self.question] = empty
+            return False
+        else:
+            return True
+
+        
+
 
 class TraversalConsumer(BaseQuestionConsumer):
 
@@ -121,20 +158,38 @@ class TraversalConsumer(BaseQuestionConsumer):
     def consume(self):
 
         if self.check_details():
-            self.blueprint.desired_next = FacultyQuestion
+            self.blueprint.desired_next = TraversalQuestion
+            self.complete()
 
         return []
 
     def check_details(self):
+        
+        registration = self.blueprint.registration
+
+        empty = has_empty_fields(
+            [registration.date_start,
+             registration.date_end,
+            ]
+        )
+
+        if empty:
+            self.blueprint.errors[self.question] = empty
+            return False
+        else:
+            return True
 
         return fields_not_empty(self.question.Meta.fields)
 
         
-
-        
-def fields_not_empty(fields):
+def has_empty_fields(fields):
+    errors = []
     for f in fields:
         if f in ['', None]:
-            info(f, 'was not filled in')
-            return False
-    return True
+            debug(f, 'was not filled in')
+            errors.append(f)
+
+    if errors != []:
+        return errors
+    else:
+        return False
