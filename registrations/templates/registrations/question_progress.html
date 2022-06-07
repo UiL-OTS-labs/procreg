@@ -9,12 +9,14 @@
         <div class="col-12">
             <h4>Progress bar</h4>
             <ul id="progress">
-                <li>Step</li>
-                <li>Step</li>
-                <li>Step</li>
-                <li>Step</li>
-                <li>Step</li>
-                <li>Step</li>
+	      {% with progress=blueprint.progress_bar.make_progress_dict %}
+	      {% for question, data in progress.items %}
+	      
+	      <li class={{data.status}}>
+		<a href="#">{{data.name}}</a>
+	      </li>
+	      {% endfor %}
+	      {% endwith %}
             </ul>
         </div>
 {% endblock %}
@@ -30,7 +32,16 @@
 {% endblock %}
 {% block sidebar %}
         <div class="col-12">
-        Question help goes here!
+          <p>Question help goes here!</p>
+	  <h3>Debug</h3>
+
+	  
+	  {{blueprint.progress_bar.make_progress_dict}}
+	  <p>
+
+	  {{blueprint.completed}}
+	  </p>
+	  
         </div>
 
 {% endblock %}
