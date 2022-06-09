@@ -28,3 +28,8 @@ def display_question_header(question):
     }
 
     return tag_context
+
+@register.inclusion_tag("registrations/templatetags/progress_bar.html")
+def progress_bar(blueprint):
+
+    return {blueprint: blueprint}

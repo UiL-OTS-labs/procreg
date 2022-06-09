@@ -3,11 +3,17 @@
 {% load static %}
 {% load i18n %}
 {% load question_tags %}
+{% load registration_tags %}
 
 
 {% block progress %}
-        <div class="col-12">
+
+<div class="col-12">
+
             <h4>Progress bar</h4>
+  {% progress_bar blueprint %}
+  
+  
             <ul id="progress">
 	      {% with progress=blueprint.progress_bar.make_progress_dict %}
 	      {% for question, data in progress.items %}
