@@ -14,42 +14,67 @@ from .forms import NewRegistrationQuestion, CategoryQuestion, \
 
 
 class RegistrationBlueprint:
+    """The blueprint for a ProcReg registration. 
+    This class provides information on current progress,
+    error messages, next question, and validation information."""
 
     model = Registration
     primary_questions = [NewRegistrationQuestion,
     ]
 
     def __init__(self, registration):
+        
+        self.registration = registration
 
-        self.required = []
-        self.completed = []
+
+        # This is messy, subject to change
         self.progress_bar = RegistrationProgressBar(self)
 
+        # Starting point for validation
         self.starting_consumers = [BasicDetailsConsumer]
+
+        # This will probably be analogous to Django's own
+        # errors dict, with field references spanning multiple
+        # objects
         self.errors = dict()
-        self.registration = registration
         self.desired_next = None
+        self.required = []
+        self.completed = []
 
         self.evaluate(self.starting_consumers)
 
     def evaluate(self, consumers):
-        """Go through the list of consumers and try to satisfy their needs"""
+        """This recursive function goes through the list
+        of consumers and presents them with this blueprint
+        object. The consumers look at the current state of
+        the blueprint to see if it satisfies their needs.
 
-        # We've run out of consumers
+        Consumers should return a list of new consumers to
+        append to the end of the list. This list may be empty.
+
+        While in this loop, consumers may modify
+        blueprint state by adding errors and setting
+        desired_next."""
+
+        # We've run out of consumers. Finally.
         if consumers == []:
             return True
 
+        # Instantiate consumer with self
         current = consumers[0](self)
 
+        # Run consumer logic, and add the list of consumers
+        # it returns to the list of consumers to be run
         next_consumers = current.consume() + consumers[1:]
 
         return self.evaluate(consumers=next_consumers)
 
     def get_desired_next_url(self):
+        """Turn the desired_next Question into a URL.
+        Probably a QuestionEditView."""
+        
         if self.desired_next in QUESTIONS.values():
-            if self.desired_next.model == Registration:
-                question = self.desired_next(instance=self.registration)
-                info(question.instance)
+            question = self.desired_next(instance=self.registration)
                 return question.get_edit_url()
         return reverse(
             "registrations:overview",
@@ -60,7 +85,10 @@ class RegistrationBlueprint:
 
 def instantiate_question(registration, question):
     """Take a question and registration, and return an
-    instantiated question for validation and introspection
+    instantiated question for validation and introspection.
+
+    This is a stupid hack until we get questions to bootstrap
+    themselves based on a registration or blueprint object.
     """
     q_model_name = question.model.__name__
     q_object = getattr(registration, q_model_name)
@@ -73,9 +101,17 @@ class BaseConsumer:
 
         self.blueprint = blueprint
 
+    
+    def consume(self):
+        """Returns a list of new consumers depending on
+        the state of our blueprint."""
+
+        return []
+
 class BaseQuestionConsumer(BaseConsumer):
 
     def get_question_errors(self):
+        "Get Django form errors"
 
         self.question = instantiate_question(
             self.registration,
@@ -87,7 +123,10 @@ class BaseQuestionConsumer(BaseConsumer):
 
         return errors
 
+
     def complete(self):
+        """Make note on the blueprint that our question was
+        completed, for the progress bar's sake."""
 
         self.blueprint.completed.append(self.question)
 
@@ -183,6 +222,7 @@ class TraversalConsumer(BaseQuestionConsumer):
 
         
 def has_empty_fields(fields):
+    "Check if any of these fields are empty"
     errors = []
     for f in fields:
         if f in ['', None]:
