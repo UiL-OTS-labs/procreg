@@ -75,7 +75,7 @@ class RegistrationBlueprint:
         
         if self.desired_next in QUESTIONS.values():
             question = self.desired_next(instance=self.registration)
-                return question.get_edit_url()
+            return question.get_edit_url()
         return reverse(
             "registrations:overview",
             kwargs={
