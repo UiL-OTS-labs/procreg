@@ -1,0 +1,14 @@
+#progress li {
+    border-left-width: 0.5rem;
+    border-left-color: grey;
+    border-left-style: solid;
+}
+
+#progress li.completed {
+    border-left-color: yellow;
+}
+
+
+#progress li.error {
+    border-left-color: red;
+}
