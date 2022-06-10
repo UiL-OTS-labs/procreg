@@ -1,0 +1,25 @@
+{% load question_tags %}
+{% for segment in question.segments %}
+
+<div class="question-display-small">
+
+    <div class="icon">
+        &nbsp;
+    </div>
+        <div class="content">
+        <h6>{{segment.field.label}}</h6>
+        <p>{{segment.field.value}}</p>
+        </div>
+
+        {% if question.is_editable %}
+        <div class="edit">
+            <a href="{{question.get_edit_url}}">
+                <button>
+                    edit
+                    </button>
+            </a>{% endif %}
+        </div>
+
+</div>
+{% empty %}Error! No segments
+{% endfor %}

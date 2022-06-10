@@ -1,0 +1,30 @@
+{% extends "registrations/base.html" %}
+{% load i18n %}
+
+{% block main %}
+
+<form method="post">{% csrf_token %}
+    <p>{% trans "registrations:delete:confirm_text" %} </p>
+    <h6>{{ object.title }}</h6>
+    <input type="submit" value="Confirm">
+</form>
+
+{% endblock %}
+
+{% block sidebar %}
+
+<h4>
+    {% trans "registrations:actions:header" %}
+</h4>
+
+
+<ul>
+    <li>
+        <a href {% url "registrations:overview" object.pk %}>
+            {% trans "registrations:actions:overview" %}
+        </a>
+    </li>
+</ul>
+
+
+{% endblock %}

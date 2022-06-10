@@ -8,6 +8,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -58,11 +59,13 @@ INSTALLED_APPS = [
 
     # UiL Core libraries
     'uil.core',
+    'uil.questions',
     # 'uil.rest', # Rest client
     # 'uil.vue',  # Vue support
 
     # Local apps
     'main',
+    'registrations',
 ]
 
 MIDDLEWARE = [
@@ -79,15 +82,14 @@ MIDDLEWARE = [
 
 if DEBUG and ENABLE_DEBUG_TOOLBAR:
     INSTALLED_APPS.append('debug_toolbar')
-    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware', )
+    MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
 
 ROOT_URLCONF = 'procreg.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -102,11 +104,54 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'procreg.wsgi.application'
 
-# Email
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 2525
-EMAIL_FROM = 'T.D.Mees@uu.nl'
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+# LOGGING
+
+log_file_path = "/tmp/django-procreg.log"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+    },
+    'handlers': {
+        'logfile': {
+            'level': 'WARNING',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': log_file_path,
+            'maxBytes': 50000,
+            'backupCount': 3,
+            'formatter': 'standard',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['logfile', 'console'],
+            'propagate': True,
+        },
+    },
+}
+
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = '/tmp/django-email'
+else:        
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'localhost'
+    EMAIL_PORT = 2525
+    EMAIL_FROM = 'T.D.Mees@uu.nl'
 
 
 # Database
@@ -159,10 +204,20 @@ PASSWORD_HASHERS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'nl'
+LANGUAGE_CODE = 'en'
 LANGUAGES = (
     ('nl', _('lang:nl')),
     ('en', _('lang:en')),
+)
+
+
+LOCALE_PATHS = (
+
+    # Merges all translations files into one
+    os.path.join(BASE_DIR, 'locale'),
+
+    # For per-app translations files
+    #'locale',
 )
 
 TIME_ZONE = 'UTC'
@@ -177,7 +232,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
 
 # Security
@@ -211,3 +266,8 @@ CSP_IMG_SRC = ["'self'", 'data:', "*"]  # Remove the last one if you
 
 MENU_SELECT_PARENTS = True
 MENU_HIDE_EMPTY = False
+
+
+# Default media directory (served statically!)
+MEDIA_ROOT = 'media'
+MEDIA_URL = '/media/'

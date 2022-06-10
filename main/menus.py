@@ -7,6 +7,12 @@ Menu.add_item("home", MenuItem(_('main:menu:home'),
                                exact_url=True
                                ))
 
+Menu.add_item("main", MenuItem(_('main:menu:registrations'),
+                               reverse('registrations:home'),
+                               exact_url=True
+                               ))
+
+
 Menu.add_item("footer", MenuItem(_('main:footer:login'),
                                  reverse('main:login'),
                                  check=lambda x: not x.user.is_authenticated

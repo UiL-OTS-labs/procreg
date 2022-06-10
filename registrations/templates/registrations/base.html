@@ -1,0 +1,44 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+{% load i18n %}
+
+
+{% block html_head %}
+<link href="{% static 'uil.questions/questions.css' %}" rel="stylesheet" />
+<link href="{% static 'uil.questions/prereg.css' %}" rel="stylesheet" />
+<link href="{% static 'registrations/css/procreg.css' %}" rel="stylesheet" />
+<link href="{% static 'registrations/css/progress.css' %}" rel="stylesheet" />
+
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript" src="{% static 'registrations/htmx.min.js' %}"></script>
+
+<div class="uu-inner-container">
+    <div class="row upper-inner">
+        {% block upper-inner %}
+        {% endblock %}
+    </div>
+    {% if show_progress %}
+    <div class="col-2 pr-progress">
+        {% block progress %}
+        {% endblock %}
+    </div>
+    <div class="col-7 pr-main">
+    {% else %}
+        <div class="col-9 pr-main">
+
+    {% endif %}
+
+            {% block main %}
+            {% endblock %}
+</div>
+
+    <div class="col-3 pr-sidebar">
+        {% block sidebar %}
+        {% endblock %}
+    </div>
+
+</div>
+{% endblock %}
