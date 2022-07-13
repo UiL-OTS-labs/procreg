@@ -4,12 +4,14 @@ import logging
 info = logging.info
 debug = logging.debug
 
-from uil.questions.blueprints import Blueprint
+from cdh.questions.blueprints import Blueprint
 
 from .models import Registration
 from .progress import RegistrationProgressBar
 from .forms import NewRegistrationQuestion, CategoryQuestion, \
-    TraversalQuestion, QUESTIONS, FacultyQuestion
+    TraversalQuestion, QUESTIONS, FacultyQuestion, \
+    UsesInformationQuestion, ConfirmInformationUseQuestion, \
+    SubmitQuestion
 
 
 
@@ -23,7 +25,10 @@ class RegistrationBlueprint:
     ]
 
     def __init__(self, registration):
+        "Set up starting values for blueprint evaluation"
         
+        self.required = []
+        self.completed = []
         self.registration = registration
 
 
@@ -38,8 +43,6 @@ class RegistrationBlueprint:
         # objects
         self.errors = dict()
         self.desired_next = None
-        self.required = []
-        self.completed = []
 
         self.evaluate(self.starting_consumers)
 
@@ -101,6 +104,9 @@ class BaseConsumer:
 
         self.blueprint = blueprint
 
+    def complete(self, out_list):
+
+        return out_list
     
     def consume(self):
         """Returns a list of new consumers depending on
@@ -109,6 +115,8 @@ class BaseConsumer:
         return []
 
 class BaseQuestionConsumer(BaseConsumer):
+
+    questions = []
 
     def get_question_errors(self):
         "Get Django form errors"
@@ -123,12 +131,12 @@ class BaseQuestionConsumer(BaseConsumer):
 
         return errors
 
+    def complete(self, out_list=[]):
 
-    def complete(self):
-        """Make note on the blueprint that our question was
-        completed, for the progress bar's sake."""
+        self.blueprint.completed += self.questions
 
-        self.blueprint.completed.append(self.question)
+        return super().complete(out_list)
+
 
 class BasicDetailsConsumer(BaseQuestionConsumer):
 
@@ -161,15 +169,20 @@ class FacultyConsumer(BaseQuestionConsumer):
 
     question = FacultyQuestion
 
+    questions = [
+        NewRegistrationQuestion,
+        FacultyQuestion,
+        ]
+
     def consume(self):
 
         if self.check_details():
             self.blueprint.desired_next = TraversalQuestion
             self.complete()
         else:
-            return []
+            return self.complete([])
 
-        return [TraversalConsumer]
+        return [UsesInformationConsumer]
 
     def check_details(self):
 
@@ -192,12 +205,12 @@ class FacultyConsumer(BaseQuestionConsumer):
 
 class TraversalConsumer(BaseQuestionConsumer):
 
-    question = TraversalQuestion
+    questions = [TraversalQuestion]
 
     def consume(self):
 
         if self.check_details():
-            self.blueprint.desired_next = TraversalQuestion
+            self.blueprint.desired_next = UsesInformationQuestion
             self.complete()
 
         return []
@@ -211,7 +224,6 @@ class TraversalConsumer(BaseQuestionConsumer):
              registration.date_end,
             ]
         )
-
         if empty:
             self.blueprint.errors[self.question] = empty
             return False
@@ -220,7 +232,45 @@ class TraversalConsumer(BaseQuestionConsumer):
 
         return fields_not_empty(self.question.Meta.fields)
 
-        
+
+
+class UsesInformationConsumer(BaseQuestionConsumer):
+
+    questions = [UsesInformationQuestion]
+
+    def consume(self):
+
+        if not self.check_details():
+            return []
+
+        answer = self.blueprint.registration.uses_information
+        if answer  == False:
+            self.blueprint.desired_next = ConfirmInformationUseQuestion
+            return []
+        elif answer == True:
+            self.blueprint.desired_next = TraversalQuestion
+
+        return []
+
+    def check_details(self):
+
+        return fields_not_empty(self.questions[0].Meta.fields)
+
+
+
+
+class ConfirmInformationUseConsumer(BaseQuestionConsumer):
+
+    questions = [ConfirmInformationUseQuestion]
+
+    def consume(self):
+
+        return []
+
+    def check_details(self):
+
+        return fields_not_empty(self.questions[0].Meta.fields)
+
 def has_empty_fields(fields):
     "Check if any of these fields are empty"
     errors = []
@@ -233,3 +283,11 @@ def has_empty_fields(fields):
         return errors
     else:
         return False
+
+def fields_not_empty(fields):
+
+    if has_empty_fields(fields) == False:
+        return True
+
+    return False
+        

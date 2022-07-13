@@ -58,8 +58,8 @@ INSTALLED_APPS = [
     'modeltranslation',
 
     # UiL Core libraries
-    'uil.core',
-    'uil.questions',
+    'cdh.core',
+    'cdh.questions',
     # 'uil.rest', # Rest client
     # 'uil.vue',  # Vue support
 

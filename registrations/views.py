@@ -6,12 +6,12 @@ from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from uil.questions.views import BlueprintView, QuestionEditView, \
+from cdh.questions.views import BlueprintView, QuestionEditView, \
     QuestionDeleteView, QuestionCreateView
 
 from .models import Registration, ParticipantCategory
 from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
-from .blueprints import RegistrationBlueprint
+from .blueprints import RegistrationBlueprint, instantiate_question
 from .mixins import RegistrationMixin
 
 
@@ -61,13 +61,43 @@ class RegistrationOverview(RegistrationMixin,
 
         return context
 
-class RegistrationQuestionEditView(RegistrationMixin,
-                                   QuestionEditView,
+class RegistrationSummaryView(RegistrationMixin,
+                              BlueprintView):
+
+
+    def get_object(self,):
+
+        return self.get_registration()
+
+    def get_context_data(self, *args, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        completed_questions = self.blueprint.completed
+
+        context['top_questions'] = [
+            q(instance=self.object) for q in top_questions
+        ]
+
+        categories = ParticipantCategory.objects.filter(
+            registration=self.object)
+        context['categories'] = [CategoryQuestion(instance=cat) for cat in categories]
+
+        return context    
+    
+
+class RegistrationQuestionEditView(QuestionEditView,
+                                   RegistrationMixin,
                                    ):
 
     "Edit a question relating to a Registration or a submodel"
 
     def get_success_url(self):
+
+        self.question = self.get_form()
+
+        if hasattr(self.question, 'get_success_url'):
+            return self.question.get_success_url()
 
         return reverse_lazy('registrations:overview',
                        kwargs={'reg_pk': self.kwargs.get('reg_pk')}

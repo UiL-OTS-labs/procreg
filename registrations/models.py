@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext as _
 
 # Create your models here.
 
@@ -28,12 +29,27 @@ class Registration(models.Model):
                                default=None,
                                null=True,
                                )
+    uses_information = models.BooleanField(
+        blank=True,
+        null=True,
+        choices=(
+            (False, _("models:registration:registration_uses_information_false")),
+            (True, _("models:registration:registration_uses_information_true")),
+             )
+        )
     date_start = models.DateField(blank=True,
                                   null=True,
                                   )
     date_end = models.DateField(blank=True,
                                 null=True,
                                 )
+    confirm_submission = models.BooleanField(
+        default=False,
+        choices=(
+            (False, _("models:registration:confirm_submission_false")),
+            (True, _("models:registration:confirm_submission_true")),
+             )
+        )
 
 class ParticipantCategory(models.Model):
 

@@ -2,7 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django import forms
 from django.urls import reverse
 
-from uil.questions import questions
+from cdh.questions import questions
 from .models import Registration, ParticipantCategory
 
 
@@ -107,7 +107,98 @@ class TraversalQuestion(RegistrationQuestionMixin, questions.Question):
 
         return segments
 
+class UsesInformationQuestion(RegistrationQuestionMixin, questions.Question):
 
+    class Meta:
+        model = Registration
+        fields = [
+            'uses_information',
+        ]
+
+    title = _("registrations:forms:uses_information_question_title")
+    description = _("registrations:forms:uses_information_question_title")
+    model = Registration
+    slug = "uses_information"
+    is_editable = True
+    show_progress = False
+
+
+    def get_segments(self):
+
+        segments = []
+        segments.append(self._field_to_segment('uses_information'))
+
+        return segments
+
+class ConfirmInformationUseQuestion(RegistrationQuestionMixin, questions.Question):
+
+    class Meta:
+        model = Registration
+        fields = [
+            #'uses_information',
+        ]
+
+    title = _("registrations:forms:confirm_information_use_question_title")
+    description = _("registrations:forms:cofirm_information_use_question_title")
+    model = Registration
+    slug = "confirm_information_use"
+    is_editable = False
+    show_progress = False
+
+
+    def get_segments(self):
+
+        segments = []
+        
+        content = questions.Segment()
+        content.type = "paragraph"
+        content.paragraph = self.description
+        segments.append(content)
+
+        return segments
+
+    def get_success_url(self):
+
+        return reverse(
+            "registrations:home"
+        )
+
+
+class SubmitQuestion(RegistrationQuestionMixin, questions.Question):
+
+    class Meta:
+        model = Registration
+        fields = [
+            'confirm_submission',
+        ]
+
+    title = _("registrations:forms:submit_question_title")
+    description = _("registrations:forms:submit_question_description")
+    model = Registration
+    slug = "submit"
+    is_editable = False
+    show_progress = False
+
+    def get_segments(self):
+
+        segments = []
+
+        segments.append(
+            self._field_to_segment(
+                "uses_information"
+            )
+        )
+        
+        content = questions.Segment()
+        content.type = "paragraph"
+        content.paragraph = _("registrations:forms:confirm_information_use_paragraph")
+        segments.append(content)
+
+        return segments
+
+
+
+    
 
 class CategoryQuestion(RegistrationQuestionMixin, questions.Question):
 
@@ -149,6 +240,8 @@ Q_LIST = [NewRegistrationQuestion,
           FacultyQuestion,
           CategoryQuestion,
           TraversalQuestion,
+          UsesInformationQuestion,
+          ConfirmInformationUseQuestion,
           ]
 
 QUESTIONS = {q.slug: q for q in Q_LIST}
