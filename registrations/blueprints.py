@@ -244,19 +244,19 @@ class TraversalConsumer(BaseQuestionConsumer):
 
 class UsesInformationConsumer(BaseQuestionConsumer):
     questions = [UsesInformationQuestion]
+    question = UsesInformationQuestion
 
     def consume(self):
-
         if not self.check_details():
             return []
 
         answer = self.blueprint.registration.uses_information
         if answer  == False:
             self.blueprint.desired_next.append(ConfirmInformationUseQuestion)
-            return []
+            return self.complete([ConfirmInformationUseConsumer])
         elif answer == True:
             self.blueprint.desired_next.append(ConfirmInformationUseQuestion)
-            return self.complete([ConfirmInformationUseQuestion])
+            return self.complete([])
 
         return []
 
