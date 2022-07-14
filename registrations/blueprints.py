@@ -85,17 +85,27 @@ class RegistrationBlueprint:
                 "reg_pk": self.registration.pk,
             })
 
+    def instantiate_question(self, question):
+        """Take a question, and return an
+        instantiated question for validation and introspection.
+        """
+        if question.model == Registration:
+            q_object = self.registration
+        else:
+            q_model_name = question.model.__name__
+            q_object = getattr(self.registration, q_model_name)
+        return question(instance=q_object)
 
-def instantiate_question(registration, question):
-    """Take a question and registration, and return an
-    instantiated question for validation and introspection.
-
-    This is a stupid hack until we get questions to bootstrap
-    themselves based on a registration or blueprint object.
-    """
-    q_model_name = question.model.__name__
-    q_object = getattr(registration, q_model_name)
-    return question(instance=q_object)
+    def instantiate_completed(self):
+        """Instantiates all questions in self.completed"""
+        out = []
+        for q in self.completed:
+            inst = self.instantiate_question(q)
+            if type(inst) != list:
+                inst = [inst]
+            out += inst
+        return out
+                
 
 
 class BaseConsumer:
