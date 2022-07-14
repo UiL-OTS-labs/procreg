@@ -11,7 +11,7 @@ from cdh.questions.views import BlueprintView, QuestionEditView, \
 
 from .models import Registration, ParticipantCategory
 from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
-from .blueprints import RegistrationBlueprint, instantiate_question
+from .blueprints import RegistrationBlueprint
 from .mixins import RegistrationMixin
 
 
@@ -64,6 +64,7 @@ class RegistrationOverview(RegistrationMixin,
 class RegistrationSummaryView(RegistrationMixin,
                               BlueprintView):
 
+    template_name = 'registrations/summary.html'
 
     def get_object(self,):
 
