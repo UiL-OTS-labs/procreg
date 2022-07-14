@@ -21,8 +21,7 @@ class RegistrationBlueprint:
     error messages, next question, and validation information."""
 
     model = Registration
-    primary_questions = [NewRegistrationQuestion,
-    ]
+    primary_questions = [NewRegistrationQuestion,]
 
     def __init__(self, registration):
         "Set up starting values for blueprint evaluation"
@@ -30,7 +29,6 @@ class RegistrationBlueprint:
         self.required = []
         self.completed = []
         self.registration = registration
-
 
         # This is messy, subject to change
         self.progress_bar = RegistrationProgressBar(self)
@@ -42,7 +40,10 @@ class RegistrationBlueprint:
         # errors dict, with field references spanning multiple
         # objects
         self.errors = dict()
-        self.desired_next = None
+
+        # For now, "go back" functionality is handled by making
+        # the desired next question a stack
+        self.desired_next = []
 
         self.evaluate(self.starting_consumers)
 
@@ -72,12 +73,23 @@ class RegistrationBlueprint:
 
         return self.evaluate(consumers=next_consumers)
 
-    def get_desired_next_url(self):
+    def get_desired_next(self, index=1):
+        try:
+            return self.desired_next[-index]
+        except IndexError:
+            return None
+
+    def get_desired_next_url(self, index=1):
         """Turn the desired_next Question into a URL.
         Probably a QuestionEditView."""
-        
-        if self.desired_next in QUESTIONS.values():
-            question = self.desired_next(instance=self.registration)
+        next_question = self.get_desired_next(index)
+        if not next_question:
+            return reverse('registrations:overview',
+                           kwargs={
+                               'reg_pk': self.registration.pk,
+                           })        
+        if next_question in QUESTIONS.values():
+            question = self.instantiate_question(next_question)
             return question.get_edit_url()
         return reverse(
             "registrations:overview",
@@ -111,99 +123,90 @@ class RegistrationBlueprint:
 class BaseConsumer:
 
     def __init__(self, blueprint):
-
         self.blueprint = blueprint
+        self.on_complete = False
 
-    def complete(self, out_list):
-
+    def complete(self, out_list=False):
+        if not out_list:
+            if not self.on_complete:
+                return []
+            return self.on_complete
         return out_list
     
     def consume(self):
         """Returns a list of new consumers depending on
         the state of our blueprint."""
-
         return []
+
 
 class BaseQuestionConsumer(BaseConsumer):
 
-    questions = []
-
     def get_question_errors(self):
         "Get Django form errors"
-
-        self.question = instantiate_question(
-            self.registration,
-            self.question,
-        )
-
-        errors = self.question.errors
+        self.instantiated = self.instantiate()
+        errors = self.instantiated.errors
         debug(f'Errors in question {self.question}: {errors}')
-
         return errors
+    
+    def instantiate(self):
+        return self.blueprint.instantiate_question(self.question)
 
-    def complete(self, out_list=[]):
+    @property
+    def instantiated(self):
+        if hasattr(self, 'instance'):
+            return self.instance
+        else:
+            return self.instantiate()
 
-        self.blueprint.completed += self.questions
-
-        return super().complete(out_list)
+    @property
+    def empty_fields(self):
+        empty = []
+        for key in self.instantiated.fields.keys():
+            value = self.instantiated[key].value()
+            if value in ['', 'None']:
+                empty.append(value)
+        return empty
+            
+    def complete(self, *args, **kwargs):
+        self.blueprint.completed += [self.question]
+        return super().complete(*args, **kwargs)
 
 
 class BasicDetailsConsumer(BaseQuestionConsumer):
-
     question = NewRegistrationQuestion
 
     def consume(self):
-
         if self.check_details():
-            self.blueprint.desired_next = FacultyQuestion
-            self.complete()
+            self.blueprint.desired_next.append(FacultyQuestion)
+            return self.complete([FacultyConsumer])
         else:
             return []
 
-        return [FacultyConsumer]
-
     def check_details(self):
+        if self.empty_fields != []:
+            return False
+        return True
 
-        registration = self.blueprint.registration
-
-        empty = has_empty_fields(
-            [
-                registration.title,
-             ]
-        )
-        self.blueprint.errors[self.question] = empty
-
-        return not empty
-
+    
 class FacultyConsumer(BaseQuestionConsumer):
-
     question = FacultyQuestion
 
-    questions = [
-        NewRegistrationQuestion,
-        FacultyQuestion,
-        ]
-
     def consume(self):
-
         if self.check_details():
-            self.blueprint.desired_next = TraversalQuestion
-            self.complete()
+            self.blueprint.desired_next.append(TraversalQuestion)
+            return self.complete([TraversalConsumer])
         else:
-            return self.complete([])
-
+            return []
         return [UsesInformationConsumer]
 
     def check_details(self):
-
         registration = self.blueprint.registration
-
         empty = has_empty_fields(
             [registration.title,
              registration.faculty,
             ]
         )
-
+        
         if empty:
             self.blueprint.errors[self.question] = empty
             return False
@@ -211,17 +214,13 @@ class FacultyConsumer(BaseQuestionConsumer):
             return True
 
         
-
-
 class TraversalConsumer(BaseQuestionConsumer):
-
-    questions = [TraversalQuestion]
+    question = TraversalQuestion
 
     def consume(self):
-
         if self.check_details():
-            self.blueprint.desired_next = UsesInformationQuestion
-            self.complete()
+            self.blueprint.desired_next.append(UsesInformationQuestion)
+            return self.complete([UsesInformationConsumer])
 
         return []
 
@@ -243,9 +242,7 @@ class TraversalConsumer(BaseQuestionConsumer):
         return fields_not_empty(self.question.Meta.fields)
 
 
-
 class UsesInformationConsumer(BaseQuestionConsumer):
-
     questions = [UsesInformationQuestion]
 
     def consume(self):
@@ -255,10 +252,11 @@ class UsesInformationConsumer(BaseQuestionConsumer):
 
         answer = self.blueprint.registration.uses_information
         if answer  == False:
-            self.blueprint.desired_next = ConfirmInformationUseQuestion
+            self.blueprint.desired_next.append(ConfirmInformationUseQuestion)
             return []
         elif answer == True:
-            self.blueprint.desired_next = TraversalQuestion
+            self.blueprint.desired_next.append(ConfirmInformationUseQuestion)
+            return self.complete([ConfirmInformationUseQuestion])
 
         return []
 
