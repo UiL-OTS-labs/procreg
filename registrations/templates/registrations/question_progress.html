@@ -10,36 +10,27 @@
 
 <div class="col-12">
 
-            <h4>Progress bar</h4>
-  {% progress_bar blueprint %}
-  
-  
-            <ul id="progress">
-	      {% with progress=blueprint.progress_bar.make_progress_dict %}
-	      {% for question, data in progress.items %}
-	      
-	      <li class={{data.status}}>
-		<a href="#">{{data.name}}</a>
-	      </li>
-	      {% endfor %}
-	      {% endwith %}
-            </ul>
-        </div>
+  <h4>Progress bar</h4>
+  {% with current=form.slug %}
+  {% progress_bar %}
+  {% endwith %}
+{{form.slug}}
+</div>
 {% endblock %}
 {% block main %}
-        <div class="col-12">
-            <h2>Editing a question</h2>
-            <p>This page facilitates both the creation and editing of Questions. Now with progress bar.</p>
+<div class="col-12">
+  <h2>Editing a question</h2>
+  <p>This page facilitates both the creation and editing of Questions. Now with progress bar.</p>
 
-            <br />
-            {% ask_question form %}
-            <br />
-        </div>
+  <br />
+  {% ask_question form %}
+  <br />
+</div>
 {% endblock %}
 {% block sidebar %}
-        <div class="col-12">
-          <p>Question help goes here!</p>
-	  
-        </div>
+<div class="col-12">
+  <p>Question help goes here!</p>
+
+</div>
 
 {% endblock %}

@@ -32,7 +32,7 @@ def display_question_header(question):
 
 @register.inclusion_tag("registrations/templatetags/progress_bar.html",
                         takes_context=True)
-def progress_bar(context, current=None):
+def progress_bar(context):
 
     tag_context = copy_context(
         context,
@@ -43,11 +43,13 @@ def progress_bar(context, current=None):
             "view",
         ]
     )
-    if "question" in context:
-        question = context.get("question")
-        tag_context.update({"current": question.slug})
-    
+    current = context.get("current", None)
+    question = context.get("question", None)
     blueprint = context.get("blueprint")
+    if not current:
+        if question:
+            current = question.slug
+            tag_context.update({"current": current})
     tag_context["progress"] = blueprint.progress_bar
     tag_context["items"] = blueprint.progress_bar.items(
         current=current

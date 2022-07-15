@@ -2,10 +2,10 @@
 
 
 <ul id="progress">
-  {% for item in progress.items %}
+  {% for item in items %}
   
-  <li class={{item.css_class}}>
-    <a href="#">{{item.title}}</a>
+  <li class="{{item.css_class}}">
+    <a href="{{item.url}}">{{item.title}}</a>
   </li>
   {% endfor %}
 </ul>
