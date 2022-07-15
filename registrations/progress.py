@@ -40,6 +40,19 @@ class RegistrationProgressBar:
 
         self.blueprint = blueprint
 
+    def items(self, current=None):
+        item_list = []
+        completed = self.blueprint.instantiate_completed()
+        for q in completed:
+            item_list.append(
+                ProgressItem.from_question(
+                    q,
+                    completed=True,
+                    current=current==q.slug
+                )
+            )
+        return item_list        
+
     def make_progress_dict(self):
 
         progress_dict = dict()
