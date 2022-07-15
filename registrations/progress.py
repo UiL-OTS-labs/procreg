@@ -1,6 +1,31 @@
 from .forms import NewRegistrationQuestion, CategoryQuestion, \
     TraversalQuestion, QUESTIONS, FacultyQuestion
 
+class ProgressItem:
+
+    def __init__(self):
+
+        self.title = "Nameless"
+        self.current = False
+        self.completed = False
+        self.url = None
+
+    def from_question(question, completed=False, current=False):
+
+        item = ProgressItem()
+        item.title = question.title
+        item.url = question.get_edit_url()
+        item.completed = completed
+        item.current = current
+
+        return item
+
+    def css_class(self):
+
+        classes = ["current", "completed"]
+        classes = [c for c in classes if getattr(self, c)]
+
+        return " ".join(classes)
 
 
 class RegistrationProgressBar:
