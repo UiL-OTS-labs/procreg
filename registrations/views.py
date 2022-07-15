@@ -65,6 +65,7 @@ class RegistrationSummaryView(RegistrationMixin,
                               BlueprintView):
 
     template_name = 'registrations/summary.html'
+    extra_context = {"show_progress": True}
 
     def get_object(self,):
 
