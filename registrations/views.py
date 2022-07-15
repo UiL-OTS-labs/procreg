@@ -82,19 +82,20 @@ class RegistrationSummaryView(RegistrationMixin,
 
 class RegistrationQuestionEditView(QuestionEditView,
                                    RegistrationMixin,
+                                   BlueprintView,
                                    ):
 
     "Edit a question relating to a Registration or a submodel"
 
     def get_success_url(self):
-
         self.question = self.get_form()
-
         if hasattr(self.question, 'get_success_url'):
             return self.question.get_success_url()
-
-        return reverse_lazy('registrations:overview',
-                       kwargs={'reg_pk': self.kwargs.get('reg_pk')}
+        return reverse_lazy(
+            'registrations:overview',
+            kwargs={
+                'reg_pk': self.kwargs.get('reg_pk')
+            }
         )
 
     def get_form_kwargs(self):
@@ -109,8 +110,8 @@ class RegistrationQuestionEditView(QuestionEditView,
     def get_context_data(self, *args, **kwargs):
 
         context = super().get_context_data(*args, **kwargs)
-
-        context['show_progress'] = True
+        context["question"] = self.question
+        context["show_progress"] = True
 
         return context
 
