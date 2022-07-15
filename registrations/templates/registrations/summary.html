@@ -3,6 +3,45 @@
 {% load question_tags %}
 {% load registration_tags %}
 
+
+{% block progress %}
+
+
+<div class="col-12">
+
+            <h4>Progress bar</h4>
+
+{% progress_bar %}
+  
+            <h4>Progress bar (fake)</h4>
+  
+            <ul id="progress">
+	      
+	      <li class="completed">
+		<a href="#">Completed</a>
+	      </li>
+	      <li class="current">
+		<a href="#">Current</a>
+	      </li>
+	      <li class="">
+		<a href="#">Normal</a>
+	      </li>
+	      <li class="completed">
+		<a href="#">Completed</a>
+	      </li>
+	      <li class="current completed">
+		<a href="#">Current completed</a>
+	      </li>
+	      <li class="">
+		<a href="#">Normal</a>
+	      </li>
+            </ul>
+        </div>
+
+
+{% endblock %}
+
+
 {% block main %}
 <div class="col-12">
     <h3>{% trans "registrations:summary:page_title" %}</h3>

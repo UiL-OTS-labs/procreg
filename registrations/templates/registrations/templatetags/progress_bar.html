@@ -2,12 +2,10 @@
 
 
 <ul id="progress">
-  {% with progress=blueprint.progress_bar.make_progress_dict %}
-  {% for question, data in progress.items %}
+  {% for item in progress.items %}
   
-  <li class={{data.status}}>
-    <a href="#">{{data.name}}</a>
+  <li class={{item.css_class}}>
+    <a href="#">{{item.title}}</a>
   </li>
   {% endfor %}
-  {% endwith %}
 </ul>
