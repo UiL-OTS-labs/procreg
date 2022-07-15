@@ -22,8 +22,11 @@ class ProgressItem:
 
     def css_class(self):
 
-        classes = ["current", "completed"]
-        classes = [c for c in classes if getattr(self, c)]
+        classes = []
+        if self.completed:
+            classes.append("completed")
+        if self.current:
+            classes.append("current")
 
         return " ".join(classes)
 
@@ -48,45 +51,7 @@ class RegistrationProgressBar:
                 ProgressItem.from_question(
                     q,
                     completed=True,
-                    current=current==q.slug
+                    current=(current==q.slug),
                 )
             )
         return item_list        
-
-    def make_progress_dict(self):
-
-        progress_dict = dict()
-
-        for question in self.all_questions:
-            progress_dict[question] = self.make_dict_item(question)
-
-        return progress_dict
-
-    def make_dict_item(self, question):
-
-        item = dict()
-
-        try:
-            from .blueprints import instantiate_question
-            iq = instantiate_question(blueprint.registration, question)
-            link = iq.get_edit_url()
-        except:
-            link = None
-
-        if hasattr(question, 'short_name'):
-            name = short_name
-        else:
-            name = question.title
-
-        if question in self.blueprint.completed:
-            status = 'completed'
-        elif question in self.blueprint.errors.keys():
-            status = 'error'
-        else:
-            status = None
-
-        return {
-            'name': name,
-            'link': link,
-            'status': status,
-        }
