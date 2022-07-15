@@ -4,29 +4,30 @@
 {% load registration_tags %}
 
 {% block main %}
-<h3>{% trans "registrations:summary:page_title" %}</h3>
+<div class="col-12">
+    <h3>{% trans "registrations:summary:page_title" %}</h3>
 
-<p>
-    {% trans "registrations:summary:page_description" %}
-</p>
+    <p>
+	{% trans "registrations:summary:page_description" %}
+    </p>
 
-<div class="summary-questions">
+    <div class="summary-questions">
 
-   </div>
+    </div>
 
-<div class="space-top">
+    <div class="space-top">
 
 
 
-{% for question in completed %}
-    {% display_question question %}
-{% endfor %}
+	{% for question in completed %}
+	{% display_question question %}
+	{% endfor %}
+
+
+    </div>
 
 
 </div>
-
-
-
 {% endblock %}
 
 {% block sidebar %}
