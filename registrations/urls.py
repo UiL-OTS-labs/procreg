@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import RegistrationsHomeView, RegistrationCreateView, \
     RegistrationOverview, RegistrationQuestionEditView, RegistrationDeleteView, \
-    MinimalCategoryView, MinimalDeleteView
+    MinimalCategoryView, MinimalDeleteView, RegistrationSummaryView
 from .forms import QUESTIONS
 from .blueprints import RegistrationBlueprint
 from .models import ParticipantCategory
@@ -25,10 +25,14 @@ urlpatterns = [
              question_dict=QUESTIONS,
              parent_pk_arg='reg_pk'),
          name='create_question'),
-    path('<int:reg_pk>/categories/minimal/',
-         MinimalCategoryView.as_view(),
-         #parent_pk_arg='reg_pk',
-         name='minimal_categories'
+    path('<int:reg_pk>/<str:question>/create/',
+         RegistrationQuestionEditView.as_view(
+             question_dict=QUESTIONS,
+             parent_pk_arg='reg_pk'),
+         name='create_question'),
+    path('<int:reg_pk>/summary/',
+         RegistrationSummaryView.as_view(),
+         name='summary',
          ),
     path('delete/category/<int:pk>/',
          MinimalDeleteView.as_view(

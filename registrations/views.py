@@ -11,7 +11,7 @@ from cdh.questions.views import BlueprintView, QuestionEditView, \
 
 from .models import Registration, ParticipantCategory
 from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
-from .blueprints import RegistrationBlueprint, instantiate_question
+from .blueprints import RegistrationBlueprint
 from .mixins import RegistrationMixin
 
 
@@ -64,6 +64,7 @@ class RegistrationOverview(RegistrationMixin,
 class RegistrationSummaryView(RegistrationMixin,
                               BlueprintView):
 
+    template_name = 'registrations/summary.html'
 
     def get_object(self,):
 
@@ -73,17 +74,9 @@ class RegistrationSummaryView(RegistrationMixin,
 
         context = super().get_context_data(**kwargs)
 
-        completed_questions = self.blueprint.completed
+        context['completed'] = self.blueprint.instantiate_completed()
 
-        context['top_questions'] = [
-            q(instance=self.object) for q in top_questions
-        ]
-
-        categories = ParticipantCategory.objects.filter(
-            registration=self.object)
-        context['categories'] = [CategoryQuestion(instance=cat) for cat in categories]
-
-        return context    
+        return context
     
 
 class RegistrationQuestionEditView(QuestionEditView,

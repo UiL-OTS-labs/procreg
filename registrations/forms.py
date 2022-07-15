@@ -143,7 +143,7 @@ class ConfirmInformationUseQuestion(RegistrationQuestionMixin, questions.Questio
     model = Registration
     slug = "confirm_information_use"
     is_editable = False
-    show_progress = False
+    show_progress = True
 
 
     def get_segments(self):
@@ -160,7 +160,10 @@ class ConfirmInformationUseQuestion(RegistrationQuestionMixin, questions.Questio
     def get_success_url(self):
 
         return reverse(
-            "registrations:home"
+            "registrations:summary",
+            kwargs={
+                'reg_pk': self.reg_pk,
+                }
         )
 
 

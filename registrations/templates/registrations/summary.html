@@ -1,0 +1,53 @@
+{% extends "registrations/base.html" %}
+{% load i18n %}
+{% load question_tags %}
+{% load registration_tags %}
+
+{% block main %}
+<h3>{% trans "registrations:summary:page_title" %}</h3>
+
+<p>
+    {% trans "registrations:summary:page_description" %}
+</p>
+
+<div class="summary-questions">
+
+   </div>
+
+<div class="space-top">
+
+
+
+{% for question in completed %}
+{% display_question question %}
+{% endfor %}
+
+
+</div>
+
+
+
+{% endblock %}
+
+{% block sidebar %}
+
+<h4>
+    {% trans "registrations:actions:header" %}
+</h4>
+
+
+<ul>
+    <li>
+        <a href="{% url "registrations:delete" reg_pk=view.object.pk %}">
+            {% trans "registrations:actions:delete" %}
+        </a>
+    </li>
+    <li>
+        <a href="{% url "registrations:create_question" reg_pk=view.object.pk question='category' %}">
+            {% trans "registrations:actions:add_category" %}
+        </a>
+    </li>
+</ul>
+
+
+{% endblock %}
