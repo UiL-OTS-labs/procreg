@@ -97,10 +97,15 @@ class RegistrationBlueprint:
                 "reg_pk": self.registration.pk,
             })
 
-    def instantiate_question(self, question):
+    def instantiate_question(self, question_or_list):
         """Take a question, and return an
         instantiated question for validation and introspection.
         """
+
+        if type(question_or_list) == list:
+            return [self.instantiate_question(q) for q in question_or_list]
+        question = question_or_list
+        
         if question.model == Registration:
             q_object = self.registration
         else:
