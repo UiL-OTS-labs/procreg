@@ -51,6 +51,19 @@ class Registration(models.Model):
              )
         )
 
+    involves_consent = models.BooleanField(
+        default=False,
+        )
+    involves_non_consent = models.BooleanField(
+        default=False,
+        )
+    involves_guardian_consent = models.BooleanField(
+        default=False,
+        )
+    involves_other_people = models.BooleanField(
+        default=False,
+        )
+
 class ParticipantCategory(models.Model):
 
     name = models.CharField(max_length=100,
