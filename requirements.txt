@@ -56,7 +56,7 @@ django-filter==22.1
     # via cdh-django-core
 django-impersonate==1.8.2
     # via -r requirements.in
-django-modeltranslation==0.18.2
+django-modeltranslation==0.18.4
     # via -r requirements.in
 django-simple-menu==1.2.1
     # via -r requirements.in
@@ -105,7 +105,6 @@ requests==2.28.1
 six==1.16.0
     # via
     #   blessings
-    #   django-modeltranslation
     #   lesscpy
     #   pyscss
 sqlparse==0.4.2
