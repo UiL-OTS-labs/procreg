@@ -6,12 +6,12 @@ debug = logging.debug
 
 from cdh.questions.blueprints import Blueprint
 
-from .models import Registration
+from .models import Registration, Involved
 from .progress import RegistrationProgressBar
 from .forms import NewRegistrationQuestion, CategoryQuestion, \
     TraversalQuestion, QUESTIONS, FacultyQuestion, \
     UsesInformationQuestion, ConfirmInformationUseQuestion, \
-    SubmitQuestion
+    SubmitQuestion, InvolvedPeopleQuestion
 
 
 
