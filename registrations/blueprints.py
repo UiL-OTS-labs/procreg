@@ -26,7 +26,7 @@ class RegistrationBlueprint:
     def __init__(self, registration):
         "Set up starting values for blueprint evaluation"
         
-        self.required = []
+        self.required = [InvolvedPeopleQuestion]
         self.completed = []
         self.registration = registration
 
@@ -255,8 +255,8 @@ class UsesInformationConsumer(BaseQuestionConsumer):
             self.blueprint.desired_next.append(ConfirmInformationUseQuestion)
             return self.complete([ConfirmInformationUseConsumer])
         elif answer == True:
-            self.blueprint.desired_next.append(ConfirmInformationUseQuestion)
-            return self.complete([])
+            self.blueprint.desired_next.append(InvolvedPeopleQuestion)
+            return self.complete([InvolvedPeopleConsumer])
 
         return []
 
@@ -265,7 +265,64 @@ class UsesInformationConsumer(BaseQuestionConsumer):
         return fields_not_empty(self.questions[0].Meta.fields)
 
 
+class InvolvedPeopleConsumer(BaseQuestionConsumer):
+    question = InvolvedPeopleQuestion
 
+    def consume(self):
+        "For each involved group, add the relevant consumer"
+        registration = self.blueprint.registration
+
+        # Check if one required groups are checked
+        if True not in [
+                registration.involves_consent,
+                registration.involves_non_consent,
+        ]:
+            return self.no_group_selected()
+
+        selected = []
+        consumer_dict = {
+            'involves_consent': ConsentGroupConsumer,
+            'involves_non_consent': NonConsentGroupConsumer,
+            'involves_guardian_consent': GuardianGroupConsumer,
+            'involves_other_people': OtherGroupConsumer,
+        }
+        for group in self.question.Meta.fields:
+            if getattr(registration, group) == True:
+                selected.append(consumer_dict[group])
+
+        return selected + [AllGroupsSatisfiedConsumer]
+
+class BaseGroupConsumer(BaseQuestionConsumer):
+
+    group_type = None
+    success_list = []
+
+    @property
+    def group_qs(self):
+        registration = self.blueprint.registration
+        return Involved.objects.get(
+            registration=registration,
+            type=self.group_type,
+        )
+
+    def consume():
+        if not self.has_no_entries():
+            if self.check_details():
+                return success()
+        return fail()        
+
+    def check_details(self):
+        return True
+
+    def has_entries(self):
+        return len(self.group_qs) == 0
+
+    def success(self):
+        return self.success_list
+
+    def fail(self):
+        return []
+    
 
 class ConfirmInformationUseConsumer(BaseQuestionConsumer):
 

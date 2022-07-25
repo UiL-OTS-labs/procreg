@@ -139,7 +139,7 @@ class ConfirmInformationUseQuestion(RegistrationQuestionMixin, questions.Questio
         ]
 
     title = _("registrations:forms:confirm_information_use_question_title")
-    description = _("registrations:forms:cofirm_information_use_question_title")
+    description = _("registrations:forms:confirm_information_use_question_title")
     model = Registration
     slug = "confirm_information_use"
     is_editable = False
@@ -165,6 +165,37 @@ class ConfirmInformationUseQuestion(RegistrationQuestionMixin, questions.Questio
                 'reg_pk': self.reg_pk,
                 }
         )
+
+    
+class InvolvedPeopleQuestion(RegistrationQuestionMixin,
+                             questions.Question,):
+
+    class Meta:
+        model = Registration
+        fields = [
+            'involves_consent',
+            'involves_non_consent',
+            'involves_guardian_consent',
+            'involves_other_people',
+        ]
+
+    title = _("registrations:forms:involved_people_question_title")
+    description = _("registrations:forms:involved_people_question_description")
+    model = Meta.model
+    slug = "involved_people"
+    is_editable = True
+    show_progress = True
+
+    def get_segments(self):
+
+        return self._fields_to_segments(
+            fields_list=self.Meta.fields
+        )
+
+        
+            
+    
+
 
 
 class SubmitQuestion(RegistrationQuestionMixin, questions.Question):
@@ -245,6 +276,7 @@ Q_LIST = [NewRegistrationQuestion,
           TraversalQuestion,
           UsesInformationQuestion,
           ConfirmInformationUseQuestion,
+          InvolvedPeopleQuestion,
           ]
 
 QUESTIONS = {q.slug: q for q in Q_LIST}
