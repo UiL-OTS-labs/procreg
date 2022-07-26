@@ -309,22 +309,22 @@ class BaseGroupConsumer(BaseQuestionConsumer):
     @property
     def group_qs(self):
         registration = self.blueprint.registration
-        return Involved.objects.get(
+        return Involved.objects.filter(
             registration=registration,
             type=self.group_type,
         )
 
-    def consume():
-        if not self.has_no_entries():
+    def consume(self):
+        if self.has_entries():
             if self.check_details():
-                return success()
-        return fail()        
+                return self.success()
+        return self.fail()        
 
     def check_details(self):
         return True
 
     def has_entries(self):
-        return len(self.group_qs) == 0
+        return not len(self.group_qs) == 0
 
     def success(self):
         return self.success_list

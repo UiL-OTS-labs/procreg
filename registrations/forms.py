@@ -189,10 +189,33 @@ class InvolvedPeopleQuestion(RegistrationQuestionMixin,
     def get_segments(self):
 
         return self._fields_to_segments(
-            fields_list=self.Meta.fields
+            fields_list=self.Meta.fields,
         )
 
-        
+class StorageQuestion(RegistrationQuestionMixin,
+                      questions.Question,
+                      ):
+
+    class Meta:
+        model = Registration
+        fields = [
+            "data_storage",
+            "consent_document_storage",
+            "multimedia_storage",
+        ]
+
+    title = _("registrations:forms:storage_question_title")
+    description = _("registrations:forms:storage_question_description")
+    model = Meta.model
+    slug = "storage"
+    is_editable = True
+    show_progress = True
+
+    def get_segments(self):
+
+        return self._fields_to_segments(
+            fields=self.Meta.fields,
+        )
             
     
 
