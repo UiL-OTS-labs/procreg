@@ -297,6 +297,10 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
 
         return selected + [AllGroupsSatisfiedConsumer]
 
+    def no_group_selected(self):
+
+        return []
+
 class BaseGroupConsumer(BaseQuestionConsumer):
 
     group_type = None
@@ -327,7 +331,23 @@ class BaseGroupConsumer(BaseQuestionConsumer):
 
     def fail(self):
         return []
-    
+
+class ConsentGroupConsumer(BaseGroupConsumer):
+
+    type = "consent"
+
+class NonConsentGroupConsumer(BaseGroupConsumer):
+
+    type = "non_consent"
+
+class GuardianGroupConsumer(BaseGroupConsumer):
+
+    type = "guardian_consent"
+
+class OtherGroupConsumer(BaseGroupConsumer):
+
+    type = "other"
+
 
 class ConfirmInformationUseConsumer(BaseQuestionConsumer):
 
