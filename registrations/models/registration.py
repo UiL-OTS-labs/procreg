@@ -8,6 +8,16 @@ USER_MODEL = get_user_model()
 
 
 class Registration(models.Model):
+    
+    YES_NO = (
+        ('yes', "models:choices:yes"),
+        ('no', "models:choices:no"),
+    )
+    YES_NO_NA = (
+        ('yes', "models:choices:yes"),
+        ('no', "models:choices:no"),
+        ('non_applicable', "models:choices:non_applicable"),
+    )
 
     title = models.CharField(max_length=200,
                              help_text="models:registration_title_help_text",
@@ -63,6 +73,26 @@ class Registration(models.Model):
     involves_other_people = models.BooleanField(
         default=False,
         )
+    # Storage question
+    # These are charfields for future-proofing and consistency
+   
+    data_storage = models.CharField(
+        max_length=25,
+        choices=YES_NO,
+        default="",
+        )
+    consent_document_storage = models.CharField(
+        max_length=25,
+        choices=YES_NO_NA,
+        default="",
+        )
+    multimedia_storage = models.CharField(
+        max_length=25,
+        choices=YES_NO_NA,
+        default="",
+        )
+    
+    
 
 class ParticipantCategory(models.Model):
 
