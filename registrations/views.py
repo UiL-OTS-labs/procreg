@@ -91,6 +91,9 @@ class RegistrationQuestionEditView(QuestionEditView,
         self.question = self.get_form()
         if hasattr(self.question, 'get_success_url'):
             return self.question.get_success_url()
+        bp_next = self.blueprint.get_desired_next_url()
+        if bp_next:
+            return bp_next
         return reverse_lazy(
             'registrations:overview',
             kwargs={
