@@ -11,7 +11,7 @@ from .progress import RegistrationProgressBar
 from .forms import NewRegistrationQuestion, CategoryQuestion, \
     TraversalQuestion, QUESTIONS, FacultyQuestion, \
     UsesInformationQuestion, ConfirmInformationUseQuestion, \
-    SubmitQuestion, InvolvedPeopleQuestion
+    SubmitQuestion, InvolvedPeopleQuestion, StorageQuestion
 
 
 
@@ -295,7 +295,7 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
             if getattr(registration, group) == True:
                 selected.append(consumer_dict[group])
 
-        return selected + [AllGroupsSatisfiedConsumer]
+        return selected + [StorageConsumer]
 
     def no_group_selected(self):
 
@@ -348,6 +348,9 @@ class OtherGroupConsumer(BaseGroupConsumer):
 
     type = "other"
 
+class StorageConsumer(BaseQuestionConsumer):
+
+    question = StorageQuestion
 
 class ConfirmInformationUseConsumer(BaseQuestionConsumer):
 
