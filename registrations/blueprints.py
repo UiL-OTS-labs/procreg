@@ -97,11 +97,13 @@ class RegistrationBlueprint:
                 "reg_pk": self.registration.pk,
             })
 
-    def instantiate_question(self, question_or_list):
-        """Take a question, and return an
+    def instantiate_question(self, question_or_list, **kwargs):
+        """
+        Return an instantiated question.
+
+        Take a question, and return an
         instantiated question for validation and introspection.
         """
-
         if type(question_or_list) == list:
             return [self.instantiate_question(q) for q in question_or_list]
         question = question_or_list
@@ -109,12 +111,27 @@ class RegistrationBlueprint:
         if question.model == Registration:
             q_object = self.registration
         else:
-            q_model_name = question.model.__name__
-            q_object = getattr(self.registration, q_model_name)
-        return question(instance=q_object)
+            q_object = question.model()
+            # if hasattr(question.model, "registration_related_name"):
+            #     q_object = getattr(
+            #         self.registration, question.model.registration_related_name
+            #     )
+            # else:
+            #     q_model_name = question.model.__name__
+            #     q_object = getattr(self.registration, q_model_name)
+        try:
+            instantiated = question(
+                instance=q_object,
+                reg_pk=self.registration.pk,
+                **kwargs,
+            )
+        except TypeError:
+            print(f"This is instantiated {question}\n\n")
+            return question
+        return instantiated
 
     def instantiate_completed(self):
-        """Instantiates all questions in self.completed"""
+        """Instantiate all questions in self.completed."""
         out = []
         for q in self.completed:
             inst = self.instantiate_question(q)
@@ -157,17 +174,12 @@ class BaseQuestionConsumer(BaseConsumer):
         return self.blueprint.instantiate_question(self.question)
 
     @property
-    def instantiated(self):
-        if hasattr(self, 'instance'):
-            return self.instance
-        else:
-            return self.instantiate()
-
-    @property
     def empty_fields(self):
         empty = []
-        for key in self.instantiated.fields.keys():
-            value = self.instantiated[key].value()
+        question = self.instantiate()
+        print(f"\n\n{question} might be instance??\n\n")
+        for key in question.Meta.fields:
+            value = question[key].value()
             if value in ['', 'None']:
                 empty.append(value)
         return empty
