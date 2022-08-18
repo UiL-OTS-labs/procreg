@@ -51,9 +51,7 @@ def progress_bar(context):
             current = question.slug
             tag_context.update({"current": current})
     tag_context["progress"] = blueprint.progress_bar
-    tag_context["items"] = blueprint.progress_bar.items(
-        current=current
-    )
+    tag_context["items"] = blueprint.progress_bar.items
         
     return tag_context
 
