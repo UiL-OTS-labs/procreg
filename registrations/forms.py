@@ -3,32 +3,47 @@ from django import forms
 from django.urls import reverse
 
 from cdh.questions import questions
-from .models import Registration, ParticipantCategory
+from .models import Registration, ParticipantCategory, Involved
 
 
 
 class RegistrationQuestionMixin:
 
-    show_progress = False
+    show_progress = True
 
     def __init__(self, *args, **kwargs):
 
         self.reg_pk = kwargs.pop('reg_pk', None)
         return super().__init__(*args, **kwargs)
 
+    def get_registration(self):
+
+        if self.reg_pk:
+            self.registration = Registration.objects.get(pk=self.reg_pk)
+        else:
+            self.registration = Registration()
+
+        return self.registration
 
     def get_edit_url(self):
 
+        registration = self.get_registration()
+
         if not hasattr(self.instance, 'registration'):
-            self.instance.registration = self.instance
+            self.instance.registration = registration
+
+        reverse_kwargs = {
+                'question': self.slug,
+                'question_pk': self.instance.pk,
+                'reg_pk': registration.pk,
+            }
+
+        if reverse_kwargs["question_pk"] is None:
+            reverse_kwargs.pop("question_pk")
 
         return reverse(
             'registrations:edit_question',
-            kwargs={
-                'question': self.slug,
-                'question_pk': self.instance.pk,
-                'reg_pk': self.instance.registration.pk,
-            }
+            kwargs=reverse_kwargs,
         )
 
     def instantiate_from_blueprint(blueprint):
@@ -40,6 +55,7 @@ class NewRegistrationQuestion(RegistrationQuestionMixin,
         questions.Question,):
 
     title = _("registrations:forms:registration_title")
+    description = _("registrations:forms:registration_description")
     model = Registration
     slug = 'new_reg'
     is_editable = True
@@ -49,6 +65,9 @@ class NewRegistrationQuestion(RegistrationQuestionMixin,
         fields = [
             'title',
         ]
+
+    fields = Meta.fields
+    model = Meta.model
 
     def get_segments(self):
 
@@ -68,6 +87,7 @@ class FacultyQuestion(RegistrationQuestionMixin, questions.Question):
         ]
 
     title = _("registrations:forms:faculty_question_title")
+    description = _("registrations:forms:faculty_question_description")
     model = Registration
     slug = "faculty"
     is_editable = True
@@ -192,6 +212,57 @@ class InvolvedPeopleQuestion(RegistrationQuestionMixin,
             fields_list=self.Meta.fields,
         )
 
+
+class NewInvolvedQuestion(RegistrationQuestionMixin,
+                          questions.Question,
+                          ):
+    class Meta:
+        model = Involved
+        fields = [
+            'name',
+        ]
+
+    is_editable = True
+    slug = "new_involved"
+    title = _("registrations:forms:involved:new_title")
+    description = _("registrations:forms:involved:new_description")
+    model = Meta.model
+
+    def __init__(self, *args, **kwargs):
+
+        self.type = kwargs.pop("type", None)
+        return super().__init__(*args, **kwargs)
+
+    def get_segments(self):
+        type_paragraph = questions.Segment(
+            type="paragraph",
+            paragraph=f"Type: {self.type}",
+        )
+
+        return [type_paragraph] + self._fields_to_segments(
+            fields_list=self.Meta.fields,
+        )
+
+    def get_edit_url(self):
+
+        registration = self.get_registration()
+
+        reverse_kwargs = {
+            "reg_pk": registration.pk,
+            "question": self.slug,
+        }
+
+        if self.instance.pk:  # Edit existing model
+            reverse_kwargs['question_pk'] = self.instance.pk
+        else:  # Else, make sure we know what type to create
+            reverse_kwargs['type'] = self.type
+
+        return reverse(
+            "registrations:edit_question",
+            kwargs=reverse_kwargs,
+        )
+
+
 class StorageQuestion(RegistrationQuestionMixin,
                       questions.Question,
                       ):
@@ -214,7 +285,7 @@ class StorageQuestion(RegistrationQuestionMixin,
     def get_segments(self):
 
         return self._fields_to_segments(
-            fields=self.Meta.fields,
+            fields_list=self.Meta.fields,
         )
             
     
@@ -300,6 +371,8 @@ Q_LIST = [NewRegistrationQuestion,
           UsesInformationQuestion,
           ConfirmInformationUseQuestion,
           InvolvedPeopleQuestion,
+          StorageQuestion,
+          NewInvolvedQuestion,
           ]
 
 QUESTIONS = {q.slug: q for q in Q_LIST}

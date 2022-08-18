@@ -11,22 +11,27 @@ from .progress import RegistrationProgressBar
 from .forms import NewRegistrationQuestion, CategoryQuestion, \
     TraversalQuestion, QUESTIONS, FacultyQuestion, \
     UsesInformationQuestion, ConfirmInformationUseQuestion, \
-    SubmitQuestion, InvolvedPeopleQuestion, StorageQuestion
+    SubmitQuestion, InvolvedPeopleQuestion, StorageQuestion, \
+    NewInvolvedQuestion
 
+
+info = logging.info
+debug = logging.debug
 
 
 class RegistrationBlueprint:
-    """The blueprint for a ProcReg registration. 
-    This class provides information on current progress,
-    error messages, next question, and validation information."""
+    """
+    The blueprint for a ProcReg registration.
 
+    This class provides information on current progress,
+    error messages, nexT question, and validation information.
+    """
     model = Registration
-    primary_questions = [NewRegistrationQuestion,]
+    primary_questions = [NewRegistrationQuestion, ]
 
     def __init__(self, registration):
-        "Set up starting values for blueprint evaluation"
-        
-        self.required = [InvolvedPeopleQuestion]
+        """Set up starting values for blueprint evaluation."""
+        self.required = []
         self.completed = []
         self.registration = registration
 
