@@ -39,7 +39,7 @@ class RegistrationOverview(RegistrationMixin,
     template_name = "registrations/overview.html"
 
     def get_object(self,):
-
+        self.get_blueprint()
         return self.get_registration()
 
     def get_context_data(self, **kwargs):
@@ -52,7 +52,7 @@ class RegistrationOverview(RegistrationMixin,
         ]
 
         context['top_questions'] = [
-            q(instance=self.object) for q in top_questions
+            self.blueprint.instantiate_question(q) for q in top_questions
         ]
 
         categories = ParticipantCategory.objects.filter(
@@ -91,6 +91,9 @@ class RegistrationQuestionEditView(QuestionEditView,
         self.question = self.get_form()
         if hasattr(self.question, 'get_success_url'):
             return self.question.get_success_url()
+        # Rebuild blueprint before getting desired next
+        # The answer might change if new info was POSTed
+        self.blueprint = self.get_blueprint()
         bp_next = self.blueprint.get_desired_next_url()
         if bp_next:
             return bp_next

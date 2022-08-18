@@ -63,9 +63,16 @@ class RegistrationMixin(UsersOrGroupsAllowedMixin):
 
         self.registration = Registration.objects.get(
             pk=self.kwargs.get('reg_pk'))
-        self.blueprint = RegistrationBlueprint(self.registration)
 
         return self.registration
+
+    def get_blueprint(self):
+        self.blueprint = RegistrationBlueprint(
+            self.get_registration(),
+        )
+        return self.blueprint
+
+        
 
     def get_allowed_users(self):
 
@@ -79,5 +86,5 @@ class RegistrationMixin(UsersOrGroupsAllowedMixin):
         context = super().get_context_data(*args, **kwargs)
 
         context['registration'] = self.get_registration()
-        context['blueprint'] = self.blueprint
+        context['blueprint'] = self.get_blueprint()
         return context
