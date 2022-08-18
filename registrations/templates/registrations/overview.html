@@ -21,7 +21,7 @@
     <h3>{% trans "registrations:overview:progress_title" %}</h3>
     {% if blueprint.desired_next %}
     <p>Vervolg uw aanvraag hier:</p>
-    {% display_question_header blueprint.desired_next %}
+    {% display_question_header blueprint.get_desired_next %}
     <div class="buttons">
     <a href="{{blueprint.get_desired_next_url}}">
         <button>
