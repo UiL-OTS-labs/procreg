@@ -1,8 +1,6 @@
 from django.urls import reverse
 import logging
 
-info = logging.info
-debug = logging.debug
 
 from cdh.questions.blueprints import Blueprint
 
@@ -52,8 +50,13 @@ class RegistrationBlueprint:
 
         self.evaluate(self.starting_consumers)
 
+        self.progress_bar.populate()
+
     def evaluate(self, consumers):
-        """This recursive function goes through the list
+        """
+        Evaluate all consumers.
+
+        This recursive function goes through the list
         of consumers and presents them with this blueprint
         object. The consumers look at the current state of
         the blueprint to see if it satisfies their needs.
@@ -63,8 +66,8 @@ class RegistrationBlueprint:
 
         While in this loop, consumers may modify
         blueprint state by adding errors and setting
-        desired_next."""
-
+        desired_next.
+        """
         # We've run out of consumers. Finally.
         if consumers == []:
             return True
@@ -78,6 +81,9 @@ class RegistrationBlueprint:
 
         return self.evaluate(consumers=next_consumers)
 
+    def required(self):
+        usual = [NewRegistrationQuestion]
+
     def get_desired_next(self, index=1):
         try:
             return self.desired_next[-index]
@@ -85,8 +91,7 @@ class RegistrationBlueprint:
             return None
 
     def get_desired_next_url(self, index=1):
-        """Turn the desired_next Question into a URL.
-        Probably a QuestionEditView."""
+        """Turn the desired_next Question into a URL."""
         next_question = self.get_desired_next(index)
         if not next_question:
             return reverse('registrations:overview',
@@ -144,7 +149,6 @@ class RegistrationBlueprint:
                 inst = [inst]
             out += inst
         return out
-                
 
 
 class BaseConsumer:
@@ -204,6 +208,10 @@ class BasicDetailsConsumer(BaseQuestionConsumer):
         else:
             return []
 
+    def complete(self, next):
+        """Don't append to completed."""
+        return next
+       
     def check_details(self):
         if self.empty_fields != []:
             return False
@@ -221,6 +229,10 @@ class FacultyConsumer(BaseQuestionConsumer):
             return []
         return [UsesInformationConsumer]
 
+    def complete(self, next):
+        """Don't append to completed."""
+        return next
+    
     def check_details(self):
         registration = self.blueprint.registration
         empty = has_empty_fields(
@@ -273,10 +285,10 @@ class UsesInformationConsumer(BaseQuestionConsumer):
             return []
 
         answer = self.blueprint.registration.uses_information
-        if answer  == False:
+        if answer is False:
             self.blueprint.desired_next.append(ConfirmInformationUseQuestion)
             return self.complete([ConfirmInformationUseConsumer])
-        elif answer == True:
+        elif answer is True:
             self.blueprint.desired_next.append(InvolvedPeopleQuestion)
             return self.complete([InvolvedPeopleConsumer])
 
@@ -291,7 +303,7 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
     question = InvolvedPeopleQuestion
 
     def consume(self):
-        "For each involved group, add the relevant consumer"
+        """For each involved group, add the relevant consumer."""
         registration = self.blueprint.registration
 
         # Check if one required groups are checked
@@ -309,19 +321,26 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
             'involves_other_people': OtherGroupConsumer,
         }
         for group in self.question.Meta.fields:
-            if getattr(registration, group) == True:
+            if getattr(registration, group) is True:
                 selected.append(consumer_dict[group])
-
-        return selected + [StorageConsumer]
+        if selected != []:
+            return self.complete(selected + [StorageConsumer])
+        else:
+            return []
 
     def no_group_selected(self):
 
         return []
 
+
 class BaseGroupConsumer(BaseQuestionConsumer):
 
     group_type = None
     success_list = []
+
+    def __init__(self, *args, **kwargs):
+
+        return super().__init__(*args, **kwargs)
 
     @property
     def group_qs(self):
@@ -335,7 +354,7 @@ class BaseGroupConsumer(BaseQuestionConsumer):
         if self.has_entries():
             if self.check_details():
                 return self.success()
-        return self.fail()        
+        return self.fail()
 
     def check_details(self):
         return True
@@ -347,27 +366,45 @@ class BaseGroupConsumer(BaseQuestionConsumer):
         return self.success_list
 
     def fail(self):
+        self.blueprint.required.append(
+            self.blueprint.instantiate_question(
+                NewInvolvedQuestion,
+                type=self.type,
+            )
+        )
         return []
+
 
 class ConsentGroupConsumer(BaseGroupConsumer):
 
     type = "consent"
 
+
 class NonConsentGroupConsumer(BaseGroupConsumer):
 
     type = "non_consent"
+
 
 class GuardianGroupConsumer(BaseGroupConsumer):
 
     type = "guardian_consent"
 
+
 class OtherGroupConsumer(BaseGroupConsumer):
 
     type = "other"
 
+
 class StorageConsumer(BaseQuestionConsumer):
 
     question = StorageQuestion
+
+    def consume(self):
+
+        if self.empty_fields == []:
+            self.complete()
+        return []
+
 
 class ConfirmInformationUseConsumer(BaseQuestionConsumer):
 
@@ -381,8 +418,9 @@ class ConfirmInformationUseConsumer(BaseQuestionConsumer):
 
         return fields_not_empty(self.questions[0].Meta.fields)
 
+
 def has_empty_fields(fields):
-    "Check if any of these fields are empty"
+    """Check if any of these fields are empty."""
     errors = []
     for f in fields:
         if f in ['', None]:
