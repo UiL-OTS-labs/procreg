@@ -8,7 +8,10 @@ from . import Registration
 
 USER_MODEL = get_user_model()
 
+
 class Involved(models.Model):
+
+    registration_related_name = "involved_groups"
 
     TYPES = (
         ('consent', _("models:involved:consent")),
@@ -21,8 +24,16 @@ class Involved(models.Model):
         max_length=25,
         choices=TYPES,
     )
+    name = models.CharField(
+        max_length=200,
+        default="",
+    )
     registration = models.ForeignKey(
         to=Registration,
         on_delete=models.CASCADE,
         related_name='involved_groups',
-        )
+    )
+    process_purpose = models.TextField(
+        max_length=500,
+        default="",
+    )
