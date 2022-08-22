@@ -422,6 +422,7 @@ class StorageConsumer(BaseQuestionConsumer):
 class ConfirmInformationUseConsumer(BaseQuestionConsumer):
 
     questions = [ConfirmInformationUseQuestion]
+    question = ConfirmInformationUseQuestion
 
     def consume(self):
 
