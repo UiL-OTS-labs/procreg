@@ -350,8 +350,21 @@ class BaseGroupConsumer(BaseQuestionConsumer):
         registration = self.blueprint.registration
         return Involved.objects.filter(
             registration=registration,
-            type=self.group_type,
+            group_type=self.group_type,
         )
+
+    def instantiate(self):
+        if len(self.group_qs) > 0:
+            iq = self.question(
+                instance=self.group_qs.first(),
+                registration=self.blueprint.registration,
+            )
+        else:
+            iq = self.question(
+                group_type=self.group_type,
+                registration=self.blueprint.registration,
+            )
+        return iq
 
     def consume(self):
         if self.has_entries():
