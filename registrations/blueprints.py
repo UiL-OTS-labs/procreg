@@ -31,6 +31,7 @@ class RegistrationBlueprint:
         """Set up starting values for blueprint evaluation."""
         self.required = []
         self.completed = []
+        self.questions = []
         self.registration = registration
 
         # This is messy, subject to change
@@ -192,9 +193,10 @@ class BaseQuestionConsumer(BaseConsumer):
             if value in ['', 'None']:
                 empty.append(value)
         return empty
-            
+
     def complete(self, *args, **kwargs):
         self.blueprint.completed += [self.question]
+        self.blueprint.questions += [self.instantiate()]
         return super().complete(*args, **kwargs)
 
 
@@ -326,7 +328,7 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
         if selected != []:
             return self.complete(selected + [StorageConsumer])
         else:
-            return []
+            return self.complete([])
 
     def no_group_selected(self):
 
@@ -335,6 +337,7 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
 
 class BaseGroupConsumer(BaseQuestionConsumer):
 
+    question = NewInvolvedQuestion
     group_type = None
     success_list = []
 
@@ -366,33 +369,30 @@ class BaseGroupConsumer(BaseQuestionConsumer):
         return self.success_list
 
     def fail(self):
-        self.blueprint.required.append(
-            self.blueprint.instantiate_question(
-                NewInvolvedQuestion,
-                type=self.type,
-            )
+        self.blueprint.questions.append(
+            self.instantiate()
         )
         return []
 
 
 class ConsentGroupConsumer(BaseGroupConsumer):
 
-    type = "consent"
+    group_type = "consent"
 
 
 class NonConsentGroupConsumer(BaseGroupConsumer):
 
-    type = "non_consent"
+    group_type = "non_consent"
 
 
 class GuardianGroupConsumer(BaseGroupConsumer):
 
-    type = "guardian_consent"
+    group_type = "guardian_consent"
 
 
 class OtherGroupConsumer(BaseGroupConsumer):
 
-    type = "other"
+    group_type = "other"
 
 
 class StorageConsumer(BaseQuestionConsumer):
