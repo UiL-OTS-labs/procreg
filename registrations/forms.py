@@ -229,14 +229,18 @@ class NewInvolvedQuestion(RegistrationQuestionMixin,
     model = Meta.model
 
     def __init__(self, *args, **kwargs):
+        "Look for a group type in kwargs or alternatively given instance."
 
-        self.type = kwargs.pop("type", None)
+        self.group_type = kwargs.pop("group_type", None)
+        if not self.group_type:
+            if "instance" in kwargs.keys():
+                self.group_type = kwargs["instance"].group_type
         return super().__init__(*args, **kwargs)
 
     def get_segments(self):
         type_paragraph = questions.Segment(
             type="paragraph",
-            paragraph=f"Type: {self.type}",
+            paragraph=f"Type: {self.group_type}",
         )
 
         return [type_paragraph] + self._fields_to_segments(
