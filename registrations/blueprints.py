@@ -66,7 +66,7 @@ class RegistrationBlueprint:
         append to the end of the list. This list may be empty.
 
         While in this loop, consumers may modify
-        blueprint state by adding errors and setting
+        blueprint state by adding errors and appending to
         desired_next.
         """
         # We've run out of consumers. Finally.
@@ -164,7 +164,7 @@ class BaseConsumer:
                 return []
             return self.on_complete
         return out_list
-    
+
     def consume(self):
         """Returns a list of new consumers depending on
         the state of our blueprint."""
@@ -179,7 +179,7 @@ class BaseQuestionConsumer(BaseConsumer):
         errors = self.instantiated.errors
         debug(f'Errors in question {self.question}: {errors}')
         return errors
-    
+
     def instantiate(self):
         return self.blueprint.instantiate_question(self.question)
 
@@ -213,13 +213,13 @@ class BasicDetailsConsumer(BaseQuestionConsumer):
     def complete(self, next):
         """Don't append to completed."""
         return next
-       
+
     def check_details(self):
         if self.empty_fields != []:
             return False
         return True
 
-    
+
 class FacultyConsumer(BaseQuestionConsumer):
     question = FacultyQuestion
 
