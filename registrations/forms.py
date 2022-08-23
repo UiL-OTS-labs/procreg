@@ -14,15 +14,15 @@ class RegistrationQuestionMixin:
     def __init__(self, *args, **kwargs):
 
         self.reg_pk = kwargs.pop('reg_pk', None)
+        self.registration = kwargs.pop('registration', None)
         return super().__init__(*args, **kwargs)
 
     def get_registration(self):
-
-        if self.reg_pk:
-            self.registration = Registration.objects.get(pk=self.reg_pk)
-        else:
-            self.registration = Registration()
-
+        if not self.registration:
+            if self.reg_pk:
+                self.registration = Registration.objects.get(pk=self.reg_pk)
+            else:
+                self.registration = Registration()
         return self.registration
 
     def get_edit_url(self):
@@ -33,10 +33,10 @@ class RegistrationQuestionMixin:
             self.instance.registration = registration
 
         reverse_kwargs = {
-                'question': self.slug,
-                'question_pk': self.instance.pk,
-                'reg_pk': registration.pk,
-            }
+            'question': self.slug,
+            'question_pk': self.instance.pk,
+            'reg_pk': registration.pk,
+        }
 
         if reverse_kwargs["question_pk"] is None:
             reverse_kwargs.pop("question_pk")
@@ -46,9 +46,9 @@ class RegistrationQuestionMixin:
             kwargs=reverse_kwargs,
         )
 
-    def instantiate_from_blueprint(blueprint):
+#    def instantiate_from_blueprint(blueprint):
 
-        return super()(instance=blueprint.registration)
+#        return super()(instance=blueprint.registration)
 
 
 class NewRegistrationQuestion(RegistrationQuestionMixin,
@@ -229,14 +229,18 @@ class NewInvolvedQuestion(RegistrationQuestionMixin,
     model = Meta.model
 
     def __init__(self, *args, **kwargs):
+        "Look for a group type in kwargs or alternatively given instance."
 
-        self.type = kwargs.pop("type", None)
+        self.group_type = kwargs.pop("group_type", None)
+        if not self.group_type:
+            if "instance" in kwargs.keys():
+                self.group_type = kwargs["instance"].group_type
         return super().__init__(*args, **kwargs)
 
     def get_segments(self):
         type_paragraph = questions.Segment(
             type="paragraph",
-            paragraph=f"Type: {self.type}",
+            paragraph=f"Type: {self.group_type}",
         )
 
         return [type_paragraph] + self._fields_to_segments(
@@ -255,7 +259,7 @@ class NewInvolvedQuestion(RegistrationQuestionMixin,
         if self.instance.pk:  # Edit existing model
             reverse_kwargs['question_pk'] = self.instance.pk
         else:  # Else, make sure we know what type to create
-            reverse_kwargs['type'] = self.type
+            reverse_kwargs['group_type'] = self.group_type
 
         return reverse(
             "registrations:edit_question",
