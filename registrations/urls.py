@@ -37,7 +37,7 @@ urlpatterns = [
     path('delete/category/<int:pk>/',
          MinimalDeleteView.as_view(
              model=ParticipantCategory),
-         #parent_pk_arg='reg_pk',
+         # parent_pk_arg='reg_pk',
          name='minimal_delete'
          )
 ]
