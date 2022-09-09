@@ -76,14 +76,18 @@ class RegistrationProgressBar:
 
     def populate(self):
 
-        for q in self.blueprint.completed:
-            self.add_question(q)
+        try:
+            for rq in self.blueprint.required:
+                self.add_question(rq)
 
-        for rq in self.blueprint.required:
-            self.add_question(rq)
+            for qq in self.blueprint.questions:
+                self.add_question(qq)
+
+        except:
+            print("Breaking out of progress bar construction")
+            breakpoint()
 
     def add_question(self, question):
-        question = self.blueprint.instantiate_question(question)
         completed = question.slug in [
             q.slug for q in self.blueprint.completed
         ]
