@@ -111,11 +111,13 @@ class RegistrationQuestionEditView(QuestionEditView,
         kwargs = super().get_form_kwargs()
         reg_pk = self.kwargs.get('reg_pk')
         kwargs.update({'reg_pk': reg_pk})
+        kwargs.update({'registration': self.get_registration()})
         return kwargs
 
     def get_context_data(self, *args, **kwargs):
 
         context = super().get_context_data(*args, **kwargs)
+
         context["question"] = self.question
         context["show_progress"] = True
 

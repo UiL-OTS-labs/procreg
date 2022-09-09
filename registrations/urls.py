@@ -20,7 +20,7 @@ urlpatterns = [
              question_dict=QUESTIONS,
              parent_pk_arg='reg_pk'),
          name='edit_question'),
-    path('<int:reg_pk>/<str:question>/<str:type>/',
+    path('<int:reg_pk>/<str:question>/<str:group_type>/',
          RegistrationQuestionEditView.as_view(
              question_dict=QUESTIONS,
              parent_pk_arg='reg_pk'),
@@ -37,7 +37,7 @@ urlpatterns = [
     path('delete/category/<int:pk>/',
          MinimalDeleteView.as_view(
              model=ParticipantCategory),
-         #parent_pk_arg='reg_pk',
+         # parent_pk_arg='reg_pk',
          name='minimal_delete'
          )
 ]

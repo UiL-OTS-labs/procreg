@@ -52,6 +52,7 @@ class UsersOrGroupsAllowedMixin():
         return super(UsersOrGroupsAllowedMixin, self).dispatch(
             request, *args, **kwargs)
 
+
 class RegistrationMixin(UsersOrGroupsAllowedMixin):
 
     blueprint = RegistrationBlueprint
@@ -71,8 +72,6 @@ class RegistrationMixin(UsersOrGroupsAllowedMixin):
             self.get_registration(),
         )
         return self.blueprint
-
-        
 
     def get_allowed_users(self):
 

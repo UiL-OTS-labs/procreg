@@ -31,6 +31,7 @@ class RegistrationBlueprint:
         """Set up starting values for blueprint evaluation."""
         self.required = []
         self.completed = []
+        self.questions = []
         self.registration = registration
 
         # This is messy, subject to change
@@ -65,7 +66,7 @@ class RegistrationBlueprint:
         append to the end of the list. This list may be empty.
 
         While in this loop, consumers may modify
-        blueprint state by adding errors and setting
+        blueprint state by adding errors and appending to
         desired_next.
         """
         # We've run out of consumers. Finally.
@@ -163,7 +164,7 @@ class BaseConsumer:
                 return []
             return self.on_complete
         return out_list
-    
+
     def consume(self):
         """Returns a list of new consumers depending on
         the state of our blueprint."""
@@ -178,7 +179,7 @@ class BaseQuestionConsumer(BaseConsumer):
         errors = self.instantiated.errors
         debug(f'Errors in question {self.question}: {errors}')
         return errors
-    
+
     def instantiate(self):
         return self.blueprint.instantiate_question(self.question)
 
@@ -192,9 +193,10 @@ class BaseQuestionConsumer(BaseConsumer):
             if value in ['', 'None']:
                 empty.append(value)
         return empty
-            
+
     def complete(self, *args, **kwargs):
         self.blueprint.completed += [self.question]
+        self.blueprint.questions += [self.instantiate()]
         return super().complete(*args, **kwargs)
 
 
@@ -211,13 +213,13 @@ class BasicDetailsConsumer(BaseQuestionConsumer):
     def complete(self, next):
         """Don't append to completed."""
         return next
-       
+
     def check_details(self):
         if self.empty_fields != []:
             return False
         return True
 
-    
+
 class FacultyConsumer(BaseQuestionConsumer):
     question = FacultyQuestion
 
@@ -326,7 +328,7 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
         if selected != []:
             return self.complete(selected + [StorageConsumer])
         else:
-            return []
+            return self.complete([])
 
     def no_group_selected(self):
 
@@ -335,6 +337,7 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
 
 class BaseGroupConsumer(BaseQuestionConsumer):
 
+    question = NewInvolvedQuestion
     group_type = None
     success_list = []
 
@@ -347,8 +350,21 @@ class BaseGroupConsumer(BaseQuestionConsumer):
         registration = self.blueprint.registration
         return Involved.objects.filter(
             registration=registration,
-            type=self.group_type,
+            group_type=self.group_type,
         )
+
+    def instantiate(self):
+        if len(self.group_qs) > 0:
+            iq = self.question(
+                instance=self.group_qs.first(),
+                registration=self.blueprint.registration,
+            )
+        else:
+            iq = self.question(
+                group_type=self.group_type,
+                registration=self.blueprint.registration,
+            )
+        return iq
 
     def consume(self):
         if self.has_entries():
@@ -366,33 +382,30 @@ class BaseGroupConsumer(BaseQuestionConsumer):
         return self.success_list
 
     def fail(self):
-        self.blueprint.required.append(
-            self.blueprint.instantiate_question(
-                NewInvolvedQuestion,
-                type=self.type,
-            )
+        self.blueprint.questions.append(
+            self.instantiate()
         )
         return []
 
 
 class ConsentGroupConsumer(BaseGroupConsumer):
 
-    type = "consent"
+    group_type = "consent"
 
 
 class NonConsentGroupConsumer(BaseGroupConsumer):
 
-    type = "non_consent"
+    group_type = "non_consent"
 
 
 class GuardianGroupConsumer(BaseGroupConsumer):
 
-    type = "guardian_consent"
+    group_type = "guardian_consent"
 
 
 class OtherGroupConsumer(BaseGroupConsumer):
 
-    type = "other"
+    group_type = "other"
 
 
 class StorageConsumer(BaseQuestionConsumer):
@@ -409,6 +422,7 @@ class StorageConsumer(BaseQuestionConsumer):
 class ConfirmInformationUseConsumer(BaseQuestionConsumer):
 
     questions = [ConfirmInformationUseQuestion]
+    question = ConfirmInformationUseQuestion
 
     def consume(self):
 

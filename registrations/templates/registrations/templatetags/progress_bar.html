@@ -7,5 +7,7 @@
   <li class="{{item.css_class}}">
     <a href="{{item.url}}">{{item.title}}</a>
   </li>
+  {% empty %}
+  No progress items found!
   {% endfor %}
 </ul>
