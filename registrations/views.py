@@ -1,18 +1,19 @@
 import logging
-debug = logging.debug
 
 from django.shortcuts import render
 from django.views import generic
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from cdh.questions.views import BlueprintView, QuestionEditView, \
     QuestionDeleteView, QuestionCreateView
 
-from .models import Registration, ParticipantCategory
+from .models import Registration, ParticipantCategory, Involved
 from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
 from .blueprints import RegistrationBlueprint
 from .mixins import RegistrationMixin
+
+debug = logging.debug
 
 
 class RegistrationsHomeView(LoginRequiredMixin,
@@ -28,6 +29,7 @@ class RegistrationsHomeView(LoginRequiredMixin,
 
         qs = Registration.objects.all()
         return qs
+
 
 class RegistrationOverview(RegistrationMixin,
                            BlueprintView):
@@ -155,6 +157,61 @@ class RegistrationDeleteView(generic.DeleteView,
     template_name = "registrations/delete_registration.html"
     success_url = reverse_lazy("registrations:home")
     pk_url_kwarg = 'reg_pk'
+
+
+class InvolvedManager(generic.TemplateView,
+                      RegistrationMixin,
+                      BlueprintView,
+                      ):
+
+    title = "registrations:views:involved_manager_title"
+    description = "registrations:views:involved_manager_description"
+    template_name = "registrations/involved_manager.html"
+    slug = "manager"
+    extra_context = {
+        "show_progress": True,
+    }
+
+    def __init__(self, *args, **kwargs):
+
+        self.registration = kwargs.get("registration")
+        self.group_type = kwargs.get("group_type")
+
+        if not self.group_type:
+            self.group_type = "consent"
+        else:
+            self.slug = self.group_type + "_manager"
+
+        self.object = None
+
+        return super().__init__(*args, **kwargs)
+
+    def get_queryset(self):
+
+        return Involved.objects.filter(
+            registration=self.registration,
+            group_type=self.group_type,
+        )
+
+    def get_context_data(self, *args, **kwargs):
+
+        context = super().get_context_data(*args, **kwargs)
+        context[object] = self.get_object()
+        return context
+
+    def get_object(self):
+        return self.registration
+
+    def get_edit_url(self):
+
+        reverse_kwargs = {
+            "reg_pk": self.registration.pk,
+            "group_type": self.group_type,
+        }
+        return reverse(
+            "registrations:involved_manager",
+            kwargs=reverse_kwargs,
+        )
 
 
 class MinimalCategoryView(generic.TemplateView,
