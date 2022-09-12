@@ -10,7 +10,7 @@ from .forms import NewRegistrationQuestion, CategoryQuestion, \
     TraversalQuestion, QUESTIONS, FacultyQuestion, \
     UsesInformationQuestion, ConfirmInformationUseQuestion, \
     SubmitQuestion, InvolvedPeopleQuestion, StorageQuestion, \
-    NewInvolvedQuestion
+    NewInvolvedQuestion, PurposeQuestion
 
 
 info = logging.info
@@ -451,6 +451,11 @@ class GuardianGroupConsumer(BaseGroupConsumer):
 class OtherGroupConsumer(BaseGroupConsumer):
 
     group_type = "other"
+
+
+class PurposeConsumer(BaseQuestionConsumer):
+
+    question = PurposeQuestion
 
 
 class StorageConsumer(BaseQuestionConsumer):

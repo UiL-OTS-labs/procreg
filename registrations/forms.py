@@ -300,7 +300,30 @@ class StorageQuestion(RegistrationQuestionMixin,
         return self._fields_to_segments(
             fields_list=self.Meta.fields,
         )
-            
+
+    
+class PurposeQuestion(RegistrationQuestionMixin,
+                      questions.Question,
+                      ):
+
+    class Meta:
+        model = Involved
+        fields = [
+            "process_purpose",
+        ]
+
+    title = _("registrations:forms:purpose_question_title")
+    description = _("registrations:forms:purpose_question_description")
+    model = Meta.model
+    slug = "purpose"
+    is_editable = True
+    show_progress = True
+
+    def get_segments(self):
+
+        return self._fields_to_segments(
+            fields_list=self.Meta.fields,
+        )
     
 
 
