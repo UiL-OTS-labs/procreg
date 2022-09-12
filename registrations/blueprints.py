@@ -327,7 +327,8 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
             if getattr(registration, group) is True:
                 selected.append(consumer_dict[group])
         if selected != []:
-            return self.complete(selected + [StorageConsumer])
+            return self.complete(selected + [ConsentManagerConsumer,
+                                             StorageConsumer, ])
         else:
             return self.complete([])
 
@@ -335,6 +336,49 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
 
         return []
 
+
+class GroupManagerConsumer(BaseConsumer):
+    """This consumer is added when at least one group of a type
+    is needed, and succeeds if at least one group of the type
+    is correctly filled in."""
+
+    group_type = None
+    success_list = []
+
+    def __init__(self, *args, **kwargs):
+
+        return super().__init__(*args, **kwargs)
+
+    @property
+    def group_qs(self):
+        registration = self.blueprint.registration
+        return Involved.objects.filter(
+            registration=registration,
+            group_type=self.group_type,
+        )
+    
+    def get_manager(self):
+
+        from .views import InvolvedManager
+        return InvolvedManager(
+            registration=self.blueprint.registration,
+            group_type=self.group_type,
+        )
+
+    def consume(self):
+        return self.success()
+
+    def success(self):
+        manager = self.get_manager()
+        self.blueprint.extra_pages.append(manager)
+        return self.success_list
+        
+
+class ConsentManagerConsumer(GroupManagerConsumer):
+
+    group_type = "consent"
+
+    
 
 class BaseGroupConsumer(BaseQuestionConsumer):
 
