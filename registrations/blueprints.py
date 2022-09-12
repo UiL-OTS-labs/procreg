@@ -32,6 +32,7 @@ class RegistrationBlueprint:
         self.required = []
         self.completed = []
         self.questions = []
+        self.extra_pages = []
         self.registration = registration
 
         # This is messy, subject to change

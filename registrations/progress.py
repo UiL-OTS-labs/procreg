@@ -83,9 +83,14 @@ class RegistrationProgressBar:
             for qq in self.blueprint.questions:
                 self.add_question(qq)
 
-        except:
-            print("Breaking out of progress bar construction")
+            for ep in self.blueprint.extra_pages:
+                self.add_question(ep)
+
+        except Exception as exc:
             breakpoint()
+            print(
+                f"""Breaking out of progress bar construction with exception e:
+                {exc}""")
 
     def add_question(self, question):
         completed = question.slug in [
