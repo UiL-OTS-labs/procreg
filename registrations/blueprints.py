@@ -316,25 +316,50 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
         ]:
             return self.no_group_selected()
 
-        selected = []
-        consumer_dict = {
-            'involves_consent': ConsentGroupConsumer,
-            'involves_non_consent': NonConsentGroupConsumer,
-            'involves_guardian_consent': GuardianGroupConsumer,
-            'involves_other_people': OtherGroupConsumer,
-        }
-        for group in self.question.Meta.fields:
-            if getattr(registration, group) is True:
-                selected.append(consumer_dict[group])
-        if selected != []:
-            return self.complete(selected + [ConsentManagerConsumer,
-                                             StorageConsumer, ])
+        # Fetch relevant consumer and manager for user selection
+        consumers, managers = self._get_selected()
+
+        # Append relevant managers here for progress bar
+        for m in managers:
+            self.blueprint.extra_pages.append(m)
+
+        # Finally, return 
+        if consumers != []:
+            return self.complete(consumers + [StorageConsumer])
         else:
             return self.complete([])
 
     def no_group_selected(self):
 
         return []
+
+    def _get_selected(self):
+        """Return the appropriate lists of consumers and managers for the
+        booleans set on the registration"""
+        
+        registration = self.blueprint.registration
+        selected = []
+        managers = []
+        consumer_dict = {
+            'involves_consent': (ConsentGroupConsumer, "consent"),
+            'involves_non_consent': (NonConsentGroupConsumer, "non_consent"),
+            'involves_guardian_consent': (GuardianGroupConsumer, "guardian_consent"),
+            'involves_other_people': (OtherGroupConsumer, "other"),
+        }
+        # Importing here to prevent circular import
+        from .views import InvolvedManager
+        for group in self.question.Meta.fields:
+            if getattr(registration, group) is True:
+                consumer, group_type = consumer_dict[group]
+                # These consumers will be added to this function's output
+                selected.append(consumer)
+                # Add managers to progress bar
+                manager = InvolvedManager(
+                    registration=self.blueprint.registration,
+                    group_type=group_type,
+                )
+                managers.append(manager)
+        return selected, managers
 
 
 class GroupManagerConsumer(BaseConsumer):
@@ -378,9 +403,8 @@ class ConsentManagerConsumer(GroupManagerConsumer):
 
     group_type = "consent"
 
-    
 
-class BaseGroupConsumer(BaseQuestionConsumer):
+class BaseGroupConsumer(BaseConsumer):
 
     question = NewInvolvedQuestion
     group_type = None
@@ -427,9 +451,6 @@ class BaseGroupConsumer(BaseQuestionConsumer):
         return self.success_list
 
     def fail(self):
-        self.blueprint.questions.append(
-            self.instantiate()
-        )
         return []
 
 
