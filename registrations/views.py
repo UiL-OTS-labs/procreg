@@ -173,30 +173,22 @@ class InvolvedManager(generic.TemplateView,
     }
 
     def __init__(self, *args, **kwargs):
-
         self.registration = kwargs.get("registration")
         self.group_type = kwargs.get("group_type")
-
-        if not self.group_type:
-            self.group_type = "consent"
-        else:
-            self.slug = self.group_type + "_manager"
-
-        self.object = None
-
         return super().__init__(*args, **kwargs)
 
     def get_queryset(self):
-
-        return Involved.objects.filter(
+        qs = Involved.objects.filter(
             registration=self.registration,
-            group_type=self.group_type,
+            group_type=self.kwargs["group_type"],
         )
+        return qs
 
     def get_context_data(self, *args, **kwargs):
 
         context = super().get_context_data(*args, **kwargs)
-        context["groups"] = self.get_queryset()
+        context["groups"] = list(self.get_queryset())
+        print(self.kwargs, self.group_type, kwargs)
         return context
 
     def get_object(self):
