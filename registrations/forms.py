@@ -268,12 +268,9 @@ class NewInvolvedQuestion(RegistrationQuestionMixin,
         )
 
     def save(self, *args, **kwargs):
-        "Set a registration on creation."
-        if not hasattr(self.instance, "registration"):
-            self.instance.registration = self.registration
-        if not hasattr(self.instance, "group_type"):
-            self.instance.registration = self.group_type
-
+        "Set a registration and group type on creation."
+        self.instance.registration = self.registration
+        self.instance.group_type = self.group_type
         return super().save(*args, **kwargs)
 
 
