@@ -196,7 +196,7 @@ class InvolvedManager(generic.TemplateView,
     def get_context_data(self, *args, **kwargs):
 
         context = super().get_context_data(*args, **kwargs)
-        context[object] = self.get_object()
+        context["groups"] = self.get_queryset()
         return context
 
     def get_object(self):
