@@ -15,6 +15,7 @@ class RegistrationQuestionMixin:
 
         self.reg_pk = kwargs.pop('reg_pk', None)
         self.registration = kwargs.pop('registration', None)
+        self.view_kwargs = kwargs.pop('view_kwargs', None)
         return super().__init__(*args, **kwargs)
 
     def get_registration(self):

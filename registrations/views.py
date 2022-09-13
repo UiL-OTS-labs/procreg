@@ -89,6 +89,12 @@ class RegistrationQuestionEditView(QuestionEditView,
 
     "Edit a question relating to a Registration or a submodel"
 
+    # These kwargs get sent on to the Question class, if available
+    extra_form_kwargs = [
+        'reg_pk',
+        'group_type',
+    ]
+
     def get_success_url(self):
         self.question = self.get_form()
         if hasattr(self.question, 'get_success_url'):
@@ -110,11 +116,15 @@ class RegistrationQuestionEditView(QuestionEditView,
 
         "Send the parent reg_pk to the Question's __init__()"
 
-        kwargs = super().get_form_kwargs()
-        reg_pk = self.kwargs.get('reg_pk')
-        kwargs.update({'reg_pk': reg_pk})
-        kwargs.update({'registration': self.get_registration()})
-        return kwargs
+        form_kwargs = super().get_form_kwargs()
+        for kw in self.extra_form_kwargs:
+            if kw in self.kwargs:
+                form_kwargs[kw] = self.kwargs.get(kw)
+        # Registration always gets sent along
+        form_kwargs.update({'registration': self.get_registration()})
+        # Send original kwargs along for good measure
+        form_kwargs["view_kwargs"] = self.kwargs
+        return form_kwargs
 
     def get_context_data(self, *args, **kwargs):
 
@@ -124,6 +134,7 @@ class RegistrationQuestionEditView(QuestionEditView,
         context["show_progress"] = True
 
         return context
+
 
     def get_template_names(self):
 
