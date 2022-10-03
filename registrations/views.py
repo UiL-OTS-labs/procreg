@@ -5,7 +5,7 @@ from django.views import generic
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from cdh.questions.views import BlueprintView, QuestionEditView, \
+from cdh.questions.views import BlueprintMixin, QuestionEditView, \
     QuestionDeleteView, QuestionCreateView
 
 from .models import Registration, ParticipantCategory, Involved
@@ -32,7 +32,7 @@ class RegistrationsHomeView(LoginRequiredMixin,
 
 
 class RegistrationOverview(RegistrationMixin,
-                           BlueprintView):
+                           BlueprintMixin):
 
     """The main page which shows basic Registration info as editable
     questions and progress."""
@@ -64,7 +64,7 @@ class RegistrationOverview(RegistrationMixin,
         return context
 
 class RegistrationSummaryView(RegistrationMixin,
-                              BlueprintView):
+                              BlueprintMixin):
 
     template_name = 'registrations/summary.html'
     extra_context = {"show_progress": True}
@@ -84,7 +84,7 @@ class RegistrationSummaryView(RegistrationMixin,
 
 class RegistrationQuestionEditView(QuestionEditView,
                                    RegistrationMixin,
-                                   BlueprintView,
+                                   BlueprintMixin,
                                    ):
 
     "Edit a question relating to a Registration or a submodel"
@@ -172,7 +172,7 @@ class RegistrationDeleteView(generic.DeleteView,
 
 class InvolvedManager(generic.TemplateView,
                       RegistrationMixin,
-                      BlueprintView,
+                      BlueprintMixin,
                       ):
 
     title = "registrations:views:involved_manager_title"
