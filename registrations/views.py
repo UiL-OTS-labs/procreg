@@ -5,8 +5,10 @@ from django.views import generic
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from cdh.questions.views import BlueprintMixin, QuestionEditView, \
-    QuestionDeleteView, QuestionCreateView
+from cdh.questions.views import BlueprintMixin, QuestionView, \
+    QuestionDeleteView, QuestionCreateView, QuestionFromURLMixin, \
+    QuestionEditView
+
 
 from .models import Registration, ParticipantCategory, Involved
 from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
@@ -43,7 +45,6 @@ class RegistrationOverview(RegistrationMixin,
     template_name = "registrations/overview.html"
 
     def get_object(self,):
-        self.get_blueprint()
         return self.get_registration()
 
     def get_context_data(self, **kwargs):
@@ -87,10 +88,11 @@ class RegistrationSummaryView(RegistrationMixin,
         return context
 
 
-class RegistrationQuestionEditView(QuestionEditView,
-                                   RegistrationMixin,
-                                   BlueprintMixin,
-                                   ):
+class RegistrationQuestionEditView(
+        QuestionFromURLMixin,
+        RegistrationMixin,
+        QuestionEditView,
+):
 
     "Edit a question relating to a Registration or a submodel"
 
@@ -106,6 +108,7 @@ class RegistrationQuestionEditView(QuestionEditView,
             return self.question.get_success_url()
         # Rebuild blueprint before getting desired next
         # The answer might change if new info was POSTed
+        self.blueprint = None
         self.blueprint = self.get_blueprint()
         bp_next = self.blueprint.get_desired_next_url()
         if bp_next:
@@ -118,7 +121,6 @@ class RegistrationQuestionEditView(QuestionEditView,
         )
 
     def get_form_kwargs(self):
-
         "Send the parent reg_pk to the Question's __init__()"
 
         form_kwargs = super().get_form_kwargs()
@@ -132,24 +134,15 @@ class RegistrationQuestionEditView(QuestionEditView,
         return form_kwargs
 
     def get_context_data(self, *args, **kwargs):
-
         context = super().get_context_data(*args, **kwargs)
-
-        context["question"] = self.question
-        context["show_progress"] = True
-
+        context["show_progress"] = self.get_question_class().show_progress
         return context
 
-
     def get_template_names(self):
-
         "Insert the preferred procreg templates for questions"
-
         template_names = super().get_template_names()
-
         template_names.insert(0, "registrations/question.html")
-
-        if self.question.show_progress:
+        if self.get_question_class().show_progress:
             template_names.insert(0, "registrations/question_progress.html")
         return template_names
 
@@ -164,8 +157,10 @@ class RegistrationCreateView(generic.CreateView,
     form_class = NewRegistrationQuestion
     success_url = reverse_lazy("registrations:home")
 
-class RegistrationDeleteView(generic.DeleteView,
-                             RegistrationMixin):
+class RegistrationDeleteView(
+        generic.DeleteView,
+        RegistrationMixin,
+):
 
     "Basic Django delete view for Registrations"
 

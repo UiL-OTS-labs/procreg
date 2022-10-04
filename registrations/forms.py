@@ -6,14 +6,11 @@ from cdh.questions import questions
 from .models import Registration, ParticipantCategory, Involved
 
 
-
 class RegistrationQuestionMixin:
 
     show_progress = True
 
     def __init__(self, *args, **kwargs):
-
-        self.reg_pk = kwargs.pop('reg_pk', None)
         self.registration = kwargs.pop('registration', None)
         self.view_kwargs = kwargs.pop('view_kwargs', None)
         return super().__init__(*args, **kwargs)
