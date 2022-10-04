@@ -32,7 +32,9 @@ class RegistrationsHomeView(LoginRequiredMixin,
 
 
 class RegistrationOverview(RegistrationMixin,
-                           BlueprintMixin):
+                           BlueprintMixin,
+                           generic.TemplateView
+                           ):
 
     """The main page which shows basic Registration info as editable
     questions and progress."""
@@ -58,13 +60,16 @@ class RegistrationOverview(RegistrationMixin,
         ]
 
         categories = ParticipantCategory.objects.filter(
-            registration=self.object)
+            registration=self.registration,
+        )
         context['categories'] = [CategoryQuestion(instance=cat) for cat in categories]
 
         return context
 
 class RegistrationSummaryView(RegistrationMixin,
-                              BlueprintMixin):
+                              BlueprintMixin,
+                              generic.TemplateView,
+                              ):
 
     template_name = 'registrations/summary.html'
     extra_context = {"show_progress": True}
@@ -80,7 +85,7 @@ class RegistrationSummaryView(RegistrationMixin,
         context['completed'] = self.blueprint.instantiate_completed()
 
         return context
-    
+
 
 class RegistrationQuestionEditView(QuestionEditView,
                                    RegistrationMixin,
