@@ -92,10 +92,9 @@ class FacultyQuestion(RegistrationQuestionMixin, questions.Question):
 
 
     def get_segments(self):
-
         segments = []
         segments.append(self._field_to_segment('faculty'))
-
+        self.segments = segments
         return segments
 
 

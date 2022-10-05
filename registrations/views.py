@@ -57,7 +57,7 @@ class RegistrationOverview(RegistrationMixin,
         ]
 
         context['top_questions'] = [
-            self.blueprint.instantiate_question(q) for q in top_questions
+            q(instance=self.get_registration()) for q in top_questions
         ]
 
         categories = ParticipantCategory.objects.filter(

@@ -14,7 +14,7 @@ def display_question_small(question, title=None):
 
     tag_context = {'question': question,
                    'title': title,
-                   'segments': question.segments,
+                   'segments': question.get_segments(),
                    }
 
     return tag_context
