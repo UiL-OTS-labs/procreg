@@ -27,8 +27,9 @@ class RegistrationBlueprint(Blueprint):
     error messages, nexT question, and validation information.
     """
     model = Registration
-    primary_questions = [NewRegistrationQuestion, ]
+    starting_consumers = [NewRegistrationConsumer, FacultyConsumer, TopQuestionsConsumer]
     desired_next = []
+    top_questions = []
 
     def __init__(self, registration):
         """Initialize the progress bar and continue"""
@@ -43,11 +44,16 @@ class RegistrationBlueprint(Blueprint):
 
     def get_desired_next_url(self, index=1):
         """Turn the desired_next Question into a URL."""
+        return reverse(
+            'registrations:overview',
+            kwargs={
+                'reg_pk': self.object.pk,
+            })
         next_question = self.get_desired_next(index)
         if not next_question:
             return reverse('registrations:overview',
                            kwargs={
-                               'reg_pk': self.registration.pk,
+                               'reg_pk': self.object.pk,
                            })        
         if next_question in QUESTIONS.values():
             question = self.instantiate_question(next_question)
@@ -55,7 +61,7 @@ class RegistrationBlueprint(Blueprint):
         return reverse(
             "registrations:overview",
             kwargs={
-                "reg_pk": self.registration.pk,
+                "reg_pk": self.object.pk,
             })
 
     def instantiate_question(self, question_or_list, **kwargs):
