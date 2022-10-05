@@ -1,3 +1,54 @@
+
+class BaseConsumer:
+
+    def __init__(self, blueprint):
+        self.blueprint = blueprint
+
+    def consume(self):
+        """Returns a list of new consumers depending on
+        blueprint state."""
+        return []
+
+
+class BaseQuestionConsumer(BaseConsumer):
+
+    question_class = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.instantiate()
+
+    def get_django_errors(self):
+        "Get Django form errors"
+        return self.question.errors
+
+    def instantiate(self):
+        """Create the self.question instance with the correct question object.
+        Overwrite this function if the question does not use the default
+        blueprint object."""
+        return self.question_class(
+            instance=self.blueprint.object,
+        )
+
+    @property
+    def empty_fields(self):
+        question = self.question
+        empty = []
+        for key in question.Meta.fields:
+            value = question[key].value()
+            if value in ['', 'None']:
+                empty.append(value)
+        return empty
+
+    def complete(self, *args, **kwargs):
+        self.blueprint.completed += [self.question]
+        self.blueprint.questions += [self.instantiate()]
+        return super().complete(*args, **kwargs)
+
+
+
+
+
 class BasicDetailsConsumer(BaseQuestionConsumer):
     question = NewRegistrationQuestion
 
