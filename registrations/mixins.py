@@ -60,23 +60,14 @@ class RegistrationMixin(
 ):
 
     blueprint_class = RegistrationBlueprint
-    blueprint_pk_kwargs = "reg_pk"
+    blueprint_pk_kwarg = "reg_pk"
     registration = None
 
     """Allow the owner of a registration to access and edit it.
     In the future, this will include collaborators."""
 
     def get_registration(self):
-        if not self.registration:
-            self.registration = Registration.objects.get(
-                pk=self.kwargs.get('reg_pk'),
-            )
-        return self.registration
-
-    def get_object(self):
-        """Make sure a registration is our self.object for blueprint
-        instatiation."""
-        return self.get_registration()
+        return self.get_blueprint_object()
 
     def get_allowed_users(self):
         allowed = [self.get_registration().created_by]

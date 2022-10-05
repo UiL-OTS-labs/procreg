@@ -16,11 +16,10 @@ class RegistrationQuestionMixin:
         return super().__init__(*args, **kwargs)
 
     def get_registration(self):
+        self.registration = self.question_data.get("registration")
+        # Hack for debugging and creating a new registration
         if not self.registration:
-            if self.reg_pk:
-                self.registration = Registration.objects.get(pk=self.reg_pk)
-            else:
-                self.registration = Registration()
+            self.registration = Registration()
         return self.registration
 
     def get_edit_url(self):
@@ -89,8 +88,7 @@ class FacultyQuestion(RegistrationQuestionMixin, questions.Question):
     model = Registration
     slug = "faculty"
     is_editable = True
-
-
+    
     def get_segments(self):
         segments = []
         segments.append(self._field_to_segment('faculty'))

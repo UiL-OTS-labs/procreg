@@ -120,19 +120,6 @@ class RegistrationQuestionEditView(
             }
         )
 
-    def get_form_kwargs(self):
-        "Send the parent reg_pk to the Question's __init__()"
-
-        form_kwargs = super().get_form_kwargs()
-        for kw in self.extra_form_kwargs:
-            if kw in self.kwargs:
-                form_kwargs[kw] = self.kwargs.get(kw)
-        # Registration always gets sent along
-        form_kwargs.update({'registration': self.get_registration()})
-        # Send original kwargs along for good measure
-        form_kwargs["view_kwargs"] = self.kwargs
-        return form_kwargs
-
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["show_progress"] = self.get_question_class().show_progress
