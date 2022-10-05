@@ -17,7 +17,7 @@ info = logging.info
 debug = logging.debug
 
 
-class RegistrationBlueprint:
+class RegistrationBlueprint(Blueprint):
     """
     The blueprint for a ProcReg registration.
 
@@ -26,65 +26,12 @@ class RegistrationBlueprint:
     """
     model = Registration
     primary_questions = [NewRegistrationQuestion, ]
+    desired_next = []
 
     def __init__(self, registration):
-        """Set up starting values for blueprint evaluation."""
-        self.required = []
-        self.completed = []
-        self.questions = []
-        self.extra_pages = []
-        self.registration = registration
-
-        # This is messy, subject to change
+        """Initialize the progress bar and continue"""
         self.progress_bar = RegistrationProgressBar(self)
-
-        # Starting point for validation
-        self.starting_consumers = [BasicDetailsConsumer]
-
-        # This will probably be analogous to Django's own
-        # errors dict, with field references spanning multiple
-        # objects
-        self.errors = dict()
-
-        # For now, "go back" functionality is handled by making
-        # the desired next question a stack
-        self.desired_next = []
-
-        self.evaluate(self.starting_consumers)
-
-        self.progress_bar.populate()
-
-    def evaluate(self, consumers):
-        """
-        Evaluate all consumers.
-
-        This recursive function goes through the list
-        of consumers and presents them with this blueprint
-        object. The consumers look at the current state of
-        the blueprint to see if it satisfies their needs.
-
-        Consumers should return a list of new consumers to
-        append to the end of the list. This list may be empty.
-
-        While in this loop, consumers may modify
-        blueprint state by adding errors and appending to
-        desired_next.
-        """
-        # We've run out of consumers. Finally.
-        if consumers == []:
-            return True
-
-        # Instantiate consumer with self
-        current = consumers[0](self)
-
-        # Run consumer logic, and add the list of consumers
-        # it returns to the list of consumers to be run
-        next_consumers = current.consume() + consumers[1:]
-
-        return self.evaluate(consumers=next_consumers)
-
-    def required(self):
-        usual = [NewRegistrationQuestion]
+        return super().__init__(registration)
 
     def get_desired_next(self, index=1):
         try:
@@ -121,7 +68,7 @@ class RegistrationBlueprint:
         question = question_or_list
         
         if question.model == Registration:
-            q_object = self.registration
+            q_object = self.object
         else:
             q_object = question.model()
             # if hasattr(question.model, "registration_related_name"):
@@ -134,7 +81,7 @@ class RegistrationBlueprint:
         try:
             instantiated = question(
                 instance=q_object,
-                reg_pk=self.registration.pk,
+                reg_pk=self.object.pk,
                 **kwargs,
             )
         except TypeError:
