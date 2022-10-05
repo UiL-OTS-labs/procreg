@@ -87,7 +87,6 @@ class RegistrationProgressBar:
                 self.add_question(ep)
 
         except Exception as exc:
-            breakpoint()
             print(
                 f"""Breaking out of progress bar construction with exception e:
                 {exc}""")

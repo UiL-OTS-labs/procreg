@@ -48,24 +48,11 @@ class RegistrationOverview(RegistrationMixin,
         return self.get_registration()
 
     def get_context_data(self, **kwargs):
-
         context = super().get_context_data(**kwargs)
-
-        top_questions = [
-            NewRegistrationQuestion,
-            FacultyQuestion,
-        ]
-
-        context['top_questions'] = [
-            q(instance=self.get_registration()) for q in top_questions
-        ]
-
-        categories = ParticipantCategory.objects.filter(
-            registration=self.registration,
-        )
-        context['categories'] = [CategoryQuestion(instance=cat) for cat in categories]
-
+        top_questions = self.blueprint.top_questions
+        context['top_questions'] = top_questions
         return context
+
 
 class RegistrationSummaryView(RegistrationMixin,
                               BlueprintMixin,
@@ -98,8 +85,6 @@ class RegistrationQuestionEditView(
 
     # These kwargs get sent on to the Question class, if available
     extra_form_kwargs = [
-        'reg_pk',
-        'group_type',
     ]
 
     def get_success_url(self):
