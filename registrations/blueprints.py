@@ -11,6 +11,8 @@ from .forms import NewRegistrationQuestion, CategoryQuestion, \
     UsesInformationQuestion, ConfirmInformationUseQuestion, \
     SubmitQuestion, InvolvedPeopleQuestion, StorageQuestion, \
     NewInvolvedQuestion, PurposeQuestion
+from .consumers import TopQuestionsConsumer, NewRegistrationConsumer, \
+    FacultyConsumer
 
 
 info = logging.info
