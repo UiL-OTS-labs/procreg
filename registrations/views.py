@@ -63,14 +63,11 @@ class RegistrationSummaryView(RegistrationMixin,
     extra_context = {"show_progress": True}
 
     def get_object(self,):
-
         return self.get_registration()
 
     def get_context_data(self, *args, **kwargs):
-
         context = super().get_context_data(**kwargs)
-
-        context['completed'] = self.blueprint.instantiate_completed()
+        context['completed'] = self.blueprint.completed
 
         return context
 
@@ -88,8 +85,7 @@ class RegistrationQuestionEditView(
     ]
 
     def get_success_url(self):
-        self.question = self.get_form()
-        if hasattr(self.question, 'get_success_url'):
+        if hasattr(self.get_question(), 'get_success_url'):
             return self.question.get_success_url()
         # Rebuild blueprint before getting desired next
         # The answer might change if new info was POSTed
@@ -104,6 +100,10 @@ class RegistrationQuestionEditView(
                 'reg_pk': self.kwargs.get('reg_pk')
             }
         )
+
+    def get_form_kwargs(self):
+        self.question_data["registration"] = self.get_registration()
+        return super().get_form_kwargs()
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
