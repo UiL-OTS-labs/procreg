@@ -27,13 +27,18 @@ class RegistrationBlueprint(Blueprint):
     error messages, nexT question, and validation information.
     """
     model = Registration
-    starting_consumers = [NewRegistrationConsumer, FacultyConsumer, TopQuestionsConsumer]
-    desired_next = []
-    top_questions = []
+    starting_consumers = [
+        NewRegistrationConsumer,
+        FacultyConsumer,
+        TopQuestionsConsumer,
+    ]
 
     def __init__(self, registration):
         """Initialize the progress bar and continue"""
         self.progress_bar = RegistrationProgressBar(self)
+        self.desired_next = []
+        self.top_questions = []
+        self.completed = []
         return super().__init__(registration)
 
     def get_desired_next(self, index=1):
