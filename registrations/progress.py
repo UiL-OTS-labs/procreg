@@ -1,6 +1,7 @@
 from .forms import NewRegistrationQuestion, CategoryQuestion, \
     TraversalQuestion, QUESTIONS, FacultyQuestion, \
     InvolvedPeopleQuestion, StorageQuestion, UsesInformationQuestion
+from cdh.questions.questions import Question
 
 
 class ProgressItem:
@@ -90,6 +91,9 @@ class RegistrationProgressBar:
             print(
                 f"""Breaking out of progress bar construction with exception e:
                 {exc}""")
+
+    def ingest(self, item):
+        pass
 
     def add_question(self, question):
         completed = question.slug in [

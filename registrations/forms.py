@@ -25,7 +25,6 @@ class RegistrationQuestionMixin:
     def get_edit_url(self):
 
         registration = self.get_registration()
-
         if not hasattr(self.instance, 'registration'):
             self.instance.registration = registration
 
@@ -122,6 +121,7 @@ class TraversalQuestion(RegistrationQuestionMixin, questions.Question):
 
         return segments
 
+
 class UsesInformationQuestion(RegistrationQuestionMixin, questions.Question):
 
     class Meta:
@@ -137,13 +137,13 @@ class UsesInformationQuestion(RegistrationQuestionMixin, questions.Question):
     is_editable = True
     show_progress = False
 
-
     def get_segments(self):
 
         segments = []
         segments.append(self._field_to_segment('uses_information'))
 
         return segments
+
 
 class ConfirmInformationUseQuestion(RegistrationQuestionMixin, questions.Question):
 

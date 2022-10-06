@@ -118,6 +118,10 @@ class RegistrationQuestionEditView(
             template_names.insert(0, "registrations/question_progress.html")
         return template_names
 
+    def form_invalid(self):
+        #  breakpoint()
+        return super().form_invalid()
+
 
 class RegistrationCreateView(generic.CreateView,
                              LoginRequiredMixin):
@@ -128,6 +132,7 @@ class RegistrationCreateView(generic.CreateView,
     template_name = 'registrations/new_registration.html'
     form_class = NewRegistrationQuestion
     success_url = reverse_lazy("registrations:home")
+
 
 class RegistrationDeleteView(
         generic.DeleteView,
