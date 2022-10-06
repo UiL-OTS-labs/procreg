@@ -160,28 +160,24 @@ class ConfirmInformationUseQuestion(RegistrationQuestionMixin, questions.Questio
     is_editable = False
     show_progress = True
 
-
     def get_segments(self):
 
         segments = []
-        
         content = questions.Segment()
         content.type = "paragraph"
         content.paragraph = self.description
         segments.append(content)
-
         return segments
 
     def get_success_url(self):
-
         return reverse(
             "registrations:summary",
             kwargs={
-                'reg_pk': self.reg_pk,
-                }
+                'reg_pk': self.get_registration().pk,
+            }
         )
 
-    
+
 class InvolvedPeopleQuestion(RegistrationQuestionMixin,
                              questions.Question,):
 

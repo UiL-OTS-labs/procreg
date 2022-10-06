@@ -49,20 +49,14 @@ class RegistrationBlueprint(Blueprint):
 
     def get_desired_next_url(self, index=1):
         """Turn the desired_next Question into a URL."""
-        return reverse(
-            'registrations:overview',
-            kwargs={
-                'reg_pk': self.object.pk,
-            })
         next_question = self.get_desired_next(index)
         if not next_question:
             return reverse('registrations:overview',
                            kwargs={
                                'reg_pk': self.object.pk,
-                           })        
-        if next_question in QUESTIONS.values():
-            question = self.instantiate_question(next_question)
-            return question.get_edit_url()
+                           })
+        if next_question.slug in QUESTIONS.keys():
+            return next_question.get_edit_url()
         return reverse(
             "registrations:overview",
             kwargs={
