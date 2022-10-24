@@ -17,61 +17,61 @@
     background-color: var(--bs-teal);
   }
   </style>
-  
-<link href="{% static 'cdh.core/questions.css' %}" rel="stylesheet" />
-<link href="{% static 'cdh.core/prereg.css' %}" rel="stylesheet" />
-<link href="{% static 'registrations/css/procreg.css' %}" rel="stylesheet" />
-<link href="{% static 'registrations/css/progress.css' %}" rel="stylesheet" />
+
+  <link href="{% static 'cdh.core/questions.css' %}" rel="stylesheet" />
+  <link href="{% static 'cdh.core/prereg.css' %}" rel="stylesheet" />
+  <link href="{% static 'registrations/css/procreg.css' %}" rel="stylesheet" />
+  <link href="{% static 'registrations/css/progress.css' %}" rel="stylesheet" />
 
 {% endblock %}
 
 
 {% block uu-header %}
-    {% get_current_language as LANGUAGE_CODE %}
-    <div class="uu-header-row justify-content-between">
-        <div class="uu-logo">
-            {% with 'cdh.core/images/logo-header-'|add:LANGUAGE_CODE|add:'.svg' as header_image %}
-                <a href="https://www.uu.nl" target="_blank">
-                    <img src="{% static header_image %}" alt="{% trans 'cdh.core:uu' %}"
-                         title="{% trans 'cdh.core:uu' %}"/>
-                </a>
-            {% endwith %}
-        </div>
-        <div class="text-center uu-header-title text-red">
-            {% block toppanel-text %}
-                {% if request.user.is_impersonate %}
-                    <span class="icon-warning">⚠</span>
-                    Impersonating user -
-                    <a href="{% url 'impersonate-stop' %}" class="uu-red-text">Stop</a>
-                    <span class="icon-warning">⚠</span>
-                {% elif acceptation %}
-                    <span class="icon-warning">⚠</span>
-                    Acceptation server
-                    <span class="icon-warning">⚠</span>
-                {% elif debug %}
-                    <span class="icon-warning">⚠</span>
-                    Local development server
-                    <span class="icon-warning">⚠</span>
-                {% endif %}
-            {% endblock %}
-        </div>
-        {% include 'base/language_box.html' %}
+  {% get_current_language as LANGUAGE_CODE %}
+  <div class="uu-header-row justify-content-between">
+    <div class="uu-logo">
+      {% with 'cdh.core/images/logo-header-'|add:LANGUAGE_CODE|add:'.svg' as header_image %}
+        <a href="https://www.uu.nl" target="_blank">
+          <img src="{% static header_image %}" alt="{% trans 'cdh.core:uu' %}"
+               title="{% trans 'cdh.core:uu' %}"/>
+        </a>
+      {% endwith %}
     </div>
-    <div class="uu-header-row">
-        <div class="me-auto uu-header-title">
-            <a href="{% url "main:home" %}">
-              {% block site_header %}
-              {% trans "site:header:title" %}
-              {% endblock %}
-            </a>
-        </div>
-        <div class="ms-auto">
-          {% block login_header %}
-          {% trans "site:header:login_text" %}
-            {% endblock %}
-        </div>
+    <div class="text-center uu-header-title text-red">
+      {% block toppanel-text %}
+        {% if request.user.is_impersonate %}
+          <span class="icon-warning">⚠</span>
+          Impersonating user -
+          <a href="{% url 'impersonate-stop' %}" class="uu-red-text">Stop</a>
+          <span class="icon-warning">⚠</span>
+        {% elif acceptation %}
+          <span class="icon-warning">⚠</span>
+          Acceptation server
+          <span class="icon-warning">⚠</span>
+        {% elif debug %}
+          <span class="icon-warning">⚠</span>
+          Local development server
+          <span class="icon-warning">⚠</span>
+        {% endif %}
+      {% endblock %}
     </div>
-    {% endblock %}
+    {% include 'base/language_box.html' %}
+  </div>
+  <div class="uu-header-row">
+    <div class="me-auto uu-header-title">
+      <a href="{% url "main:home" %}">
+        {% block site_header %}
+          {% trans "site:header:title" %}
+        {% endblock %}
+      </a>
+    </div>
+    <div class="ms-auto">
+      {% block login_header %}
+        {% trans "site:header:login_text" %}
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}
 
 
 {% block uu-content %}
@@ -90,43 +90,43 @@
       </div>
     </div>
   {% endblock %}
-    
+
   {% block hero %}
     <header class="uu-hero">
       <h1>
         {% block hero_text %}
-        {% trans "site:hero:default_hero_text" %}
+          {% trans "site:hero:default_hero_text" %}
         {% endblock %}
       </h1>
     </header>
   {% endblock %}
-<div class="uu-content">
-    <div class="row upper-inner">
-        {% block upper-inner %}
-        {% endblock %}
-    </div>
-    {% if stepper %}
-    <div class="col-2 d-lg-block d-none">
-      <div class="stepper">
-        {% block stepper %}
-        {% endblock %}
+  <style>
+  .uu-sidebar-content {
+    height: 100%;
+  }
+    </style>
+  <div class="uu-sidebar-container uu-sidebar-right">
+
+      <aside class="uu-sidebar">
+        <button class="uu-sidebar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#exampleSidebar" aria-expanded="false">
+          Show sidebar
+        </button>
+        <div id="exampleSidebar" class="collapse uu-sidebar-collapse">
+          {% block sidebar %}
+            <h2>Sidebar</h2>
+          {% endblock %}
         </div>
-    </div>
-    {% endif %}
-    <div class="d-flex flex-column col-12 col-lg-10">
-      <div class="form">
-        
+      </aside>
+      <div class="uu-sidebar-content">
 
 
-            {% block main %}
-            {% endblock %}
+
+      {% block main_content %}
+        Main content goes here
+      {% endblock %}
+
       </div>
-      </div>
 
-    <div class="col-3 pr-sidebar">
-        {% block sidebar %}
-        {% endblock %}
     </div>
-
-</div>
+  
 {% endblock %}
