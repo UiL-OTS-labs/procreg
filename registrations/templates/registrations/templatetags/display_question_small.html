@@ -1,5 +1,5 @@
 {% load question_tags %}
-{% for segment in question.segments %}
+{% for segment in segments %}
 
 <div class="question-display-small">
 
@@ -17,7 +17,10 @@
                 <button>
                     edit
                     </button>
-            </a>{% endif %}
+            </a>
+            {% else %}
+            not editable
+            {% endif %}
         </div>
 
 </div>

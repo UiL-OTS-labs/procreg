@@ -6,29 +6,25 @@ from cdh.questions import questions
 from .models import Registration, ParticipantCategory, Involved
 
 
-
 class RegistrationQuestionMixin:
 
     show_progress = True
 
     def __init__(self, *args, **kwargs):
-
-        self.reg_pk = kwargs.pop('reg_pk', None)
         self.registration = kwargs.pop('registration', None)
+        self.view_kwargs = kwargs.pop('view_kwargs', None)
         return super().__init__(*args, **kwargs)
 
     def get_registration(self):
+        self.registration = self.question_data.get("registration")
+        # Hack for debugging and creating a new registration
         if not self.registration:
-            if self.reg_pk:
-                self.registration = Registration.objects.get(pk=self.reg_pk)
-            else:
-                self.registration = Registration()
+            self.registration = Registration()
         return self.registration
 
     def get_edit_url(self):
 
         registration = self.get_registration()
-
         if not hasattr(self.instance, 'registration'):
             self.instance.registration = registration
 
@@ -76,6 +72,7 @@ class NewRegistrationQuestion(RegistrationQuestionMixin,
 
         return segments
 
+
 class FacultyQuestion(RegistrationQuestionMixin, questions.Question):
 
     show_progress = True
@@ -91,13 +88,11 @@ class FacultyQuestion(RegistrationQuestionMixin, questions.Question):
     model = Registration
     slug = "faculty"
     is_editable = True
-
-
+    
     def get_segments(self):
-
         segments = []
         segments.append(self._field_to_segment('faculty'))
-
+        self.segments = segments
         return segments
 
 
@@ -127,6 +122,7 @@ class TraversalQuestion(RegistrationQuestionMixin, questions.Question):
 
         return segments
 
+
 class UsesInformationQuestion(RegistrationQuestionMixin, questions.Question):
 
     class Meta:
@@ -142,13 +138,13 @@ class UsesInformationQuestion(RegistrationQuestionMixin, questions.Question):
     is_editable = True
     show_progress = False
 
-
     def get_segments(self):
 
         segments = []
         segments.append(self._field_to_segment('uses_information'))
 
         return segments
+
 
 class ConfirmInformationUseQuestion(RegistrationQuestionMixin, questions.Question):
 
@@ -165,28 +161,24 @@ class ConfirmInformationUseQuestion(RegistrationQuestionMixin, questions.Questio
     is_editable = False
     show_progress = True
 
-
     def get_segments(self):
 
         segments = []
-        
         content = questions.Segment()
         content.type = "paragraph"
         content.paragraph = self.description
         segments.append(content)
-
         return segments
 
     def get_success_url(self):
-
         return reverse(
             "registrations:summary",
             kwargs={
-                'reg_pk': self.reg_pk,
-                }
+                'reg_pk': self.get_registration().pk,
+            }
         )
 
-    
+
 class InvolvedPeopleQuestion(RegistrationQuestionMixin,
                              questions.Question,):
 
@@ -267,12 +259,9 @@ class NewInvolvedQuestion(RegistrationQuestionMixin,
         )
 
     def save(self, *args, **kwargs):
-        "Set a registration on creation."
-        if not hasattr(self.instance, "registration"):
-            self.instance.registration = self.registration
-        if not hasattr(self.instance, "group_type"):
-            self.instance.registration = self.group_type
-
+        "Set a registration and group type on creation."
+        self.instance.registration = self.registration
+        self.instance.group_type = self.group_type
         return super().save(*args, **kwargs)
 
 
@@ -300,7 +289,30 @@ class StorageQuestion(RegistrationQuestionMixin,
         return self._fields_to_segments(
             fields_list=self.Meta.fields,
         )
-            
+
+    
+class PurposeQuestion(RegistrationQuestionMixin,
+                      questions.Question,
+                      ):
+
+    class Meta:
+        model = Involved
+        fields = [
+            "process_purpose",
+        ]
+
+    title = _("registrations:forms:purpose_question_title")
+    description = _("registrations:forms:purpose_question_description")
+    model = Meta.model
+    slug = "purpose"
+    is_editable = True
+    show_progress = True
+
+    def get_segments(self):
+
+        return self._fields_to_segments(
+            fields_list=self.Meta.fields,
+        )
     
 
 

@@ -78,12 +78,12 @@
 
 <ul>
     <li>
-        <a href="{% url "registrations:delete" reg_pk=view.object.pk %}">
+        <a href="{% url "registrations:delete" reg_pk=registration.pk %}">
             {% trans "registrations:actions:delete" %}
         </a>
     </li>
     <li>
-        <a href="{% url "registrations:create_question" reg_pk=view.object.pk question='category' %}">
+        <a href="{% url "registrations:create_question" reg_pk=registration.pk question='category' %}">
             {% trans "registrations:actions:add_category" %}
         </a>
     </li>

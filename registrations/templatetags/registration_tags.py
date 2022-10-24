@@ -11,11 +11,11 @@ def h2_and_buttons(title, *args):
 def display_question_small(question, title=None):
     """Display question in small form for overview pages."""
 
-
-    tag_context = {'question': question,
-                   'title': title,
-                   'segments': question.segments,
-                   }
+    tag_context = {
+        'question': question,
+        'title': title,
+        'segments': question.get_segments(),
+    }
 
     return tag_context
 
@@ -58,11 +58,8 @@ def progress_bar(context):
 
 
 def copy_context(context, keys, default=None):
-    
+
     out = {}
-        
     for k in keys:
         out[k] = context.get(k, default)
-
     return out
-        

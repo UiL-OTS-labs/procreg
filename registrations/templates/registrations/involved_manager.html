@@ -1,0 +1,43 @@
+{% extends "registrations/base.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load question_tags %}
+{% load registration_tags %}
+
+
+{% block progress %}
+
+<div class="col-12">
+
+  <h4>Progress bar</h4>
+  {% with current=form.slug %}
+    {% progress_bar %}
+  {% endwith %}
+</div>
+{% endblock %}
+{% block main %}
+<div class="col-12">
+  <h2>Editing a question</h2>
+  <p>This page facilitates both the creation and editing of Questions. Now with progress bar. </p>
+  <ul>
+    {% for group in groups %}
+      <li>
+        {{ group }}
+      </li>    
+    {% endfor %}
+    <li>
+      <a href="{% url "registrations:edit_question" reg_pk=reg_pk question="new_involved" group_type=group_type %}">
+        {% trans "templates:involved_manager:add_new_group" %}
+      </a>
+  </ul>
+  
+</div>
+{% endblock %}
+{% block sidebar %}
+<div class="col-12">
+  <p>Question help goes here!</p>
+
+</div>
+
+{% endblock %}

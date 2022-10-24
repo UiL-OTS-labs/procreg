@@ -104,20 +104,10 @@
   .uu-sidebar-content {
     height: 100%;
   }
-    </style>
-  <div class="uu-sidebar-container uu-sidebar-right">
+  </style>
+  <div class="uu-container ">
 
-      <aside class="uu-sidebar">
-        <button class="uu-sidebar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#exampleSidebar" aria-expanded="false">
-          Show sidebar
-        </button>
-        <div id="exampleSidebar" class="collapse uu-sidebar-collapse">
-          {% block sidebar %}
-            <h2>Sidebar</h2>
-          {% endblock %}
-        </div>
-      </aside>
-      <div class="uu-sidebar-content">
+    <div class="uu-content">
 
 
 
@@ -125,8 +115,8 @@
         Main content goes here
       {% endblock %}
 
-      </div>
-
     </div>
-  
+
+  </div>
+
 {% endblock %}
