@@ -51,9 +51,7 @@ class RegistrationProgressBar:
     def get_items(self, current=None):
         item_list = []
 
-        completed = self.blueprint.instantiate_question(
-            self.blueprint.completed,
-        )
+        completed = self.blueprint.completed
         for q in completed:
             item_list.append(
                 ProgressItem.from_question(
@@ -93,6 +91,15 @@ class RegistrationProgressBar:
                 {exc}""")
 
     def ingest(self, item):
+        self.add_item(item)
+
+    def add_item(self, item):
+        if isinstance(item, Question):
+            self.add_question(item)
+        elif isinstance(item, View):
+            self.add_view(item)
+
+    def add_view(self, item):
         pass
 
     def add_question(self, question):

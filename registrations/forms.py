@@ -72,6 +72,7 @@ class NewRegistrationQuestion(RegistrationQuestionMixin,
 
         return segments
 
+
 class FacultyQuestion(RegistrationQuestionMixin, questions.Question):
 
     show_progress = True

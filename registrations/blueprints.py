@@ -38,6 +38,8 @@ class RegistrationBlueprint(Blueprint):
         self.progress_bar = RegistrationProgressBar(self)
         self.desired_next = []
         self.top_questions = []
+        # Completed is the list of items which are considered
+        # correctly filled in. They show up on the summary page.
         self.completed = []
         return super().__init__(registration)
 
