@@ -107,7 +107,7 @@ class RegistrationQuestionEditView(
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context["show_progress"] = self.get_question_class().show_progress
+        context["stepper"] = self.get_question_class().show_progress
         return context
 
     def get_template_names(self):
@@ -208,6 +208,7 @@ class MinimalCategoryView(generic.TemplateView,
 
         context['categories'] = cat_qs
         return context
+
 
 class MinimalDeleteView(QuestionDeleteView,
                         RegistrationMixin,
