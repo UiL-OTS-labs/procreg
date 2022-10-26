@@ -3,6 +3,7 @@
 {% load static %}
 {% load i18n %}
 {% load question_tags %}
+{% load progress_tags %}
 {% load registration_tags %}
 
 
@@ -10,7 +11,7 @@
 
   <h4>Stepper</h4>
   {% with current=form.slug %}
-    {% progress_bar %}
+    {% progress_bar blueprint form %}
   {% endwith %}
 
   <h4>Completed</h4>
