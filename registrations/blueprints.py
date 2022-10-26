@@ -19,6 +19,16 @@ info = logging.info
 debug = logging.debug
 
 
+class CompletedList(list):
+
+    def __init__(self, blueprint):
+        self.blueprint = blueprint
+
+    def append(self, item):
+        self.blueprint.questions.append(item)
+        return super().append(item)
+
+
 class RegistrationBlueprint(Blueprint):
     """
     The blueprint for a ProcReg registration.
@@ -40,7 +50,8 @@ class RegistrationBlueprint(Blueprint):
         self.top_questions = []
         # Completed is the list of items which are considered
         # correctly filled in. They show up on the summary page.
-        self.completed = []
+        self.completed = CompletedList(self)
+        self.questions = []
         return super().__init__(registration)
 
     def get_desired_next(self, index=1):
@@ -64,6 +75,25 @@ class RegistrationBlueprint(Blueprint):
             kwargs={
                 "reg_pk": self.object.pk,
             })
+
+    def get_question(self, **kwargs):
+        """
+        Get questions matching kwargs from this blueprints list of instantiated questions.
+        """
+        match = self.questions
+        for key, value in kwargs.items():
+            match = filter(
+                lambda q: getattr(q, key, False) == value,
+                match,
+            )
+        match = list(match)
+        size = len(match)
+        if size == 0:
+            return None
+        if size == 1:
+            return match[0]
+        else:
+            return list(match)
 
     def instantiate_question(self, question_or_list, **kwargs):
         """
