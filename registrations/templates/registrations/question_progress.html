@@ -1,35 +1,55 @@
-{% extends "registrations/base.html" %}
+{% extends "registrations/base-form.html" %}
 
 {% load static %}
 {% load i18n %}
 {% load question_tags %}
+{% load progress_tags %}
 {% load registration_tags %}
 
 
-{% block progress %}
+{% block stepper %}
 
-<div class="col-12">
-
-  <h4>Progress bar</h4>
+  <h4>Stepper</h4>
   {% with current=form.slug %}
-  {% progress_bar %}
+    {% progress_bar blueprint form %}
   {% endwith %}
-</div>
-{% endblock %}
-{% block main %}
-<div class="col-12">
-  <h2>Editing a question</h2>
-  <p>This page facilitates both the creation and editing of Questions. Now with progress bar.</p>
 
-  <br />
-  {% ask_question form %}
-  <br />
-</div>
-{% endblock %}
-{% block sidebar %}
-<div class="col-12">
-  <p>Question help goes here!</p>
+  <h4>Completed</h4>
+  <ul>
+  {% for q in blueprint.completed %}
+<li>{{q.slug}} (<a href="{{q.get_edit_url}}">edit</a>)</li>
+  {% endfor %}
+  </ul>
+  <ul>
+  {% for q in blueprint.available %}
+<li>{{q.slug}} (<a href="{{q.get_edit_url}}">edit</a>)</li>
+  {% endfor %}
+  </ul>
 
-</div>
+  <h4>All available</h4>
+{% endblock %}
+{% block form %}
+  <div class="uu-form-text-row">
+    <div class="uu-form-text">
+      <h2>Editing a question</h2>
+      <p>This page facilitates both the creation and editing of Questions. Now with progress bar.</p>
+    </div>
+    <div class="uu-form-text-aside">
+      <p>Top-level FAQ goes here</p>
+
+    </div>
+  </div>
+  <div class="uu-form-row">
+    <div class="uu-form-field">
+      <br />
+      {% ask_question question %}
+      <br />
+    </div>
+    <div class="uu-form-help">
+      <p>
+        Question help goes here.
+        </p>
+    </div>
+  </div>
 
 {% endblock %}

@@ -1,6 +1,8 @@
+from django.views import View
 from .forms import NewRegistrationQuestion, CategoryQuestion, \
     TraversalQuestion, QUESTIONS, FacultyQuestion, \
     InvolvedPeopleQuestion, StorageQuestion, UsesInformationQuestion
+from cdh.questions.questions import Question
 
 
 class ProgressItem:
@@ -50,9 +52,7 @@ class RegistrationProgressBar:
     def get_items(self, current=None):
         item_list = []
 
-        completed = self.blueprint.instantiate_question(
-            self.blueprint.completed,
-        )
+        completed = self.blueprint.completed
         for q in completed:
             item_list.append(
                 ProgressItem.from_question(
@@ -83,9 +83,25 @@ class RegistrationProgressBar:
             for qq in self.blueprint.questions:
                 self.add_question(qq)
 
-        except:
-            print("Breaking out of progress bar construction")
-            breakpoint()
+            for ep in self.blueprint.extra_pages:
+                self.add_question(ep)
+
+        except Exception as exc:
+            print(
+                f"""Breaking out of progress bar construction with exception e:
+                {exc}""")
+
+    def ingest(self, item):
+        self.add_item(item)
+
+    def add_item(self, item):
+        if isinstance(item, Question):
+            self.add_question(item)
+        elif isinstance(item, View):
+            self.add_view(item)
+
+    def add_view(self, item):
+        pass
 
     def add_question(self, question):
         completed = question.slug in [

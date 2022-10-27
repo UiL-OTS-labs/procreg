@@ -1,4 +1,5 @@
 from django.core.exceptions import PermissionDenied
+from cdh.questions.views import BlueprintMixin
 
 
 from .models import Registration
@@ -53,37 +54,27 @@ class UsersOrGroupsAllowedMixin():
             request, *args, **kwargs)
 
 
-class RegistrationMixin(UsersOrGroupsAllowedMixin):
+class RegistrationMixin(
+        BlueprintMixin,
+        UsersOrGroupsAllowedMixin,
+):
 
-    blueprint = RegistrationBlueprint
+    blueprint_class = RegistrationBlueprint
+    blueprint_pk_kwarg = "reg_pk"
+    registration = None
 
     """Allow the owner of a registration to access and edit it.
     In the future, this will include collaborators."""
 
     def get_registration(self):
-
-        self.registration = Registration.objects.get(
-            pk=self.kwargs.get('reg_pk'))
-
-        return self.registration
-
-    def get_blueprint(self):
-        self.blueprint = RegistrationBlueprint(
-            self.get_registration(),
-        )
-        return self.blueprint
+        return self.get_blueprint_object()
 
     def get_allowed_users(self):
-
         allowed = [self.get_registration().created_by]
         allowed.append(super().get_allowed_users())
-
         return allowed
 
     def get_context_data(self, *args, **kwargs):
-
         context = super().get_context_data(*args, **kwargs)
-
         context['registration'] = self.get_registration()
-        context['blueprint'] = self.get_blueprint()
         return context

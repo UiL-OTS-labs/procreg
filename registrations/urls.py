@@ -2,7 +2,8 @@ from django.urls import path
 
 from .views import RegistrationsHomeView, RegistrationCreateView, \
     RegistrationOverview, RegistrationQuestionEditView, RegistrationDeleteView, \
-    MinimalCategoryView, MinimalDeleteView, RegistrationSummaryView
+    MinimalCategoryView, MinimalDeleteView, RegistrationSummaryView, \
+    InvolvedManager
 from .forms import QUESTIONS
 from .blueprints import RegistrationBlueprint
 from .models import ParticipantCategory
@@ -15,6 +16,11 @@ urlpatterns = [
     path('<int:reg_pk>/', RegistrationOverview.as_view(), name='overview'),
     path('delete/<int:reg_pk>/', RegistrationDeleteView.as_view(),
          name='delete'),
+    path('<int:reg_pk>/manager/<str:group_type>/',
+         InvolvedManager.as_view(),
+         name='involved_manager',
+         ),
+    # Take heed, the pathspecs below are quite greedy
     path('<int:reg_pk>/<str:question>/edit/<int:question_pk>/',
          RegistrationQuestionEditView.as_view(
              question_dict=QUESTIONS,

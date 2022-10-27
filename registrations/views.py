@@ -1,18 +1,21 @@
 import logging
-debug = logging.debug
 
 from django.shortcuts import render
 from django.views import generic
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from cdh.questions.views import BlueprintView, QuestionEditView, \
-    QuestionDeleteView, QuestionCreateView
+from cdh.questions.views import BlueprintMixin, QuestionView, \
+    QuestionDeleteView, QuestionCreateView, QuestionFromURLMixin, \
+    QuestionEditView
 
-from .models import Registration, ParticipantCategory
+
+from .models import Registration, ParticipantCategory, Involved
 from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
 from .blueprints import RegistrationBlueprint
 from .mixins import RegistrationMixin
+
+debug = logging.debug
 
 
 class RegistrationsHomeView(LoginRequiredMixin,
@@ -29,8 +32,11 @@ class RegistrationsHomeView(LoginRequiredMixin,
         qs = Registration.objects.all()
         return qs
 
+
 class RegistrationOverview(RegistrationMixin,
-                           BlueprintView):
+                           BlueprintMixin,
+                           generic.TemplateView
+                           ):
 
     """The main page which shows basic Registration info as editable
     questions and progress."""
@@ -39,60 +45,51 @@ class RegistrationOverview(RegistrationMixin,
     template_name = "registrations/overview.html"
 
     def get_object(self,):
-        self.get_blueprint()
         return self.get_registration()
 
     def get_context_data(self, **kwargs):
-
         context = super().get_context_data(**kwargs)
-
-        top_questions = [
-            NewRegistrationQuestion,
-            FacultyQuestion,
-        ]
-
-        context['top_questions'] = [
-            self.blueprint.instantiate_question(q) for q in top_questions
-        ]
-
-        categories = ParticipantCategory.objects.filter(
-            registration=self.object)
-        context['categories'] = [CategoryQuestion(instance=cat) for cat in categories]
-
+        top_questions = self.blueprint.top_questions
+        context['top_questions'] = top_questions
         return context
 
+
 class RegistrationSummaryView(RegistrationMixin,
-                              BlueprintView):
+                              BlueprintMixin,
+                              generic.TemplateView,
+                              ):
 
     template_name = 'registrations/summary.html'
     extra_context = {"show_progress": True}
 
     def get_object(self,):
-
         return self.get_registration()
 
     def get_context_data(self, *args, **kwargs):
-
         context = super().get_context_data(**kwargs)
-
-        context['completed'] = self.blueprint.instantiate_completed()
+        context['completed'] = self.blueprint.completed
 
         return context
-    
 
-class RegistrationQuestionEditView(QuestionEditView,
-                                   RegistrationMixin,
-                                   BlueprintView,
-                                   ):
+
+class RegistrationQuestionEditView(
+        QuestionFromURLMixin,
+        RegistrationMixin,
+        QuestionEditView,
+):
 
     "Edit a question relating to a Registration or a submodel"
 
+    # These kwargs get sent on to the Question class, if available
+    extra_form_kwargs = [
+    ]
+
     def get_success_url(self):
-        self.question = self.get_form()
-        if hasattr(self.question, 'get_success_url'):
+        if hasattr(self.get_question(), 'get_success_url'):
             return self.question.get_success_url()
         # Rebuild blueprint before getting desired next
         # The answer might change if new info was POSTed
+        self.blueprint = None
         self.blueprint = self.get_blueprint()
         bp_next = self.blueprint.get_desired_next_url()
         if bp_next:
@@ -105,35 +102,25 @@ class RegistrationQuestionEditView(QuestionEditView,
         )
 
     def get_form_kwargs(self):
-
-        "Send the parent reg_pk to the Question's __init__()"
-
-        kwargs = super().get_form_kwargs()
-        reg_pk = self.kwargs.get('reg_pk')
-        kwargs.update({'reg_pk': reg_pk})
-        kwargs.update({'registration': self.get_registration()})
-        return kwargs
+        self.question_data["registration"] = self.get_registration()
+        return super().get_form_kwargs()
 
     def get_context_data(self, *args, **kwargs):
-
         context = super().get_context_data(*args, **kwargs)
-
-        context["question"] = self.question
-        context["show_progress"] = True
-
+        context["stepper"] = self.get_question_class().show_progress
         return context
 
     def get_template_names(self):
-
         "Insert the preferred procreg templates for questions"
-
         template_names = super().get_template_names()
-
         template_names.insert(0, "registrations/question.html")
-
-        if self.question.show_progress:
+        if self.get_question_class().show_progress:
             template_names.insert(0, "registrations/question_progress.html")
         return template_names
+
+    def form_invalid(self):
+        #  breakpoint()
+        return super().form_invalid()
 
 
 class RegistrationCreateView(generic.CreateView,
@@ -146,8 +133,11 @@ class RegistrationCreateView(generic.CreateView,
     form_class = NewRegistrationQuestion
     success_url = reverse_lazy("registrations:home")
 
-class RegistrationDeleteView(generic.DeleteView,
-                             RegistrationMixin):
+
+class RegistrationDeleteView(
+        generic.DeleteView,
+        RegistrationMixin,
+):
 
     "Basic Django delete view for Registrations"
 
@@ -155,6 +145,53 @@ class RegistrationDeleteView(generic.DeleteView,
     template_name = "registrations/delete_registration.html"
     success_url = reverse_lazy("registrations:home")
     pk_url_kwarg = 'reg_pk'
+
+
+class InvolvedManager(generic.TemplateView,
+                      RegistrationMixin,
+                      BlueprintMixin,
+                      ):
+
+    title = "registrations:views:involved_manager_title"
+    description = "registrations:views:involved_manager_description"
+    template_name = "registrations/involved_manager.html"
+    slug = "manager"
+    extra_context = {
+        "show_progress": True,
+    }
+
+    def __init__(self, *args, **kwargs):
+        self.registration = kwargs.get("registration")
+        self.group_type = kwargs.get("group_type")
+        return super().__init__(*args, **kwargs)
+
+    def get_queryset(self):
+        qs = Involved.objects.filter(
+            registration=self.registration,
+            group_type=self.kwargs["group_type"],
+        )
+        return qs
+
+    def get_context_data(self, *args, **kwargs):
+
+        context = super().get_context_data(*args, **kwargs)
+        context["groups"] = list(self.get_queryset())
+        print(self.kwargs, self.group_type, kwargs)
+        return context
+
+    def get_object(self):
+        return self.registration
+
+    def get_edit_url(self):
+
+        reverse_kwargs = {
+            "reg_pk": self.registration.pk,
+            "group_type": self.group_type,
+        }
+        return reverse(
+            "registrations:involved_manager",
+            kwargs=reverse_kwargs,
+        )
 
 
 class MinimalCategoryView(generic.TemplateView,
@@ -171,6 +208,7 @@ class MinimalCategoryView(generic.TemplateView,
 
         context['categories'] = cat_qs
         return context
+
 
 class MinimalDeleteView(QuestionDeleteView,
                         RegistrationMixin,
