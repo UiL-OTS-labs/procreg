@@ -26,6 +26,7 @@ def progress_bar(blueprint, current):
         "current_question": current,
         "blueprint": blueprint,
         "enumerator": enumerator,
+        "group_one": ["new_reg", "faculty"]
     }
     return tag_context
 
@@ -34,8 +35,8 @@ def progress_bar(blueprint, current):
     "registrations/templatetags/progress_item_question.html",
     takes_context=True,
 )
-def progress_item_from_question(context, question, size="largest", text=None,
-                                url=True, number=0):
+def progress_item_from_question(context, question, size="largest",
+                                text=None, url=True, number=True):
     if question in ["", None]:
         return None
     # Caller can set url to False or None to disable
@@ -51,13 +52,15 @@ def progress_item_from_question(context, question, size="largest", text=None,
     if question.slug == current.slug:
         item_classes.append("active")
 
-    enumerator = context.get("enumerator")
+    if number is True:
+        enumerator = context.get("enumerator")
+        number = enumerator(question.slug)
 
     tag_context = {
         "title": text,
         "span_classes": " ".join(span_classes),
         "item_classes": " ".join(item_classes),
-        "number": enumerator(question.slug),
+        "number": number,
         "link": url,
     }
     return tag_context
@@ -69,8 +72,9 @@ def progress_item_from_question(context, question, size="largest", text=None,
 )
 def progress_item_from_slug(context, slug, **kwargs):
     blueprint = context.get("blueprint")
+    question_kwargs = kwargs.get("question_kwargs", {})
     question = blueprint.get_question(
         slug=slug,
-        **kwargs,
+        **question_kwargs,
     )
-    return progress_item_from_question(context, question,)
+    return progress_item_from_question(context, question, **kwargs)

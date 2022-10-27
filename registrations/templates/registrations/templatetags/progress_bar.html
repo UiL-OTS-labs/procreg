@@ -2,9 +2,16 @@
 
 <div class="stepper">
   <ul>
-    {% progress_item_from_slug "new_reg" %}
-    {% progress_item_from_slug "faculty" %}
-    {% progress_item_from_slug "involved_people" %}
+    <li>
+      {% progress_item_from_slug "new_reg" %}
+      {% if current_question.slug in group_one %}
+        <ul>
+          <li>
+            {% progress_item_from_slug "faculty" number="" size="large" %}
+          </li>
+        </ul>
+      {% endif %}
+    </li>
     <li>
       <a class="stepper-item">
         <span class="stepper-bubble stepper-bubble-largest">1</span>
