@@ -19,6 +19,26 @@ info = logging.info
 debug = logging.debug
 
 
+class BlueprintErrors():
+
+    def __init__(self):
+        self.all_errors = []
+
+    def add(self, *args):
+        self.all_errors.append(args)
+
+    def __getitem__(self, *args):
+        return self.rfilter(self.all_errors, args)
+
+    def rfilter(self, sample, args):
+        if len(args) == 0:
+            return sample
+        next_sample = [item[1:] for item in sample if item[0] == args[0]]
+        if next_sample == []:
+            return next_sample
+        return [args[0]] + self.rfilter(next_sample, args[1:])
+
+
 class CompletedList(list):
 
     def __init__(self, blueprint):
@@ -45,6 +65,7 @@ class RegistrationBlueprint(Blueprint):
 
     def __init__(self, registration):
         """Initialize the progress bar and continue"""
+        super().__init__(registration)
         self.progress_bar = RegistrationProgressBar(self)
         self.desired_next = []
         self.top_questions = []
@@ -52,7 +73,8 @@ class RegistrationBlueprint(Blueprint):
         # correctly filled in. They show up on the summary page.
         self.completed = CompletedList(self)
         self.questions = []
-        return super().__init__(registration)
+        self.errors = BlueprintErrors()
+        self.start()
 
     def get_desired_next(self, index=1):
         try:

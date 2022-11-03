@@ -20,9 +20,8 @@ class TopQuestionsConsumer(BaseConsumer):
         "If both top questions are filled out, append the next consumer"
         required = [NewRegistrationQuestion, FacultyQuestion]
         for q in required:
-            if q.slug in self.blueprint.errors.keys():
-                if self.blueprint.errors[q.slug] != {}:
-                    return []
+            if len(self.blueprint.errors[q.slug]) != 0:
+                return []
         return [UsesInformationConsumer]
 
 
@@ -43,7 +42,8 @@ class NewRegistrationConsumer(RegistrationConsumer):
         self.errors = self.get_django_errors()
         for f in self.empty_fields:
             self.errors.append(f"Field {f} is empty")
-        self.blueprint.errors[self.question.slug] = self.errors
+        for field, error in self.errors.items():
+            self.blueprint.errors.add(self.question.slug, field, error)
 
 
 class FacultyConsumer(RegistrationConsumer):
@@ -61,9 +61,16 @@ class FacultyConsumer(RegistrationConsumer):
 
     def get_errors(self):
         self.errors = self.get_django_errors()
+        for f, v in self.errors.items():
+            self.blueprint.errors.add(
+                self.question.slug, f, v,
+            )
         for f in self.empty_fields:
-            self.errors.append(f"Field {f} is empty")
-        self.blueprint.errors[self.question.slug] = self.errors
+            self.blueprint.errors.add(
+                self.question.slug,
+                f,
+                f"Field {f} is empty",
+            )
 
 
 class UsesInformationConsumer(RegistrationConsumer):
