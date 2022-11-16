@@ -1,19 +1,27 @@
 from django import template
 import logging
 
+from registrations.forms import PlaceholderQuestion
+
 register = template.Library()
 
 class ProgressEnumerator:
 
     def __init__(self):
         self.counter = {
-            "new_reg": 1,
-            "faculty": 2,
-            "involved_people": 3,
+            None: 1,
         }
 
+    def count(self, slug):
+        num = self.counter[slug]
+        self.counter[slug] = num + 1
+        return num
+
     def __call__(self, slug):
-        return str(self.counter[slug])
+        if slug in self.counter.keys():
+            return str(self.count(slug))
+        else:
+            return self.count(None)
 
 @register.inclusion_tag(
     "registrations/templatetags/progress_bar.html",
@@ -77,4 +85,6 @@ def progress_item_from_slug(context, slug, **kwargs):
         slug=slug,
         **question_kwargs,
     )
+    if not question:
+        question = PlaceholderQuestion(slug=slug)
     return progress_item_from_question(context, question, **kwargs)

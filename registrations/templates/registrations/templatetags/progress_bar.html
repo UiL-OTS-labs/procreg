@@ -1,59 +1,47 @@
 {% load progress_tags %}
 
 <div class="stepper">
-  <ul>
-    <li>
-      {% progress_item_from_slug "new_reg" %}
-      {% if current_question.slug in group_one %}
-        <ul>
-          <li>
-            {% progress_item_from_slug "faculty" number="" size="large" %}
-          </li>
-        </ul>
-      {% endif %}
-    </li>
-    <li>
-      <a class="stepper-item">
-        <span class="stepper-bubble stepper-bubble-largest">1</span>
-        <span>Hello</span>
-      </a>
-    </li>
-    <li>
-      <a class="stepper-item">
-        <span class="stepper-bubble stepper-bubble-largest">2</span>
-        <span>World</span>
-      </a>
-    </li>
-    <li>
-      <a class="stepper-item">
-        <span class="stepper-bubble stepper-bubble-largest">3</span>
-        <span>This has children</span>
-      </a>
-      <ul>
+    <ul>
         <li>
-          <a class="stepper-item">
-            <span class="stepper-bubble stepper-bubble-large"></span>
-            <span>Child 1</span>
-          </a>
+            {% progress_item_from_slug "new_reg" %}
+            {% if current_question.slug in group_one %}
+                <ul>
+                    <li>
+                        {% progress_item_from_slug "faculty" number="" size="large" %}
+                    </li>
+                </ul>
+            {% endif %}
         </li>
         <li>
-          <a class="stepper-item">
-            <span class="stepper-bubble stepper-bubble-large"></span>
-            <span>Child 2</span>
-          </a>
+            {% progress_item_from_slug "traversal" text="Traversal" %}
         </li>
-      </ul>
-    </li>
-  </ul>
+        <li>
+            {% progress_item_from_slug "goal" text="Goal" %}
+        </li>
+        <li>
+            {% progress_item_from_slug "involved_people" text="Involved people" %}
+        </li>
+        <li>
+            {% progress_item_from_slug "information" text="Information" %}
+        </li>
+        <li>
+            {% progress_item_from_slug "retention" text="Retention" %}
+        </li>
+        <li>
+            {% progress_item_from_slug "receivers" text="Receivers" %}
+        </li>
+        <li>
+            {% progress_item_from_slug "software" text="Software" %}
+        </li>
+        <li>
+            {% progress_item_from_slug "security" text="Security" %}
+        </li>
+        <li>
+            {% progress_item_from_slug "documents" text="Documents" %}
+        </li>
+        <li>
+            {% progress_item_from_slug "summary" text="Summary" %}
+        </li>
+    </ul>
 </div>
 
-<ul id="progress">
-  {% for item in items %}
-
-    <li class="{{item.css_class}}">
-      <a href="{{item.url}}">{{item.title}}</a>
-    </li>
-  {% empty %}
-    No progress items found!
-  {% endfor %}
-</ul>
