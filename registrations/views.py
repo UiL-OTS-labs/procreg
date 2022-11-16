@@ -193,6 +193,19 @@ class InvolvedManager(generic.TemplateView,
             kwargs=reverse_kwargs,
         )
 
+class StepperView(RegistrationQuestionEditView):
+    template_name = "registrations/stepper_view.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["stepper"] = True
+        slug = self.kwargs.get("slug", "no_slug_provided")
+        context["slug"] = slug
+        return context
+
+    def get_template_names(self):
+        return [self.template_name]
+
 
 class MinimalCategoryView(generic.TemplateView,
                           RegistrationMixin):
