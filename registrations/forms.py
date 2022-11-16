@@ -388,6 +388,22 @@ class CategoryQuestion(RegistrationQuestionMixin, questions.Question):
         return super().save(*args, **kwargs)
 
 
+class PlaceholderQuestion(RegistrationQuestionMixin, questions.Question):
+    title = "Placeholder"
+    description = "Description of placeholder question"
+    is_editable = True
+
+    class Meta:
+        model = Registration
+        fields = []
+
+    def __init__(self, slug="placeholder", *args, **kwargs):
+        self.slug = slug
+        super().__init__(self)
+
+    def get_edit_url(self):
+        return "#"
+
 
 Q_LIST = [NewRegistrationQuestion,
           FacultyQuestion,
