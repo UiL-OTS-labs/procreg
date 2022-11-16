@@ -9,12 +9,11 @@
 
 {% block stepper %}
 
-  <h4>Stepper</h4>
   {% with current=form.slug %}
     {% progress_bar blueprint form %}
   {% endwith %}
 
-  <h4>Completed</h4>
+  <h4 class="mt-4">Completed</h4>
   <ul>
   {% for q in blueprint.completed %}
 <li>{{q.slug}} (<a href="{{q.get_edit_url}}">edit</a>)</li>
