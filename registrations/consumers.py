@@ -104,6 +104,8 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
     def consume(self):
         """For each involved group, add the relevant consumer."""
         registration = self.blueprint.object
+        self.blueprint.desired_next.append(self.question)
+        self.blueprint.questions.append(self.question)
         # Check if one required groups are checked
         if True not in [
                 registration.involves_consent,

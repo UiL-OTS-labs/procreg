@@ -60,7 +60,10 @@ class RegistrationSummaryView(RegistrationMixin,
                               ):
 
     template_name = 'registrations/summary.html'
-    extra_context = {"show_progress": True}
+    extra_context = {"stepper": True}
+    title = "registrations:views:summary_title"
+    description = "registrations:views:summary_description"
+    slug = "summary"
 
     def get_object(self,):
         return self.get_registration()
@@ -71,6 +74,14 @@ class RegistrationSummaryView(RegistrationMixin,
 
         return context
 
+    def get_edit_url(self,):
+        reg_pk = self.reg_pk
+        return reverse(
+            "registrations:summary",
+            kwargs={
+                "reg_pk": reg_pk,
+            },
+        )
 
 class RegistrationQuestionEditView(
         QuestionFromURLMixin,
