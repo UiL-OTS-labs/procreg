@@ -42,14 +42,11 @@ class RegistrationQuestionMixin:
             kwargs=reverse_kwargs,
         )
 
-#    def instantiate_from_blueprint(blueprint):
 
-#        return super()(instance=blueprint.registration)
-
-
-class NewRegistrationQuestion(RegistrationQuestionMixin,
-        questions.Question,):
-
+class NewRegistrationQuestion(
+        RegistrationQuestionMixin,
+        questions.Question,
+):
     title = _("registrations:forms:registration_title")
     description = _("registrations:forms:registration_description")
     model = Registration

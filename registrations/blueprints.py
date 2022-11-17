@@ -100,7 +100,8 @@ class RegistrationBlueprint(Blueprint):
 
     def get_question(self, **kwargs):
         """
-        Get questions matching kwargs from this blueprints list of instantiated questions.
+        Get questions matching kwargs from this blueprints list of
+        instantiated questions.
         """
         match = self.questions
         for key, value in kwargs.items():
