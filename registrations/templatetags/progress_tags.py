@@ -30,12 +30,16 @@ def progress_bar(blueprint, current):
     enumerator = ProgressEnumerator()
     tag_context = {
         "involved": [],
-        "current_slug": current.slug,
-        "current_question": current,
         "blueprint": blueprint,
         "enumerator": enumerator,
         "group_one": ["new_reg", "faculty"]
     }
+    if hasattr(current, "slug"):
+        tag_context['current_slug'] = current.slug
+        tag_context['current_question'] = current
+    else:
+        tag_context['current_slug'] = current
+        tag_context['current_question'] = blueprint.get_question(slug=current)
     return tag_context
 
 
