@@ -1,48 +1,22 @@
-{% extends "registrations/base.html" %}
+{% extends "registrations/base-form.html" %}
+
+{% load static %}
 {% load i18n %}
 {% load question_tags %}
 {% load registration_tags %}
+{% load progress_tags %}
 
 
-{% block progress %}
+{% block stepper %}
 
 
-<div class="col-12">
-
-            <h4>Progress bar</h4>
-
-{% progress_bar %}
+awoo
+{% progress_bar view.blueprint "summary" %}
   
-            <h4>Progress bar (fake)</h4>
-  
-            <ul id="progress">
-	      
-	      <li class="completed">
-		<a href="#">Completed</a>
-	      </li>
-	      <li class="current">
-		<a href="#">Current</a>
-	      </li>
-	      <li class="">
-		<a href="#">Normal</a>
-	      </li>
-	      <li class="completed">
-		<a href="#">Completed</a>
-	      </li>
-	      <li class="current completed">
-		<a href="#">Current completed</a>
-	      </li>
-	      <li class="">
-		<a href="#">Normal</a>
-	      </li>
-            </ul>
-        </div>
-
-
 {% endblock %}
 
 
-{% block main %}
+{% block form %}
 <div class="col-12">
     <h3>{% trans "registrations:summary:page_title" %}</h3>
 
@@ -67,27 +41,4 @@
 
 
 </div>
-{% endblock %}
-
-{% block sidebar %}
-
-<h4>
-    {% trans "registrations:actions:header" %}
-</h4>
-
-
-<ul>
-    <li>
-        <a href="{% url "registrations:delete" reg_pk=registration.pk %}">
-            {% trans "registrations:actions:delete" %}
-        </a>
-    </li>
-    <li>
-        <a href="{% url "registrations:create_question" reg_pk=registration.pk question='category' %}">
-            {% trans "registrations:actions:add_category" %}
-        </a>
-    </li>
-</ul>
-
-
 {% endblock %}

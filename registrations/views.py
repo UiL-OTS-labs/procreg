@@ -60,7 +60,10 @@ class RegistrationSummaryView(RegistrationMixin,
                               ):
 
     template_name = 'registrations/summary.html'
-    extra_context = {"show_progress": True}
+    extra_context = {"stepper": True}
+    title = "registrations:views:summary_title"
+    description = "registrations:views:summary_description"
+    slug = "summary"
 
     def get_object(self,):
         return self.get_registration()
@@ -71,6 +74,14 @@ class RegistrationSummaryView(RegistrationMixin,
 
         return context
 
+    def get_edit_url(self,):
+        reg_pk = self.reg_pk
+        return reverse(
+            "registrations:summary",
+            kwargs={
+                "reg_pk": reg_pk,
+            },
+        )
 
 class RegistrationQuestionEditView(
         QuestionFromURLMixin,
@@ -192,6 +203,19 @@ class InvolvedManager(generic.TemplateView,
             "registrations:involved_manager",
             kwargs=reverse_kwargs,
         )
+
+class StepperView(RegistrationQuestionEditView):
+    template_name = "registrations/stepper_view.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["stepper"] = True
+        slug = self.kwargs.get("slug", "no_slug_provided")
+        context["slug"] = slug
+        return context
+
+    def get_template_names(self):
+        return [self.template_name]
 
 
 class MinimalCategoryView(generic.TemplateView,

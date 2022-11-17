@@ -22,7 +22,15 @@ class TopQuestionsConsumer(BaseConsumer):
         for q in required:
             if len(self.blueprint.errors[q.slug]) != 0:
                 return []
-        return [UsesInformationConsumer]
+        self.enable_summary()
+        return [InvolvedPeopleConsumer]
+
+    def enable_summary(self):
+        from .views import RegistrationSummaryView
+        view = RegistrationSummaryView(
+            reg_pk=self.blueprint.object.pk,
+        )
+        self.blueprint.questions.append(view)
 
 
 class NewRegistrationConsumer(RegistrationConsumer):
@@ -96,6 +104,8 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
     def consume(self):
         """For each involved group, add the relevant consumer."""
         registration = self.blueprint.object
+        self.blueprint.desired_next.append(self.question)
+        self.blueprint.questions.append(self.question)
         # Check if one required groups are checked
         if True not in [
                 registration.involves_consent,
