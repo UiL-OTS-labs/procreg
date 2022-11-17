@@ -22,7 +22,15 @@ class TopQuestionsConsumer(BaseConsumer):
         for q in required:
             if len(self.blueprint.errors[q.slug]) != 0:
                 return []
-        return [UsesInformationConsumer]
+        self.enable_summary()
+        return [InvolvedPeopleConsumer]
+
+    def enable_summary(self):
+        from .views import RegistrationSummaryView
+        view = RegistrationSummaryView(
+            reg_pk=self.blueprint.object.pk,
+        )
+        self.blueprint.questions.append(view)
 
 
 class NewRegistrationConsumer(RegistrationConsumer):
