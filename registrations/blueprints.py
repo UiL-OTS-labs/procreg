@@ -5,7 +5,7 @@ import logging
 from cdh.questions.blueprints import Blueprint
 
 from .models import Registration, Involved
-from .progress import RegistrationProgressBar
+# from .progress import RegistrationProgressBar
 from .forms import NewRegistrationQuestion, CategoryQuestion, \
     TraversalQuestion, QUESTIONS, FacultyQuestion, \
     UsesInformationQuestion, ConfirmInformationUseQuestion, \
@@ -13,6 +13,7 @@ from .forms import NewRegistrationQuestion, CategoryQuestion, \
     NewInvolvedQuestion, PurposeQuestion
 from .consumers import TopQuestionsConsumer, NewRegistrationConsumer, \
     FacultyConsumer
+from .mixins import BlueprintMixin, UsersOrGroupsAllowedMixin
 
 
 info = logging.info
@@ -66,7 +67,7 @@ class RegistrationBlueprint(Blueprint):
     def __init__(self, registration):
         """Initialize the progress bar and continue"""
         super().__init__(registration)
-        self.progress_bar = RegistrationProgressBar(self)
+        # self.progress_bar = RegistrationProgressBar(self)
         self.desired_next = []
         self.top_questions = []
         # Completed is the list of items which are considered
@@ -161,3 +162,28 @@ class RegistrationBlueprint(Blueprint):
             out += inst
         return out
 
+
+class RegistrationMixin(
+        BlueprintMixin,
+        UsersOrGroupsAllowedMixin,
+):
+
+    blueprint_class = RegistrationBlueprint
+    blueprint_pk_kwarg = "reg_pk"
+    registration = None
+
+    """Allow the owner of a registration to access and edit it.
+    In the future, this will include collaborators."""
+
+    def get_registration(self):
+        return self.get_blueprint_object()
+
+    def get_allowed_users(self):
+        allowed = [self.get_registration().created_by]
+        allowed.append(super().get_allowed_users())
+        return allowed
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['registration'] = self.get_registration()
+        return context

@@ -2,8 +2,23 @@ from django.core.exceptions import PermissionDenied
 from cdh.questions.views import BlueprintMixin
 
 
-from .models import Registration
-from .blueprints import RegistrationBlueprint
+class ProgressItemMixin():
+    """Provides the basic attributes for a view or question
+    to be displayed in a progress bar"""
+
+    title = "registrations:mixins:progress_item"
+    slug = "progress_item"
+
+    def __init__(self, *args, **kwargs):
+        self.complete = False
+        self.current = False
+        self.disabled = False
+        self.incomplete = False
+        return super().__init__(*args, **kwargs)
+
+    def get_edit_url(self):
+        return "#"
+
 
 class UsersOrGroupsAllowedMixin():
 
@@ -54,27 +69,3 @@ class UsersOrGroupsAllowedMixin():
             request, *args, **kwargs)
 
 
-class RegistrationMixin(
-        BlueprintMixin,
-        UsersOrGroupsAllowedMixin,
-):
-
-    blueprint_class = RegistrationBlueprint
-    blueprint_pk_kwarg = "reg_pk"
-    registration = None
-
-    """Allow the owner of a registration to access and edit it.
-    In the future, this will include collaborators."""
-
-    def get_registration(self):
-        return self.get_blueprint_object()
-
-    def get_allowed_users(self):
-        allowed = [self.get_registration().created_by]
-        allowed.append(super().get_allowed_users())
-        return allowed
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context['registration'] = self.get_registration()
-        return context

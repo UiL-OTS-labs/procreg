@@ -34,7 +34,7 @@ urlpatterns = [
     path('impersonate/', include('impersonate.urls')),
     path('cdhcore/', include('cdh.core.urls')),
     path('i18n/', include('django.conf.urls.i18n')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT, show_indexes=True)
+]
 
 
 admin.site.site_header = ''
@@ -47,4 +47,4 @@ if settings.DEBUG:
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
 
-    ] + urlpatterns
+    ] + urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT, show_indexes=True)

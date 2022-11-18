@@ -1,9 +1,8 @@
 from django import template
 import logging
 
-from registrations.forms import PlaceholderQuestion
-
 register = template.Library()
+
 
 class ProgressEnumerator:
 
@@ -48,7 +47,8 @@ def progress_bar(blueprint, current):
     takes_context=True,
 )
 def progress_item_from_question(context, question, size="largest",
-                                text=None, url=True, number=True):
+                                text=None, url=True, number=True,
+                                incomplete=False,):
     if question in ["", None]:
         return None
     # Caller can set url to False or None to disable
@@ -63,6 +63,14 @@ def progress_item_from_question(context, question, size="largest",
     current = context.get("current_question")
     if question.slug == current.slug:
         item_classes.append("active")
+    if question.disabled:
+        item_classes.append("disabled")
+    else:
+        if incomplete or question.incomplete:
+            item_classes.append("incomplete")
+        else:
+            if question.complete:
+                item_classes.append("complete")
 
     if number is True:
         enumerator = context.get("enumerator")
@@ -83,6 +91,7 @@ def progress_item_from_question(context, question, size="largest",
     takes_context=True,
 )
 def progress_item_from_slug(context, slug, **kwargs):
+    from ..forms import PlaceholderQuestion
     blueprint = context.get("blueprint")
     question_kwargs = kwargs.get("question_kwargs", {})
     question = blueprint.get_question(

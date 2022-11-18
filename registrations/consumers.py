@@ -18,10 +18,18 @@ class TopQuestionsConsumer(BaseConsumer):
 
     def consume(self):
         "If both top questions are filled out, append the next consumer"
-        required = [NewRegistrationQuestion, FacultyQuestion]
-        for q in required:
+        # Fetch the instantiated top questions from blueprint
+        new_reg, fac = (
+            self.blueprint.get_question(slug=q.slug) for q in
+            [NewRegistrationQuestion, FacultyQuestion]
+            )
+        # Set them to incomplete if they have errors
+        self.blueprint.top_questions_incomplete = False
+        for q in (new_reg, fac):
+            q.complete = True
             if len(self.blueprint.errors[q.slug]) != 0:
-                return []
+                q.incomplete = True
+                self.blueprint.top_questions_incomplete = True
         self.enable_summary()
         return [InvolvedPeopleConsumer]
 
@@ -112,11 +120,13 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
                 registration.involves_non_consent,
         ]:
             return self.no_group_selected()
+        self.question.complete = True
         # Fetch relevant consumer and manager for user selection
         consumers, managers = self._get_selected()
         # Append relevant managers here for progress bar
         for m in managers:
-            self.blueprint.progress_bar.ingest(m)
+            #self.blueprint.progress_bar.ingest(m)
+            pass
         # Finally, return
         if consumers != []:
             return consumers + [StorageConsumer]
@@ -124,6 +134,7 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
             return []
 
     def no_group_selected(self):
+        self.question.incomplete = True
         return []
 
     def _get_selected(self):
