@@ -24,12 +24,12 @@ class TopQuestionsConsumer(BaseConsumer):
             [NewRegistrationQuestion, FacultyQuestion]
             )
         # Set them to incomplete if they have errors
+        self.blueprint.top_questions_incomplete = False
         for q in (new_reg, fac):
             q.complete = True
             if len(self.blueprint.errors[q.slug]) != 0:
                 q.incomplete = True
-        if fac.incomplete:
-            new_reg.incomplete = True
+                self.blueprint.top_questions_incomplete = True
         self.enable_summary()
         return [InvolvedPeopleConsumer]
 

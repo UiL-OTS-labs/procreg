@@ -47,7 +47,8 @@ def progress_bar(blueprint, current):
     takes_context=True,
 )
 def progress_item_from_question(context, question, size="largest",
-                                text=None, url=True, number=True):
+                                text=None, url=True, number=True,
+                                incomplete=False,):
     if question in ["", None]:
         return None
     # Caller can set url to False or None to disable
@@ -65,7 +66,7 @@ def progress_item_from_question(context, question, size="largest",
     if question.disabled:
         item_classes.append("disabled")
     else:
-        if question.incomplete:
+        if incomplete or question.incomplete:
             item_classes.append("incomplete")
         else:
             if question.complete:
