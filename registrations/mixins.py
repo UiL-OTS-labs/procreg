@@ -2,8 +2,23 @@ from django.core.exceptions import PermissionDenied
 from cdh.questions.views import BlueprintMixin
 
 
-from .models import Registration
-from .blueprints import RegistrationBlueprint
+class ProgressItemMixin():
+    """Provides the basic attributes for a view or question
+    to be displayed in a progress bar"""
+
+    title = "registrations:mixins:progress_item"
+    slug = "progress_item"
+
+    def __init__(self, *args, **kwargs):
+        self.complete = False
+        self.current = False
+        self.disabled = False
+        self.incomplete = False
+        return super().__init__(*args, **kwargs)
+
+    def get_edit_url(self):
+        return "#"
+
 
 class UsersOrGroupsAllowedMixin():
 
