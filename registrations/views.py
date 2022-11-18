@@ -12,8 +12,8 @@ from cdh.questions.views import BlueprintMixin, QuestionView, \
 
 from .models import Registration, ParticipantCategory, Involved
 from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
-from .blueprints import RegistrationBlueprint
-from .mixins import RegistrationMixin
+from .blueprints import RegistrationMixin
+from .mixins import ProgressItemMixin
 
 debug = logging.debug
 
@@ -54,10 +54,12 @@ class RegistrationOverview(RegistrationMixin,
         return context
 
 
-class RegistrationSummaryView(RegistrationMixin,
-                              BlueprintMixin,
-                              generic.TemplateView,
-                              ):
+class RegistrationSummaryView(
+        ProgressItemMixin,
+        RegistrationMixin,
+        BlueprintMixin,
+        generic.TemplateView,
+):
 
     template_name = 'registrations/summary.html'
     extra_context = {"stepper": True}
