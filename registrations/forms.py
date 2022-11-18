@@ -1,12 +1,12 @@
 from django.utils.translation import ugettext_lazy as _
-from django import forms
 from django.urls import reverse
 
 from cdh.questions import questions
 from .models import Registration, ParticipantCategory, Involved
+from .mixins import ProgressItemMixin
 
 
-class RegistrationQuestionMixin:
+class RegistrationQuestionMixin(ProgressItemMixin):
 
     show_progress = True
 
@@ -43,6 +43,24 @@ class RegistrationQuestionMixin:
         )
 
 
+class PlaceholderQuestion(RegistrationQuestionMixin, questions.Question):
+    title = "Placeholder"
+    description = "Description of placeholder question"
+    is_editable = True
+
+    class Meta:
+        model = Registration
+        fields = []
+
+    def __init__(self, slug="placeholder", *args, **kwargs):
+        super().__init__(self)
+        self.slug = slug
+        self.disabled = True
+
+    def get_edit_url(self):
+        return False
+
+    
 class NewRegistrationQuestion(
         RegistrationQuestionMixin,
         questions.Question,
@@ -384,22 +402,6 @@ class CategoryQuestion(RegistrationQuestionMixin, questions.Question):
         self.instance.registration = reg
         return super().save(*args, **kwargs)
 
-
-class PlaceholderQuestion(RegistrationQuestionMixin, questions.Question):
-    title = "Placeholder"
-    description = "Description of placeholder question"
-    is_editable = True
-
-    class Meta:
-        model = Registration
-        fields = []
-
-    def __init__(self, slug="placeholder", *args, **kwargs):
-        self.slug = slug
-        super().__init__(self)
-
-    def get_edit_url(self):
-        return "#"
 
 
 Q_LIST = [NewRegistrationQuestion,
