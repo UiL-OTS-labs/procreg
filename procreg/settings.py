@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django_extensions',
 
     # django-simple-menu
-    'menu',
+    'simple_menu',
 
     # DRF - Enable if using uil.rest and/or uil.vue.FancyList
     # 'rest_framework',
