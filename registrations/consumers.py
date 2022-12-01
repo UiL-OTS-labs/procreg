@@ -99,22 +99,6 @@ class FacultyConsumer(RegistrationConsumer):
             )
 
 
-class UsesInformationConsumer(RegistrationConsumer):
-
-    question_class = UsesInformationQuestion
-
-    def consume(self):
-        # This consumer blocks if unanswered
-        self.blueprint.desired_next.append(self.question)
-        if self.filled_in_fields == []:
-            return []
-        answer = self.blueprint.object.uses_information
-        if answer is False:
-            return [ConfirmInformationUseConsumer]
-        elif answer is True:
-            return [InvolvedPeopleConsumer]
-
-
 class InvolvedPeopleConsumer(BaseQuestionConsumer):
 
     question_class = InvolvedPeopleQuestion
