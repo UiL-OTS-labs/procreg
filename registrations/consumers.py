@@ -13,6 +13,16 @@ class RegistrationConsumer(BaseQuestionConsumer):
         question_data["registration"] = self.blueprint.object
         return question_data
 
+    def add_error(self, *args):
+        return self.blueprint.errors.add(*args)
+
+    def add_question_error(self, *args):
+        try:
+            slug = self.question.slug
+        except AttributeError as e:
+            raise e("Question or slug undefined")
+        return self.blueprint.errors.add(slug, *args)
+
 
 class TopQuestionsConsumer(BaseConsumer):
 
