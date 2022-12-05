@@ -123,7 +123,7 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
             pass
         # Finally, return
         if consumers != []:
-            return consumers + [StorageConsumer]
+            return [GroupManagerConsumer] + consumers + [StorageConsumer]
         else:
             return []
 
@@ -165,7 +165,7 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
         )
 
 
-class GroupManagerConsumer(RegistrationConsumer):
+class GroupManagerConsumer(BaseConsumer):
     """This consumer is added when at least one group of a type
     is needed, and succeeds if at least one group of the type
     is correctly filled in."""
@@ -187,11 +187,13 @@ class GroupManagerConsumer(RegistrationConsumer):
     def get_manager(self):
         from .views import InvolvedManager
         return InvolvedManager(
-            registration=self.blueprint.registration,
+            registration=self.blueprint.object,
             group_type=self.group_type,
         )
 
     def consume(self):
+        self.manager = self.get_manager()
+        self.blueprint.questions.append(self.manager)
         return []
         
 

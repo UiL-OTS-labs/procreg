@@ -160,7 +160,8 @@ class RegistrationDeleteView(
     pk_url_kwarg = 'reg_pk'
 
 
-class InvolvedManager(generic.TemplateView,
+class InvolvedManager(ProgressItemMixin,
+                      generic.TemplateView,
                       RegistrationMixin,
                       BlueprintMixin,
                       ):
@@ -168,7 +169,7 @@ class InvolvedManager(generic.TemplateView,
     title = "registrations:views:involved_manager_title"
     description = "registrations:views:involved_manager_description"
     template_name = "registrations/involved_manager.html"
-    slug = "manager"
+    slug = "involved_manager"
     extra_context = {
         "show_progress": True,
     }
@@ -205,6 +206,7 @@ class InvolvedManager(generic.TemplateView,
             "registrations:involved_manager",
             kwargs=reverse_kwargs,
         )
+
 
 class StepperView(RegistrationQuestionEditView):
     template_name = "registrations/stepper_view.html"
