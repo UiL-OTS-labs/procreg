@@ -53,6 +53,10 @@ class Registration(models.Model):
     date_end = models.DateField(blank=True,
                                 null=True,
                                 )
+    research_goal = models.TextField(
+        default="",
+        max_length=500,
+    )
     confirm_submission = models.BooleanField(
         default=False,
         choices=(

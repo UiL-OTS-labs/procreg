@@ -2,7 +2,8 @@ from cdh.questions.blueprints import BaseConsumer, BaseQuestionConsumer
 
 from .forms import NewRegistrationQuestion, FacultyQuestion, \
     UsesInformationQuestion, InvolvedPeopleQuestion, NewInvolvedQuestion, \
-    PurposeQuestion, StorageQuestion, ConfirmInformationUseQuestion
+    PurposeQuestion, StorageQuestion, ConfirmInformationUseQuestion, \
+    TraversalQuestion, GoalQuestion
 from .models import Involved
 
 
@@ -41,7 +42,7 @@ class TopQuestionsConsumer(BaseConsumer):
                 q.incomplete = True
                 self.blueprint.top_questions_incomplete = True
         self.enable_summary()
-        return [InvolvedPeopleConsumer]
+        return [TraversalConsumer]
 
     def enable_summary(self):
         from .views import RegistrationSummaryView
@@ -97,6 +98,28 @@ class FacultyConsumer(RegistrationConsumer):
                 f,
                 f"Field {f} is empty",
             )
+
+
+class TraversalConsumer(BaseQuestionConsumer):
+
+    question_class = TraversalQuestion
+
+    def consume(self):
+        self.blueprint.questions.append(
+            self.question,
+        )
+        return [GoalConsumer]
+
+
+class GoalConsumer(BaseQuestionConsumer):
+
+    question_class = GoalQuestion
+
+    def consume(self):
+        self.blueprint.questions.append(
+            self.question,
+        )
+        return [InvolvedPeopleConsumer]
 
 
 class InvolvedPeopleConsumer(BaseQuestionConsumer):
