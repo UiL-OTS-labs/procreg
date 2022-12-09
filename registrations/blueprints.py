@@ -181,6 +181,9 @@ class RegistrationMixin(
     def get_registration(self):
         return self.get_blueprint_object()
 
+    def get_object(self):
+        return self.get_registration()
+
     def get_allowed_users(self):
         allowed = [self.get_registration().created_by]
         allowed.append(super().get_allowed_users())
