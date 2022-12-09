@@ -232,8 +232,13 @@ class BaseGroupConsumer(BaseConsumer):
     success_list = []
 
     def __init__(self, *args, **kwargs):
-
-        return super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+        # Add our group type to the blueprint for the
+        # InvolvedManager can easily find which ones are selected
+        if self.group_type:
+            self.blueprint.selected_groups.append(
+                self.group_type,
+            )
 
     @property
     def group_qs(self):
