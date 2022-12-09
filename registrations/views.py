@@ -160,17 +160,18 @@ class RegistrationDeleteView(
     pk_url_kwarg = 'reg_pk'
 
 
-class InvolvedManager(generic.TemplateView,
+class InvolvedManager(ProgressItemMixin,
                       RegistrationMixin,
-                      BlueprintMixin,
+                      generic.TemplateView,
                       ):
 
     title = "registrations:views:involved_manager_title"
     description = "registrations:views:involved_manager_description"
     template_name = "registrations/involved_manager.html"
-    slug = "manager"
+    slug = "involved_manager"
     extra_context = {
         "show_progress": True,
+        "stepper": True,
     }
 
     def __init__(self, *args, **kwargs):
@@ -186,17 +187,14 @@ class InvolvedManager(generic.TemplateView,
         return qs
 
     def get_context_data(self, *args, **kwargs):
-
         context = super().get_context_data(*args, **kwargs)
-        context["groups"] = list(self.get_queryset())
-        print(self.kwargs, self.group_type, kwargs)
+        context["groups"] = self.get_involved_groups()
         return context
 
-    def get_object(self):
-        return self.registration
+    def get_involved_groups(self):
+        return self.blueprint.selected_groups
 
     def get_edit_url(self):
-
         reverse_kwargs = {
             "reg_pk": self.registration.pk,
             "group_type": self.group_type,
@@ -205,6 +203,7 @@ class InvolvedManager(generic.TemplateView,
             "registrations:involved_manager",
             kwargs=reverse_kwargs,
         )
+
 
 class StepperView(RegistrationQuestionEditView):
     template_name = "registrations/stepper_view.html"

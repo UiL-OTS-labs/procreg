@@ -128,13 +128,32 @@ class TraversalQuestion(RegistrationQuestionMixin, questions.Question):
     slug = "traversal"
     is_editable = True
 
-
     def get_segments(self):
-
         segments = []
         segments.append(self._field_to_segment('date_start'))
         segments.append(self._field_to_segment('date_end'))
+        return segments
 
+
+class GoalQuestion(RegistrationQuestionMixin, questions.Question):
+
+    show_progress = True
+
+    class Meta:
+        model = Registration
+        fields = [
+            "research_goal",
+        ]
+
+    title = _("registrations:forms:goal_question_title")
+    description = _("registrations:forms:goal_question_description")
+    model = Registration
+    slug = "goal"
+    is_editable = True
+
+    def get_segments(self):
+        segments = []
+        segments.append(self._field_to_segment('research_goal'))
         return segments
 
 
@@ -218,6 +237,8 @@ class InvolvedPeopleQuestion(RegistrationQuestionMixin,
         return self._fields_to_segments(
             fields_list=self.Meta.fields,
         )
+
+
 
 
 class NewInvolvedQuestion(RegistrationQuestionMixin,
@@ -413,6 +434,7 @@ Q_LIST = [NewRegistrationQuestion,
           InvolvedPeopleQuestion,
           StorageQuestion,
           NewInvolvedQuestion,
+          GoalQuestion,
           ]
 
 QUESTIONS = {q.slug: q for q in Q_LIST}

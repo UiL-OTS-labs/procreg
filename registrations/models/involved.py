@@ -37,3 +37,11 @@ class Involved(models.Model):
         max_length=500,
         default="",
     )
+    # Fields relating to personal information
+
+
+class InformationKind(models.Model):
+    description = models.CharField(
+        max_length=200,
+        default="",
+    )

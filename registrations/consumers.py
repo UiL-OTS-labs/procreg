@@ -2,7 +2,8 @@ from cdh.questions.blueprints import BaseConsumer, BaseQuestionConsumer
 
 from .forms import NewRegistrationQuestion, FacultyQuestion, \
     UsesInformationQuestion, InvolvedPeopleQuestion, NewInvolvedQuestion, \
-    PurposeQuestion, StorageQuestion, ConfirmInformationUseQuestion
+    PurposeQuestion, StorageQuestion, ConfirmInformationUseQuestion, \
+    TraversalQuestion, GoalQuestion
 from .models import Involved
 
 
@@ -12,6 +13,16 @@ class RegistrationConsumer(BaseQuestionConsumer):
         question_data = super().get_question_data()
         question_data["registration"] = self.blueprint.object
         return question_data
+
+    def add_error(self, *args):
+        return self.blueprint.errors.add(*args)
+
+    def add_question_error(self, *args):
+        try:
+            slug = self.question.slug
+        except AttributeError as e:
+            raise e("Question or slug undefined")
+        return self.blueprint.errors.add(slug, *args)
 
 
 class TopQuestionsConsumer(BaseConsumer):
@@ -31,7 +42,7 @@ class TopQuestionsConsumer(BaseConsumer):
                 q.incomplete = True
                 self.blueprint.top_questions_incomplete = True
         self.enable_summary()
-        return [InvolvedPeopleConsumer]
+        return [TraversalConsumer]
 
     def enable_summary(self):
         from .views import RegistrationSummaryView
@@ -89,20 +100,26 @@ class FacultyConsumer(RegistrationConsumer):
             )
 
 
-class UsesInformationConsumer(RegistrationConsumer):
+class TraversalConsumer(BaseQuestionConsumer):
 
-    question_class = UsesInformationQuestion
+    question_class = TraversalQuestion
 
     def consume(self):
-        # This consumer blocks if unanswered
-        self.blueprint.desired_next.append(self.question)
-        if self.filled_in_fields == []:
-            return []
-        answer = self.blueprint.object.uses_information
-        if answer is False:
-            return [ConfirmInformationUseConsumer]
-        elif answer is True:
-            return [InvolvedPeopleConsumer]
+        self.blueprint.questions.append(
+            self.question,
+        )
+        return [GoalConsumer]
+
+
+class GoalConsumer(BaseQuestionConsumer):
+
+    question_class = GoalQuestion
+
+    def consume(self):
+        self.blueprint.questions.append(
+            self.question,
+        )
+        return [InvolvedPeopleConsumer]
 
 
 class InvolvedPeopleConsumer(BaseQuestionConsumer):
@@ -129,7 +146,7 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
             pass
         # Finally, return
         if consumers != []:
-            return consumers + [StorageConsumer]
+            return [GroupManagerConsumer] + consumers + [StorageConsumer]
         else:
             return []
 
@@ -171,7 +188,7 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
         )
 
 
-class GroupManagerConsumer(RegistrationConsumer):
+class GroupManagerConsumer(BaseConsumer):
     """This consumer is added when at least one group of a type
     is needed, and succeeds if at least one group of the type
     is correctly filled in."""
@@ -193,11 +210,13 @@ class GroupManagerConsumer(RegistrationConsumer):
     def get_manager(self):
         from .views import InvolvedManager
         return InvolvedManager(
-            registration=self.blueprint.registration,
+            registration=self.blueprint.object,
             group_type=self.group_type,
         )
 
     def consume(self):
+        self.manager = self.get_manager()
+        self.blueprint.questions.append(self.manager)
         return []
         
 
@@ -213,8 +232,13 @@ class BaseGroupConsumer(BaseConsumer):
     success_list = []
 
     def __init__(self, *args, **kwargs):
-
-        return super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+        # Add our group type to the blueprint for the
+        # InvolvedManager can easily find which ones are selected
+        if self.group_type:
+            self.blueprint.selected_groups.append(
+                self.group_type,
+            )
 
     @property
     def group_qs(self):

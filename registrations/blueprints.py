@@ -70,6 +70,9 @@ class RegistrationBlueprint(Blueprint):
         # self.progress_bar = RegistrationProgressBar(self)
         self.desired_next = []
         self.top_questions = []
+        # These are the selected groups of subjects such as consent,
+        # non-consent, etc.
+        self.selected_groups = []
         # Completed is the list of items which are considered
         # correctly filled in. They show up on the summary page.
         self.completed = CompletedList(self)
@@ -177,6 +180,9 @@ class RegistrationMixin(
 
     def get_registration(self):
         return self.get_blueprint_object()
+
+    def get_object(self):
+        return self.get_registration()
 
     def get_allowed_users(self):
         allowed = [self.get_registration().created_by]
