@@ -161,9 +161,8 @@ class RegistrationDeleteView(
 
 
 class InvolvedManager(ProgressItemMixin,
-                      generic.TemplateView,
                       RegistrationMixin,
-                      BlueprintMixin,
+                      generic.TemplateView,
                       ):
 
     title = "registrations:views:involved_manager_title"
@@ -172,6 +171,7 @@ class InvolvedManager(ProgressItemMixin,
     slug = "involved_manager"
     extra_context = {
         "show_progress": True,
+        "stepper": True,
     }
 
     def __init__(self, *args, **kwargs):
@@ -187,17 +187,14 @@ class InvolvedManager(ProgressItemMixin,
         return qs
 
     def get_context_data(self, *args, **kwargs):
-
         context = super().get_context_data(*args, **kwargs)
-        context["groups"] = list(self.get_queryset())
-        print(self.kwargs, self.group_type, kwargs)
+        context["groups"] = self.get_involved_groups()
         return context
 
-    def get_object(self):
-        return self.registration
+    def get_involved_groups(self):
+        return self.blueprint.selected_groups
 
     def get_edit_url(self):
-
         reverse_kwargs = {
             "reg_pk": self.registration.pk,
             "group_type": self.group_type,
