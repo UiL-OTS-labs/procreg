@@ -184,6 +184,9 @@ class RegistrationMixin(
     def get_object(self):
         return self.get_registration()
 
+    def allowed_user_test(self, user):
+        return user.is_staff
+
     def get_allowed_users(self):
         allowed = [self.get_registration().created_by]
         allowed.append(super().get_allowed_users())
