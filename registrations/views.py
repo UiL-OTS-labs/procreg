@@ -146,6 +146,11 @@ class RegistrationCreateView(generic.CreateView,
     form_class = NewRegistrationQuestion
     success_url = reverse_lazy("registrations:home")
 
+    def form_valid(self, form):
+        """Set creator of registration."""
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
 
 class RegistrationDeleteView(
         generic.DeleteView,

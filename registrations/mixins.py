@@ -36,8 +36,14 @@ class UsersOrGroupsAllowedMixin():
             self.allowed_users = (self.allowed_users,)
         return self.allowed_users
 
+    def allowed_user_test(self, user):
+        """Given a user object, return True if they are allowed"""
+        return False
+
     def check_membership(self, groups):
         """ Check required group(s) """
+        # We do a superuser check here because this method
+        # should never get overwritten
         if self.current_user.is_superuser:
             return True
         return set(groups).intersection(set(self.current_user_groups))
@@ -61,6 +67,9 @@ class UsersOrGroupsAllowedMixin():
                 authorized = True
             elif self.check_membership(self.get_group_required()):
                 authorized = True
+
+        if self.allowed_user_test(self.current_user):
+            authorized = True
 
         if not authorized:
             raise PermissionDenied
