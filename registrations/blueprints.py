@@ -20,6 +20,7 @@ info = logging.info
 debug = logging.debug
 
 
+
 class BlueprintErrors():
 
     def __init__(self):
@@ -28,17 +29,51 @@ class BlueprintErrors():
     def add(self, *args):
         self.all_errors.append(args)
 
+    def search(self, *args):
+        result = []
+        for e in self.all_errors:
+            pprint([e, args, self.rfilter2(e, args)])
+            if self.rfilter2(e, args)[-1] != EndStop:
+                result.append(e)
+        return result
+
     def __getitem__(self, *args):
-        return self.rfilter(self.all_errors, args)
+        return self.search(*args)
 
-    def rfilter(self, sample, args):
+    def rfilter2(self, sample, args, depth=0):
+        """Sequentially filter a list of items through a list of filters"""
+        # First, the case in which we've exhausted our samples
+        if len(sample) == 0:
+            # If there are no more args, then it's a perfect match
+            if len(args) == 0:
+                return [sample]
+            # If there are still unmatched filters, add an EndStop
+            # to mark the failure
+            else:
+                return [EndStop]
+        # Below is the general case in which we still have samples left
         if len(args) == 0:
-            return sample
-        next_sample = [item[1:] for item in sample if item[0] == args[0]]
-        if next_sample == []:
-            return next_sample
-        return [args[0]] + self.rfilter(next_sample, args[1:])
+            # No more filters, so all we have left matches by default
+            return [sample]
+        # Define current filter from args
+        else:
+            if not callable(args[0]):
+                # Non-callable just wants an exact match
+                def current(x):
+                    return x == args[0]
+            else:
+                # Current filter was already callable
+                current = args[0]
+        if not current(sample[0]):
+            # Filter doesn't match, so stop matching here
+            return [ EndStop ]
+        # Default result, return current match and filtered remainder
+        return [sample[0]] + self.rfilter2(sample[1:], args[1:])
 
+
+class EndStop:
+    pass
+        
 
 class CompletedList(list):
 
