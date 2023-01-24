@@ -280,7 +280,24 @@ class InvolvedManager(ProgressItemMixin,
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["groups"] = self.get_involved_groups()
+        context["questions"] = self.collect_questions()
         return context
+
+    def collect_questions(self):
+        questions = {
+            group_type: {
+                "existing": [],
+            } for group_type in self.get_involved_groups()
+        }
+        for q in self.blueprint.questions:
+            if q.slug == "new_involved":
+                if q.instance.pk is not None:
+                    questions[q.group_type]["existing"] += [q]
+                else:
+                    questions[q.group_type]["new"] = q
+        from pprint import pprint
+        pprint(questions)
+        return questions
 
     def get_involved_groups(self):
         return self.blueprint.selected_groups
@@ -288,7 +305,6 @@ class InvolvedManager(ProgressItemMixin,
     def get_edit_url(self):
         reverse_kwargs = {
             "reg_pk": self.registration.pk,
-            "group_type": self.group_type,
         }
         return reverse(
             "registrations:involved_manager",

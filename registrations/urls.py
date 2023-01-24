@@ -16,7 +16,7 @@ urlpatterns = [
     path('<int:reg_pk>/', RegistrationOverview.as_view(), name='overview'),
     path('delete/<int:reg_pk>/', RegistrationDeleteView.as_view(),
          name='delete'),
-    path('<int:reg_pk>/manager/<str:group_type>/',
+    path('<int:reg_pk>/manager/',
          InvolvedManager.as_view(),
          name='involved_manager',
          ),

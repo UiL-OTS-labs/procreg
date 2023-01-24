@@ -206,7 +206,7 @@ class GroupManagerConsumer(BaseConsumer):
             registration=registration,
             group_type=self.group_type,
         )
-    
+
     def get_manager(self):
         from .views import InvolvedManager
         return InvolvedManager(
