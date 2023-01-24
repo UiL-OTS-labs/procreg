@@ -33,7 +33,7 @@ class TopQuestionsConsumer(BaseConsumer):
         new_reg, fac = (
             self.blueprint.get_question(slug=q.slug) for q in
             [NewRegistrationQuestion, FacultyQuestion]
-            )
+        )
         # Set them to incomplete if they have errors
         self.blueprint.top_questions_incomplete = False
         for q in (new_reg, fac):

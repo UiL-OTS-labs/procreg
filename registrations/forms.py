@@ -9,29 +9,25 @@ from .mixins import ProgressItemMixin
 class RegistrationQuestionMixin(ProgressItemMixin):
 
     show_progress = True
+    extra_form_kwargs = []
 
     def __init__(self, *args, **kwargs):
+        self.blueprint = kwargs.pop("blueprint", None)
         self.registration = kwargs.pop('registration', None)
         self.view_kwargs = kwargs.pop('view_kwargs', None)
         return super().__init__(*args, **kwargs)
 
     def get_registration(self):
-        self.registration = self.question_data.get("registration")
-        # Hack for debugging and creating a new registration
-        if not self.registration:
-            self.registration = Registration()
+        if not getattr(self, "registration"):
+            self.registration = self.blueprint.object
         return self.registration
 
     def get_edit_url(self):
 
-        registration = self.get_registration()
-        if not hasattr(self.instance, 'registration'):
-            self.instance.registration = registration
-
         reverse_kwargs = {
             'question': self.slug,
             'question_pk': self.instance.pk,
-            'reg_pk': registration.pk,
+            'reg_pk': self.get_registration().pk,
         }
 
         if reverse_kwargs["question_pk"] is None:

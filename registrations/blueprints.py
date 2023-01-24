@@ -143,9 +143,14 @@ class RegistrationBlueprint(Blueprint):
         instantiated questions.
         """
         match = self.questions
+        question_pk = kwargs.pop("question_pk", None)
+
+        class NoMatch:
+            pass
+
         for key, value in kwargs.items():
             match = filter(
-                lambda q: getattr(q, key, False) == value,
+                lambda q: getattr(q, key, NoMatch) == value,
                 match,
             )
         match = list(match)
@@ -155,7 +160,7 @@ class RegistrationBlueprint(Blueprint):
         if size == 1:
             return match[0]
         else:
-            return list(match)
+            return match
 
     def instantiate_question(self, question_or_list, **kwargs):
         """
@@ -183,6 +188,7 @@ class RegistrationBlueprint(Blueprint):
             instantiated = question(
                 instance=q_object,
                 reg_pk=self.object.pk,
+                registration=self.object,
                 **kwargs,
             )
         except TypeError:
@@ -215,9 +221,6 @@ class RegistrationMixin(
 
     def get_registration(self):
         return self.get_blueprint_object()
-
-    def get_object(self):
-        return self.get_registration()
 
     def allowed_user_test(self, user):
         return user.is_staff
