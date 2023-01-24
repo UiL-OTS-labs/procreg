@@ -85,6 +85,92 @@ class RegistrationSummaryView(
             },
         )
 
+class QuestionFromBlueprintMixin(
+):
+    """Get the question to edit from the blueprint."""
+
+    question_class_kwarg = "question"
+
+    def get_question(self):
+        """Use the provided kwarg to get the instatiated question
+        from our blueprint."""
+        question_kwargs = {
+            "slug": self.kwargs.get(self.question_class_kwarg),
+        }
+        if "question_pk" in self.kwargs:
+            question_pk = self.kwargs.get("question_pk")
+            question_kwargs["question_pk"] = question_pk
+        blueprint = self.get_blueprint()
+        search = blueprint.get_question(
+            **question_kwargs,
+        )
+        if search is None:
+            breakpoint()
+            raise RuntimeError(
+                f"No Question found in blueprint for given args: \
+                {question_kwargs}",
+            )
+        elif type(search) is list:
+            raise RuntimeError(
+                f"Got multiple possible questions for given slug: \
+                {question_kwargs}",
+            )
+        else:
+            return search
+
+    def get_question_object(self):
+        return self.get_question().instance
+
+    def get_form(self):
+        if self.request.method in ('POST', 'PUT'):
+            return super().get_form()
+        return self.get_question()
+
+    def get_question_class(self):
+        return type(self.get_question())
+
+
+class BlueprintQuestionEditView(
+        QuestionFromBlueprintMixin,
+        RegistrationMixin,
+        QuestionEditView,
+):
+
+    def get_success_url(self):
+        if hasattr(self.get_question(), 'get_success_url'):
+            return self.question.get_success_url()
+        # Rebuild blueprint before getting desired next
+        # The answer might change if new info was POSTed
+        self.blueprint = None
+        self.blueprint = self.get_blueprint()
+        bp_next = self.blueprint.get_desired_next_url()
+        if bp_next:
+            return bp_next
+        return reverse_lazy(
+            'registrations:overview',
+            kwargs={
+                'reg_pk': self.kwargs.get('reg_pk')
+            }
+        )
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["stepper"] = self.get_question_class().show_progress
+        return context
+
+    def get_template_names(self):
+        "Insert the preferred procreg templates for questions"
+        template_names = super().get_template_names()
+        template_names.insert(0, "registrations/question.html")
+        if self.get_question_class().show_progress:
+            template_names.insert(0, "registrations/question_progress.html")
+        return template_names
+
+    def form_invalid(self, form):
+        #  breakpoint()
+        return super().form_invalid(form)
+
+
 class RegistrationQuestionEditView(
         QuestionFromURLMixin,
         RegistrationMixin,

@@ -3,7 +3,7 @@ from django.urls import path
 from .views import RegistrationsHomeView, RegistrationCreateView, \
     RegistrationOverview, RegistrationQuestionEditView, RegistrationDeleteView, \
     MinimalCategoryView, MinimalDeleteView, RegistrationSummaryView, \
-    InvolvedManager, StepperView
+    InvolvedManager, StepperView, BlueprintQuestionEditView
 from .forms import QUESTIONS
 from .blueprints import RegistrationBlueprint
 from .models import ParticipantCategory
@@ -24,6 +24,10 @@ urlpatterns = [
     path('<int:reg_pk>/<str:question>/edit/<int:question_pk>/',
          RegistrationQuestionEditView.as_view(
              question_dict=QUESTIONS,
+             parent_pk_arg='reg_pk'),
+         name='edit_question'),
+    path('<int:reg_pk>/<str:question>/edit2/<int:question_pk>/',
+         BlueprintQuestionEditView.as_view(
              parent_pk_arg='reg_pk'),
          name='edit_question'),
     path('<int:reg_pk>/<str:question>/<str:group_type>/',
