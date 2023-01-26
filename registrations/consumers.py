@@ -31,9 +31,9 @@ class TopQuestionsConsumer(BaseConsumer):
         "If both top questions are filled out, append the next consumer"
         # Fetch the instantiated top questions from blueprint
         new_reg, fac = (
-            self.blueprint.get_question(slug=q.slug) for q in
+            self.blueprint.get_question(q.slug) for q in
             [NewRegistrationQuestion, FacultyQuestion]
-            )
+        )
         # Set them to incomplete if they have errors
         self.blueprint.top_questions_incomplete = False
         for q in (new_reg, fac):
@@ -140,10 +140,6 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
         self.question.complete = True
         # Fetch relevant consumer and manager for user selection
         consumers, managers = self._get_selected()
-        # Append relevant managers here for progress bar
-        for m in managers:
-            #self.blueprint.progress_bar.ingest(m)
-            pass
         # Finally, return
         if consumers != []:
             return [GroupManagerConsumer] + consumers + [StorageConsumer]
@@ -184,48 +180,36 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
         from .views import InvolvedManager
         return InvolvedManager(
             registration=self.blueprint.object,
-            group_type=group_type,
         )
 
 
 class GroupManagerConsumer(BaseConsumer):
     """This consumer is added when at least one group of a type
-    is needed, and succeeds if at least one group of the type
-    is correctly filled in."""
-
-    group_type = None
+    is needed, and succeeds if at least one group of each type
+    has been added."""
     success_list = []
 
     def __init__(self, *args, **kwargs):
         return super().__init__(*args, **kwargs)
 
-    @property
-    def group_qs(self):
-        registration = self.blueprint.object
-        return Involved.objects.filter(
-            registration=registration,
-            group_type=self.group_type,
-        )
-    
     def get_manager(self):
         from .views import InvolvedManager
         return InvolvedManager(
             registration=self.blueprint.object,
-            group_type=self.group_type,
         )
 
     def consume(self):
         self.manager = self.get_manager()
         self.blueprint.questions.append(self.manager)
         return []
-        
+
 
 class ConsentManagerConsumer(GroupManagerConsumer):
 
     group_type = "consent"
 
 
-class BaseGroupConsumer(BaseConsumer):
+class BaseGroupConsumer(BaseQuestionConsumer):
 
     question_class = NewInvolvedQuestion
     group_type = None
@@ -249,19 +233,30 @@ class BaseGroupConsumer(BaseConsumer):
         )
 
     def instantiate(self):
-        if len(self.group_qs) > 0:
-            iq = self.question_class(
-                instance=self.group_qs.first(),
-                registration=self.blueprint.object,
-            )
-        else:
-            iq = self.question(
+        """Add a question with empty Involved for new group creation"""
+        self.question = self.question_class(
+            instance=Involved(
                 group_type=self.group_type,
-                registration=self.blueprint.registration,
-            )
-        return iq
+            ),
+            blueprint=self.blueprint,
+            registration=self.blueprint.object,
+        )
+        return self.question
 
     def consume(self):
+        # First add the empty question to blueprint
+        # This will allow the user to create new groups
+        if self.question.instance.group_type is None:
+            breakpoint()
+        self.blueprint.questions.append(self.question)
+        # Then search for existing groups to manage
+        for group in self.group_qs:
+            # Instantiate the question with instance
+            iq = self.question_class(
+                instance=group,
+                blueprint=self.blueprint,
+            )
+            self.blueprint.questions.append(iq)
         if self.has_entries():
             if self.check_details():
                 return self.success()

@@ -12,8 +12,8 @@ from cdh.questions.views import BlueprintMixin, QuestionView, \
 
 from .models import Registration, ParticipantCategory, Involved
 from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
-from .blueprints import RegistrationMixin
-from .mixins import ProgressItemMixin
+from .mixins import RegistrationMixin
+from .progress import ProgressItemMixin
 
 debug = logging.debug
 
@@ -85,6 +85,47 @@ class RegistrationSummaryView(
             },
         )
 
+
+class BlueprintQuestionEditView(
+        RegistrationMixin,
+        QuestionEditView,
+):
+
+    def get_success_url(self):
+        # Rebuild blueprint before getting desired next
+        # The answer might change if new info was POSTed
+        self.blueprint = None
+        self.blueprint = self.get_blueprint()
+        if hasattr(self.get_question(), 'get_success_url'):
+            return self.question.get_success_url()
+        bp_next = self.blueprint.get_desired_next_url()
+        if bp_next:
+            return bp_next
+        return reverse_lazy(
+            'registrations:overview',
+            kwargs={
+                'reg_pk': self.kwargs.get('reg_pk')
+            }
+        )
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["stepper"] = self.get_question_class().show_progress
+        return context
+
+    def get_template_names(self):
+        "Insert the preferred procreg templates for questions"
+        template_names = super().get_template_names()
+        template_names.insert(0, "registrations/question.html")
+        if self.get_question_class().show_progress:
+            template_names.insert(0, "registrations/question_progress.html")
+        return template_names
+
+    def form_invalid(self, form):
+        #  breakpoint()
+        return super().form_invalid(form)
+
+
 class RegistrationQuestionEditView(
         QuestionFromURLMixin,
         RegistrationMixin,
@@ -115,8 +156,9 @@ class RegistrationQuestionEditView(
         )
 
     def get_form_kwargs(self):
-        self.question_data["registration"] = self.get_registration()
-        return super().get_form_kwargs()
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs["blueprint"] = self.get_blueprint()
+        return form_kwargs
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -194,7 +236,22 @@ class InvolvedManager(ProgressItemMixin,
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["groups"] = self.get_involved_groups()
+        context["questions"] = self.collect_questions()
         return context
+
+    def collect_questions(self):
+        questions = {
+            group_type: {
+                "existing": [],
+            } for group_type in self.get_involved_groups()
+        }
+        for question in self.blueprint.questions:
+            if question.slug == "new_involved":
+                if question.instance.pk is not None:
+                    questions[question.instance.group_type]["existing"] += [question]
+                else:
+                    questions[question.instance.group_type]["new"] = question
+        return questions
 
     def get_involved_groups(self):
         return self.blueprint.selected_groups
@@ -202,7 +259,6 @@ class InvolvedManager(ProgressItemMixin,
     def get_edit_url(self):
         reverse_kwargs = {
             "reg_pk": self.registration.pk,
-            "group_type": self.group_type,
         }
         return reverse(
             "registrations:involved_manager",

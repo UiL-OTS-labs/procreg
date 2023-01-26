@@ -15,14 +15,14 @@
 
   <h4 class="mt-4">Completed</h4>
   <ul>
-  {% for q in blueprint.completed %}
-<li>{{q.slug}} (<a href="{{q.get_edit_url}}">edit</a>)</li>
-  {% endfor %}
+    {% for q in blueprint.completed %}
+      <li>{{q.slug}} (<a href="{{q.get_edit_url}}">edit</a>)</li>
+    {% endfor %}
   </ul>
   <ul>
-  {% for q in blueprint.available %}
-<li>{{q.slug}} (<a href="{{q.get_edit_url}}">edit</a>)</li>
-  {% endfor %}
+    {% for q in blueprint.available %}
+      <li>{{q.slug}} (<a href="{{q.get_edit_url}}">edit</a>)</li>
+    {% endfor %}
   </ul>
 
   <h4>All available</h4>
@@ -42,16 +42,22 @@
   </div>
   <div class="uu-form-row">
     <div class="uu-form-field">
-      {% for group in groups %}
-      <h3>{{group}}</h3>
-      {% empty %}
-      <h3>No groups selected?</h3>
+      {% for group_type, data in questions.items %}
+        <h3>{{group_type}}</h3>
+        <ul>
+        {% for eq in data.existing %}
+          <li><a href="{{eq.get_edit_url}}">Existing: {{eq.instance.name}}</a></li>
+        {% endfor %}
+        <li><a href="{{data.new.get_edit_url}}">Make new</a></li>
+        </ul>
+          {% empty %}
+        <h3>No groups selected?</h3>
       {% endfor %}
     </div>
     <div class="uu-form-help">
       <p>
         Question help goes here.
-        </p>
+      </p>
     </div>
   </div>
 

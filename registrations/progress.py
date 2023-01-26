@@ -1,7 +1,4 @@
 from django.views import View
-from .forms import NewRegistrationQuestion, CategoryQuestion, \
-    TraversalQuestion, QUESTIONS, FacultyQuestion, \
-    InvolvedPeopleQuestion, StorageQuestion, UsesInformationQuestion
 from cdh.questions.questions import Question
 
 
@@ -38,11 +35,11 @@ class ProgressItem:
 
 class RegistrationProgressBar:
 
-    all_questions = [
-        NewRegistrationQuestion,
-        FacultyQuestion,
-        TraversalQuestion,
-    ]
+#    all_questions = [
+        #NewRegistrationQuestion,
+        #FacultyQuestion,
+        #TraversalQuestion,
+        #]
 
     def __init__(self, blueprint):
 
@@ -113,3 +110,23 @@ class RegistrationProgressBar:
                 completed=completed,
             ),
         )
+
+
+class ProgressItemMixin():
+    """Provides the basic attributes for a view or question
+    to be displayed in a progress bar"""
+
+    title = "registrations:mixins:progress_item"
+    slug = "progress_item"
+
+    def __init__(self, *args, **kwargs):
+        self.complete = False
+        self.current = False
+        self.disabled = False
+        self.incomplete = False
+        return super().__init__(*args, **kwargs)
+
+    def get_edit_url(self):
+        return "#"
+
+
