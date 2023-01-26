@@ -156,8 +156,9 @@ class RegistrationQuestionEditView(
         )
 
     def get_form_kwargs(self):
-        self.question_data["registration"] = self.get_registration()
-        return super().get_form_kwargs()
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs["blueprint"] = self.get_blueprint()
+        return form_kwargs
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)

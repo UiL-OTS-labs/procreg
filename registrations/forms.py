@@ -235,11 +235,23 @@ class InvolvedPeopleQuestion(RegistrationQuestionMixin,
         )
 
 
+class QuestionViewArgumentsMixin():
+    """Use this mixin to receive arguments from the calling view"""
+
+    view_arguments = []
+
+    def __init__(self, *args, **kwargs):
+        for arg_name in self.view_arguments:
+            arg_value = kwargs.pop("arg_name", None)
+            setattr(self, arg_name, arg_value)
+        return super().__init__(*args, **kwargs)
 
 
-class NewInvolvedQuestion(RegistrationQuestionMixin,
-                          questions.Question,
-                          ):
+class NewInvolvedQuestion(
+        QuestionViewArgumentsMixin,
+        RegistrationQuestionMixin,
+        questions.Question,
+):
     class Meta:
         model = Involved
         fields = [
@@ -251,6 +263,7 @@ class NewInvolvedQuestion(RegistrationQuestionMixin,
     title = _("registrations:forms:involved:new_title")
     description = _("registrations:forms:involved:new_description")
     model = Meta.model
+    view_arguments = ["group_type"]
 
     def __init__(self, *args, **kwargs):
         "Look for a group type in kwargs or alternatively given instance."
@@ -283,7 +296,7 @@ class NewInvolvedQuestion(RegistrationQuestionMixin,
         if self.instance.pk:  # Edit existing model
             reverse_kwargs['question_pk'] = self.instance.pk
         else:  # Else, make sure we know what type to create
-            reverse_kwargs['group_type'] = self.group_type
+            reverse_kwargs['group_type'] = self.instance.group_type
 
         return reverse(
             "registrations:edit_question",

@@ -130,3 +130,57 @@ class QuestionFromBlueprintMixin(
         return type(self.get_question())
 
 
+
+class GroupTypeMixin():
+    """Pass group type on to question"""
+
+    def get_question(self):
+        group_type = self.kwargs.get("group_type")
+        if not group_type:
+            return super().get_question()
+
+        def group_type_filter(question):
+            result = question.instance.group_type == group_type
+            return result
+
+        return super().get_question(extra_filter=group_type_filter)
+
+    def get_form_kwargs(self, *args, **kwargs):
+        form_kwargs = super().get_form_kwargs(*args, **kwargs)
+        group_type = self.kwargs.get("group_type")
+        if group_type:
+            form_kwargs.update(
+                {"group_type": group_type}
+            )
+        return form_kwargs
+
+
+class RegistrationMixin(
+        GroupTypeMixin,
+        QuestionFromBlueprintMixin,
+        BlueprintMixin,
+        UsersOrGroupsAllowedMixin,
+):
+
+    blueprint_class = RegistrationBlueprint
+    blueprint_pk_kwarg = "reg_pk"
+    registration = None
+
+    """Allow the owner of a registration to access and edit it.
+    In the future, this will include collaborators."""
+
+    def get_registration(self):
+        return self.get_blueprint_object()
+
+    def allowed_user_test(self, user):
+        return user.is_staff
+
+    def get_allowed_users(self):
+        allowed = [self.get_registration().created_by]
+        allowed.append(super().get_allowed_users())
+        return allowed
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['registration'] = self.get_registration()
+        return context
