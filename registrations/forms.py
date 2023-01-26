@@ -305,14 +305,14 @@ class NewInvolvedQuestion(
 
     def save(self, *args, **kwargs):
         "Set a registration and group type on creation."
-        self.instance.registration = self.registration
-        self.instance.group_type = self.group_type
+        self.instance.registration = self.blueprint.object
         return super().save(*args, **kwargs)
 
 
-class StorageQuestion(RegistrationQuestionMixin,
-                      questions.Question,
-                      ):
+class StorageQuestion(
+        RegistrationQuestionMixin,
+        questions.Question,
+):
 
     class Meta:
         model = Registration
