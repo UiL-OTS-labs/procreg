@@ -133,23 +133,24 @@ class RegistrationBlueprint(Blueprint):
                 "reg_pk": self.object.pk,
             })
 
-    def get_question(self, **kwargs):
+    def get_question(self, slug, question_pk=False, extra_filter=None):
         """
         Get questions matching kwargs from this blueprints list of
         instantiated questions.
         """
-        match = self.questions
-        question_pk = kwargs.pop("question_pk", None)
-
-        class NoMatch:
-            pass
-
-        for key, value in kwargs.items():
-            match = filter(
-                lambda q: getattr(q, key, NoMatch) == value,
-                match,
+        match = []
+        # Basic matching on 
+        for q in self.questions:
+            if q.slug != slug:
+                continue
+            if question_pk is not False and hasattr(q, "instance"):
+                if q.instance.pk != question_pk:
+                    continue
+            match.append(q)
+        if extra_filter:
+            match = list(
+                filter(extra_filter, match)
             )
-        match = list(match)
         size = len(match)
         if size == 0:
             return None

@@ -25,14 +25,13 @@ urlpatterns = [
          RegistrationQuestionEditView.as_view(
              question_dict=QUESTIONS,
              parent_pk_arg='reg_pk'),
-         name='edit_question'),
+         name='edit_question_old'),
     path('<int:reg_pk>/<str:question>/edit2/<int:question_pk>/',
          BlueprintQuestionEditView.as_view(
              parent_pk_arg='reg_pk'),
          name='edit_question'),
     path('<int:reg_pk>/<str:question>/<str:group_type>/',
-         RegistrationQuestionEditView.as_view(
-             question_dict=QUESTIONS,
+         BlueprintQuestionEditView.as_view(
              parent_pk_arg='reg_pk'),
          name='edit_question'),
     path('<int:reg_pk>/<str:question>/create/',

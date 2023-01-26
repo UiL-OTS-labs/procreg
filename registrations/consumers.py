@@ -31,7 +31,7 @@ class TopQuestionsConsumer(BaseConsumer):
         "If both top questions are filled out, append the next consumer"
         # Fetch the instantiated top questions from blueprint
         new_reg, fac = (
-            self.blueprint.get_question(slug=q.slug) for q in
+            self.blueprint.get_question(q.slug) for q in
             [NewRegistrationQuestion, FacultyQuestion]
         )
         # Set them to incomplete if they have errors
@@ -246,6 +246,8 @@ class BaseGroupConsumer(BaseQuestionConsumer):
     def consume(self):
         # First add the empty question to blueprint
         # This will allow the user to create new groups
+        if self.question.instance.group_type is None:
+            breakpoint()
         self.blueprint.questions.append(self.question)
         # Then search for existing groups to manage
         for group in self.group_qs:

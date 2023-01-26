@@ -79,3 +79,54 @@ class UsersOrGroupsAllowedMixin():
             request, *args, **kwargs)
 
 
+
+
+class QuestionFromBlueprintMixin(
+):
+    """Get the question to edit from the blueprint."""
+
+    question_class_kwarg = "question"
+
+    def get_question(self, extra_filter=None):
+        """Use the provided kwarg to get the instatiated question
+        from our blueprint."""
+        blueprint = self.get_blueprint()
+        slug = self.kwargs.get(self.question_class_kwarg)
+        question_pk = self.kwargs.get("question_pk")
+        search = blueprint.get_question(
+            slug,
+            question_pk=question_pk,
+            extra_filter=extra_filter,
+        )
+        if search is None:
+            raise RuntimeError(
+                f"No Question found in blueprint for given args: \
+                {slug} with pk {question_pk}",
+            )
+        elif type(search) is list:
+            raise RuntimeError(
+                f"Got multiple possible questions for given query: \
+                {slug} with pk {question_pk} ({search})",
+            )
+        else:
+            return search
+
+    def get_question_object(self):
+        return self.get_question().instance
+
+    def get_form(self):
+        if self.request.method in ('POST', 'PUT'):
+            return super().get_form()
+        return self.get_question()
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update(
+            {"blueprint": self.get_blueprint()}
+        )
+        return kwargs
+
+    def get_question_class(self):
+        return type(self.get_question())
+
+
