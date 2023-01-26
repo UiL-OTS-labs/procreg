@@ -1,5 +1,6 @@
 from django.core.exceptions import PermissionDenied
 from cdh.questions.views import BlueprintMixin
+from .blueprints import RegistrationBlueprint
 
 
 class ProgressItemMixin():

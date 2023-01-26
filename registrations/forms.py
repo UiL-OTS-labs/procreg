@@ -3,7 +3,7 @@ from django.urls import reverse
 
 from cdh.questions import questions
 from .models import Registration, ParticipantCategory, Involved
-from .mixins import ProgressItemMixin
+from .progress import ProgressItemMixin
 
 
 class RegistrationQuestionMixin(ProgressItemMixin):

@@ -1,4 +1,6 @@
 from django.urls import reverse
+from .forms import QUESTIONS
+                     
 import logging
 
 
@@ -6,14 +8,8 @@ from cdh.questions.blueprints import Blueprint
 
 from .models import Registration, Involved
 # from .progress import RegistrationProgressBar
-from .forms import NewRegistrationQuestion, CategoryQuestion, \
-    TraversalQuestion, QUESTIONS, FacultyQuestion, \
-    UsesInformationQuestion, ConfirmInformationUseQuestion, \
-    SubmitQuestion, InvolvedPeopleQuestion, StorageQuestion, \
-    NewInvolvedQuestion, PurposeQuestion
 from .consumers import TopQuestionsConsumer, NewRegistrationConsumer, \
     FacultyConsumer
-from .mixins import BlueprintMixin, UsersOrGroupsAllowedMixin
 
 
 info = logging.info

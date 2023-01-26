@@ -1,7 +1,4 @@
 from django.views import View
-from .forms import NewRegistrationQuestion, CategoryQuestion, \
-    TraversalQuestion, QUESTIONS, FacultyQuestion, \
-    InvolvedPeopleQuestion, StorageQuestion, UsesInformationQuestion
 from cdh.questions.questions import Question
 
 

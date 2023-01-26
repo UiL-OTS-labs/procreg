@@ -12,8 +12,8 @@ from cdh.questions.views import BlueprintMixin, QuestionView, \
 
 from .models import Registration, ParticipantCategory, Involved
 from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
-from .blueprints import RegistrationMixin
-from .mixins import ProgressItemMixin
+from .mixins import RegistrationMixin
+from .progress import ProgressItemMixin
 
 debug = logging.debug
 
