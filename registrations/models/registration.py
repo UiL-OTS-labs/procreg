@@ -16,7 +16,7 @@ class Registration(models.Model):
     YES_NO_NA = (
         ('yes', "models:choices:yes"),
         ('no', "models:choices:no"),
-        ('non_applicable', "models:choices:non_applicable"),
+        ('n_a', "models:choices:non_applicable"),
     )
 
     title = models.CharField(max_length=200,
@@ -67,16 +67,50 @@ class Registration(models.Model):
 
     involves_consent = models.BooleanField(
         default=False,
-        )
+    )
     involves_non_consent = models.BooleanField(
         default=False,
-        )
+    )
     involves_guardian_consent = models.BooleanField(
         default=False,
-        )
+    )
     involves_other_people = models.BooleanField(
         default=False,
-        )
+    )
+
+    # Retention question
+    raw_storage_location = models.CharField(
+        max_length=250,
+        default="",
+        blank=True,
+    )
+    raw_data_decade = models.CharField(
+        max_length=10,
+        choices=YES_NO,
+        default="",
+    )
+    ic_storage_location = models.CharField(
+        max_length=250,
+        default="",
+        blank=True,
+    )
+    ic_storage_decade = models.CharField(
+        max_length=10,
+        choices=YES_NO,
+        default="",
+    )
+    audio_video_kept = models.CharField(
+        max_length=10,
+        choices=YES_NO_NA,
+        default="",
+    )
+    audio_video_kept_details = models.CharField(
+        max_length=250,
+        default="",
+        blank=True,
+    )
+
+    
     # Storage question
     # These are charfields for future-proofing and consistency
    
@@ -84,17 +118,17 @@ class Registration(models.Model):
         max_length=25,
         choices=YES_NO,
         default="",
-        )
+    )
     consent_document_storage = models.CharField(
         max_length=25,
         choices=YES_NO_NA,
         default="",
-        )
+    )
     multimedia_storage = models.CharField(
         max_length=25,
         choices=YES_NO_NA,
         default="",
-        )
+    )
     
     
 

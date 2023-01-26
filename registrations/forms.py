@@ -307,35 +307,8 @@ class NewInvolvedQuestion(
         "Set a registration and group type on creation."
         self.instance.registration = self.blueprint.object
         return super().save(*args, **kwargs)
-
-
-class StorageQuestion(
-        RegistrationQuestionMixin,
-        questions.Question,
-):
-
-    class Meta:
-        model = Registration
-        fields = [
-            "data_storage",
-            "consent_document_storage",
-            "multimedia_storage",
-        ]
-
-    title = _("registrations:forms:storage_question_title")
-    description = _("registrations:forms:storage_question_description")
-    model = Meta.model
-    slug = "storage"
-    is_editable = True
-    show_progress = True
-
-    def get_segments(self):
-
-        return self._fields_to_segments(
-            fields_list=self.Meta.fields,
-        )
-
     
+
 class PurposeQuestion(RegistrationQuestionMixin,
                       questions.Question,
                       ):
@@ -350,6 +323,36 @@ class PurposeQuestion(RegistrationQuestionMixin,
     description = _("registrations:forms:purpose_question_description")
     model = Meta.model
     slug = "purpose"
+    is_editable = True
+    show_progress = True
+
+    def get_segments(self):
+
+        return self._fields_to_segments(
+            fields_list=self.Meta.fields,
+        )
+
+
+class RetentionQuestion(
+        RegistrationQuestionMixin,
+        questions.Question,
+):
+
+    class Meta:
+        model = Registration
+        fields = [
+            "raw_storage_location",
+            "raw_data_decade",
+            "ic_storage_location",
+            "ic_storage_decade",
+            "audio_video_kept",
+            "audio_video_kept_details",
+        ]
+
+    title = _("registrations:forms:storage_question_title")
+    description = _("registrations:forms:storage_question_description")
+    model = Meta.model
+    slug = "retention"
     is_editable = True
     show_progress = True
 
@@ -434,16 +437,18 @@ class CategoryQuestion(RegistrationQuestionMixin, questions.Question):
 
 
 
-Q_LIST = [NewRegistrationQuestion,
-          FacultyQuestion,
-          CategoryQuestion,
-          TraversalQuestion,
-          UsesInformationQuestion,
-          ConfirmInformationUseQuestion,
-          InvolvedPeopleQuestion,
-          StorageQuestion,
-          NewInvolvedQuestion,
-          GoalQuestion,
-          ]
+Q_LIST = [
+    NewRegistrationQuestion,
+    FacultyQuestion,
+    CategoryQuestion,
+    TraversalQuestion,
+    UsesInformationQuestion,
+    ConfirmInformationUseQuestion,
+    InvolvedPeopleQuestion,
+    RetentionQuestion,
+    NewInvolvedQuestion,
+    GoalQuestion,
+    PurposeQuestion,
+]
 
 QUESTIONS = {q.slug: q for q in Q_LIST}

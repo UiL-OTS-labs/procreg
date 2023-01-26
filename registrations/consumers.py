@@ -2,7 +2,7 @@ from cdh.questions.blueprints import BaseConsumer, BaseQuestionConsumer
 
 from .forms import NewRegistrationQuestion, FacultyQuestion, \
     UsesInformationQuestion, InvolvedPeopleQuestion, NewInvolvedQuestion, \
-    PurposeQuestion, StorageQuestion, ConfirmInformationUseQuestion, \
+    PurposeQuestion, RetentionQuestion, ConfirmInformationUseQuestion, \
     TraversalQuestion, GoalQuestion
 from .models import Involved
 
@@ -142,7 +142,7 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
         consumers, managers = self._get_selected()
         # Finally, return
         if consumers != []:
-            return [GroupManagerConsumer] + consumers + [StorageConsumer]
+            return [GroupManagerConsumer] + consumers + [RetentionConsumer]
         else:
             return []
 
@@ -300,15 +300,26 @@ class PurposeConsumer(BaseQuestionConsumer):
     question = PurposeQuestion
 
 
-class StorageConsumer(RegistrationConsumer):
+class RetentionConsumer(RegistrationConsumer):
 
-    question_class = StorageQuestion
+    question_class = RetentionQuestion
 
     def consume(self):
 
-        if self.empty_fields == []:
-            return []
+        self.blueprint.questions.append(self.question)
+        
+        return [ReceiverConsumer]
+
+class ReceiverConsumer(RegistrationConsumer):
+
+    question_class = ReceiverQuestion
+
+    def consume(self):
+
+        self.blueprint.questions.append(self.question)
+
         return []
+    
 
 
 class ConfirmInformationUseConsumer(BaseQuestionConsumer):
