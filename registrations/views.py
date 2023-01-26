@@ -245,14 +245,12 @@ class InvolvedManager(ProgressItemMixin,
                 "existing": [],
             } for group_type in self.get_involved_groups()
         }
-        for q in self.blueprint.questions:
-            if q.slug == "new_involved":
-                if q.instance.pk is not None:
-                    questions[q.group_type]["existing"] += [q]
+        for question in self.blueprint.questions:
+            if question.slug == "new_involved":
+                if question.instance.pk is not None:
+                    questions[question.instance.group_type]["existing"] += [question]
                 else:
-                    questions[q.group_type]["new"] = q
-        from pprint import pprint
-        pprint(questions)
+                    questions[question.instance.group_type]["new"] = question
         return questions
 
     def get_involved_groups(self):
