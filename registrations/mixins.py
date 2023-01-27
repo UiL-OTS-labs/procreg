@@ -95,7 +95,10 @@ class QuestionFromBlueprintMixin(
         else:
             return search
 
-    def get_question_object(self):
+    def get_object(self,):
+        """Using this mixin, the questions provided by the
+        Blueprint should already be instantiated. So we can
+        just grab the object from the form."""
         return self.get_question().instance
 
     def get_form(self):
