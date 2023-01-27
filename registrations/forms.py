@@ -56,7 +56,7 @@ class PlaceholderQuestion(RegistrationQuestionMixin, questions.Question):
     def get_edit_url(self):
         return False
 
-    
+
 class NewRegistrationQuestion(
         RegistrationQuestionMixin,
         questions.Question,
@@ -361,7 +361,30 @@ class RetentionQuestion(
         return self._fields_to_segments(
             fields_list=self.Meta.fields,
         )
-    
+
+
+class ReceiverQuestion(RegistrationQuestionMixin, questions.Question):
+    # Django ModelForm compatibility
+    class Meta:
+        model = Registration
+        fields = [
+            "third_party_sharing",
+        ]
+    # Procreg question stuff
+    model = Meta.model
+    title = _("registrations:forms:receiver_question_title")
+    description = _("registrations:forms:receiver_question_description")
+    slug = "receivers"
+    is_editable = True
+    show_progress = True
+    # Custom template for Manager inclusion
+    form_template_name = "forms/receiver_form.html"
+    use_custom_template = True
+
+    def get_segments(self):
+        # Instead of gathering segments we really
+        # just want to rander {{form}} with a custom template
+        pass
 
 
 

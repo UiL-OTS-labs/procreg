@@ -3,7 +3,7 @@ from cdh.questions.blueprints import BaseConsumer, BaseQuestionConsumer
 from .forms import NewRegistrationQuestion, FacultyQuestion, \
     UsesInformationQuestion, InvolvedPeopleQuestion, NewInvolvedQuestion, \
     PurposeQuestion, RetentionQuestion, ConfirmInformationUseQuestion, \
-    TraversalQuestion, GoalQuestion
+    TraversalQuestion, GoalQuestion, ReceiverQuestion
 from .models import Involved
 
 

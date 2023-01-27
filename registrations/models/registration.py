@@ -129,6 +129,14 @@ class Registration(models.Model):
         choices=YES_NO_NA,
         default="",
     )
+
+    # Third parties
+
+    third_party_sharing = models.CharField(
+        max_length=25,
+        choices=YES_NO,
+        default="",
+    )
     
     
 
