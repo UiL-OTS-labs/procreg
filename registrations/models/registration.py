@@ -6,18 +6,20 @@ from django.utils.translation import gettext as _
 
 USER_MODEL = get_user_model()
 
+YES_NO = (
+    ('yes', "models:choices:yes"),
+    ('no', "models:choices:no"),
+    ('', "models:choices:please_specify"),
+)
+YES_NO_NA = (
+    ('yes', "models:choices:yes"),
+    ('no', "models:choices:no"),
+    ('n_a', "models:choices:non_applicable"),
+    ('', "models:choices:please_specify"),
+)
 
 class Registration(models.Model):
     
-    YES_NO = (
-        ('yes', "models:choices:yes"),
-        ('no', "models:choices:no"),
-    )
-    YES_NO_NA = (
-        ('yes', "models:choices:yes"),
-        ('no', "models:choices:no"),
-        ('n_a', "models:choices:non_applicable"),
-    )
 
     title = models.CharField(max_length=200,
                              help_text="models:registration_title_help_text",
@@ -137,19 +139,3 @@ class Registration(models.Model):
         choices=YES_NO,
         default="",
     )
-    
-    
-
-class ParticipantCategory(models.Model):
-
-    name = models.CharField(max_length=100,
-                            blank=True,
-                            null=True,
-                            )
-    number = models.PositiveIntegerField(blank=True,
-                                         null=True,
-                                         )
-    has_consented = models.BooleanField(default=False)
-    registration = models.ForeignKey(Registration,
-                                     on_delete=models.CASCADE,
-                                     )
