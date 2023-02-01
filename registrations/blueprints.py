@@ -133,7 +133,8 @@ class RegistrationBlueprint(Blueprint):
                 "reg_pk": self.object.pk,
             })
 
-    def get_question(self, slug, question_pk=False, extra_filter=None):
+    def get_question(self, slug, question_pk=False, extra_filter=None,
+                     always_list=False,):
         """
         Get questions matching kwargs from this blueprints list of
         instantiated questions.
@@ -155,7 +156,10 @@ class RegistrationBlueprint(Blueprint):
         if size == 0:
             return None
         if size == 1:
-            return match[0]
+            if always_list:
+                return match
+            else:
+                return match[0]
         else:
             return match
 
