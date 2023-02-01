@@ -28,7 +28,6 @@ class BlueprintErrors():
     def search(self, *args):
         result = []
         for e in self.all_errors:
-            pprint([e, args, self.rfilter2(e, args)])
             if self.rfilter2(e, args)[-1] != EndStop:
                 result.append(e)
         return result
