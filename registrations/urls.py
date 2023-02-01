@@ -35,8 +35,7 @@ urlpatterns = [
              parent_pk_arg='reg_pk'),
          name='edit_question'),
     path('<int:reg_pk>/<str:question>/create/',
-         RegistrationQuestionEditView.as_view(
-             question_dict=QUESTIONS,
+         BlueprintQuestionEditView.as_view(
              parent_pk_arg='reg_pk'),
          name='create_question'),
     path('<int:reg_pk>/summary/',
