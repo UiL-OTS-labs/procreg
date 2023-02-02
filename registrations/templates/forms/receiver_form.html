@@ -1,0 +1,79 @@
+{% load question_tags %}
+
+{% if editing %}
+<form method="post" action="" class="uu-form uu-form-no-gap">{% csrf_token %}
+  {% else %}
+  <div class="uu-form uu-form-no-gap">
+    {% endif %}
+
+
+<section class="question">
+
+{% for receiver in question.get_queryset %}
+recolo pecolo
+{% empty %}
+zero recolo
+  {% endfor %}
+
+{% for segment in question.get_segments %}
+  {% render_segment segment %}
+ {% endfor %}
+
+
+  
+<div class="uu-form-row">
+  <div class="uu-form-field">
+    <label class=uu-form-field" for="id_{{segment.field.name}}">
+      {{ source_question.label }}
+    </label>
+    {% for iq in existing %}
+    {% with item=iq.instance %}
+
+    <div class="form-control d-flex flex-row">
+      <div style="flex-grow: 1; flex-shrink: 0;">
+        <strong>{{item.name}}</strong>
+        <br />{{item.co_investigator}}</div>
+        {% if editing %}
+        <div style="flex-shrink: 1;" class="btn-group">
+          <a class="btn btn-primary" href="{{iq.get_edit_url}}">edit</a>
+          <a class="btn btn-secondary" href="{{iq.get_delete_url}}">delete</a>
+        </div>
+        {% endif %}
+    </div>
+
+    {% endwith %}
+    {% endfor %}
+    {% if editing %}
+    <a href="{{new.get_edit_url}}" style="text-decoration: none;">
+
+      <div class="form-control btn btn-tertiary">
+        Add department...
+      </div>
+    </a>
+    {% endif %}
+  </div>
+
+
+
+</div>
+
+<div class="gt-right question-buttons">
+  {% if editing %}
+  <input type="submit" value="opslaan" class="btn btn-primary mt-4"/>
+  {% else %}
+  {% if question.is_deletable and not deleting %}
+  <a href="{{question.get_delete_url}}" value="Delete" class="button">Delete</a>
+  {% endif %}
+  {% if question.is_editable %}
+  <a href="{{question.get_edit_url}}" value="Bewerken" class="btn btn-primary">
+    Bewerken
+  </a>
+  {% endif %}
+  {% endif %}
+</div>
+
+</section>
+
+{% if editing %}
+</form>
+{% endif %}
