@@ -321,7 +321,7 @@ class ReceiverConsumer(RegistrationConsumer):
         if self.blueprint.object.third_party_sharing == "yes":
             return [NewReceiverConsumer]
         elif self.blueprint.object.third_party_sharing == "no":
-            return [SecurityConsumer]
+            return [SoftwareManagerConsumer]
         else:
             return []
 
@@ -341,6 +341,12 @@ class NewReceiverConsumer(BaseConsumer):
                 return [SecurityConsumer]
         return []
 
+    def at_least_one_created(self):
+        return self.get_queryset().count() > 0
+
+    def no_errors(self):
+        return True
+
     def instantiate_all(self):
         """Populate self.questions with all Receivers plus one
         empty one"""
@@ -359,6 +365,7 @@ class NewReceiverConsumer(BaseConsumer):
                 instance=Receiver(),
             )
         )
+        self.blueprint.questions += self.questions
 
     def get_queryset(self):
         return Receiver.objects.filter(
@@ -369,6 +376,12 @@ class NewReceiverConsumer(BaseConsumer):
         self.blueprint.errors.add(
             ReceiverQuestion.slug,
         )
+        return []
+
+
+class SoftwareManagerConsumer(BaseConsumer):
+
+    def consume(self):
         return []
 
 

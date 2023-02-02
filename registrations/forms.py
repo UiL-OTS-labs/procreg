@@ -399,19 +399,30 @@ class ReceiverQuestion(RegistrationQuestionMixin, questions.Question):
         if not self.use_custom_template:
             return super().render()
         template = loader.get_template(self.template_name)
-        context.update({
-            "question": self,
-            "editing": True,
-        })
+        context.update(
+            {
+                "question": self,
+                "editing": True,
+            }
+        )
         if self.instance.third_party_sharing == "yes":
             existing = self.blueprint.get_question(
                 always_list=True,
-                slug="new_existing",
+                slug="new_receiver",
+                question_pk=True,
             )
             new = self.blueprint.get_question(
-                slug="new_existing",
+                slug="new_receiver",
                 question_pk=None,
             )
+            context.update(
+                {
+                    "new": new,
+                    "existing": existing,
+                    "show_selector": True,
+                }
+            )
+        breakpoint()
         return template.render(context.flatten())
 
     def get_segments(self):
