@@ -143,8 +143,16 @@ class RegistrationBlueprint(Blueprint):
         for q in self.questions:
             if q.slug != slug:
                 continue
-            if question_pk is not False and hasattr(q, "instance"):
+            if question_pk not in [True, False]:
+                # We want a question with a specific pk,
+                # which may include None to specifically
+                # find a question with and unsaved instance
                 if q.instance.pk != question_pk:
+                    continue
+            if question_pk is True:
+                # We don't care about the instance pk other
+                # than that it's defined
+                if q.instance.pk is None:
                     continue
             match.append(q)
         if extra_filter:
@@ -153,7 +161,10 @@ class RegistrationBlueprint(Blueprint):
             )
         size = len(match)
         if size == 0:
-            return None
+            if always_list:
+                return []
+            else:
+                return None
         if size == 1:
             if always_list:
                 return match
