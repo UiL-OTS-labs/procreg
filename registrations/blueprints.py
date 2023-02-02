@@ -143,10 +143,10 @@ class RegistrationBlueprint(Blueprint):
         for q in self.questions:
             if q.slug != slug:
                 continue
-            if question_pk not in [True, False]:
+            if not isinstance(question_pk, bool):
                 # We want a question with a specific pk,
                 # which may include None to specifically
-                # find a question with and unsaved instance
+                # find a question with an unsaved instance
                 if q.instance.pk != question_pk:
                     continue
             if question_pk is True:

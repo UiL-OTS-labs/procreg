@@ -76,7 +76,7 @@ class QuestionFromBlueprintMixin(
         from our blueprint."""
         blueprint = self.get_blueprint()
         slug = self.kwargs.get(self.question_class_kwarg)
-        question_pk = self.kwargs.get("question_pk")
+        question_pk = self.kwargs.get("question_pk", False)
         search = blueprint.get_question(
             slug,
             question_pk=question_pk,
