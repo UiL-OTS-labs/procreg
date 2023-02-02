@@ -338,7 +338,7 @@ class NewReceiverConsumer(BaseConsumer):
         self.instantiate_all()
         if self.at_least_one_created():
             if self.no_errors():
-                return [SecurityConsumer]
+                return [SoftwareManagerConsumer]
         return []
 
     def at_least_one_created(self):

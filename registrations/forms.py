@@ -387,7 +387,7 @@ class ReceiverQuestion(RegistrationQuestionMixin, questions.Question):
         this registration."""
         if hasattr(self, "qs"):
             return self.qs
-        self.qs = Receiver.objects.get(
+        self.qs = Receiver.objects.filter(
             registration=self.registration,
         )
         return self.qs
@@ -422,7 +422,6 @@ class ReceiverQuestion(RegistrationQuestionMixin, questions.Question):
                     "show_selector": True,
                 }
             )
-        breakpoint()
         return template.render(context.flatten())
 
     def get_segments(self):
@@ -448,6 +447,7 @@ class NewReceiverQuestion(
             "explanation",
         ]
     slug = "new_receiver"
+    model = Meta.model
 
     def __init__(self, *args, **kwargs):
         """Remove unnecessary fields of inside EER"""
