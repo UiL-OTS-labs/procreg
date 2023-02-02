@@ -472,6 +472,21 @@ class NewReceiverQuestion(
             },
         )
 
+    def get_delete_url(self):
+        return reverse(
+            "registrations:delete_receiver",
+            kwargs={
+                "reg_pk": self.get_registration().pk,
+                "receiver_pk": self.instance.pk,
+            }
+        )
+
+    def get_segments(self):
+        return self._fields_to_segments(
+            self.fields
+        )
+                
+
     def save(self):
         self.instance.registration = self.get_registration()
         return super().save()
