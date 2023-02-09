@@ -369,7 +369,7 @@ class NewReceiverConsumer(BaseConsumer):
 
     def get_queryset(self):
         return Receiver.objects.filter(
-            registration=self.registration,
+            registration=self.blueprint.object,
         )
 
     def none_added(self):

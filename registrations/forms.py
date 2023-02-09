@@ -466,9 +466,10 @@ class NewReceiverQuestion(
 
     def get_create_url(self):
         return reverse(
-            "new_receiver",
+            "registrations:edit_question",
             kwargs={
                 "question": "new_receiver",
+                "reg_pk": self.blueprint.object.pk,
             },
         )
 
