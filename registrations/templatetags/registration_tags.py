@@ -19,6 +19,7 @@ def display_question_small(question, title=None):
 
     return tag_context
 
+
 @register.inclusion_tag("registrations/templatetags/display_question_header.html")
 def display_question_header(question):
     """Display a question's header and description without
@@ -31,6 +32,16 @@ def display_question_header(question):
     return tag_context
 
 
+@register.inclusion_tag("registrations/templatetags/display_loq.html")
+def display_loq(question):
+    """This displays the current instances of a question
+    that functions as a CreateView for submodels. It should
+    have get_create_url() and get_delete_url() defined."""
+    tag_context = {
+        'source_question': question,
+        "editing": True,
+    }
+    return tag_context
 
 
 def copy_context(context, keys, default=None):

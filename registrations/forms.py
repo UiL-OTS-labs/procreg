@@ -417,6 +417,7 @@ class ReceiverQuestion(RegistrationQuestionMixin, questions.Question):
             )
             context.update(
                 {
+                    "source_question": new,
                     "new": new,
                     "existing": existing,
                     "show_selector": True,
@@ -486,12 +487,10 @@ class NewReceiverQuestion(
         return self._fields_to_segments(
             self.fields
         )
-                
 
     def save(self):
         self.instance.registration = self.get_registration()
         return super().save()
-
 
 
 class SubmitQuestion(RegistrationQuestionMixin, questions.Question):
