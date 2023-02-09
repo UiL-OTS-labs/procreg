@@ -457,13 +457,13 @@ class NewReceiverQuestion(
             self.fields.pop("basis_for_transfer")
             self.fields.pop("explanation")
 
-    def get_queryset(self):
+    def get_existing(self):
         """Return the list of receivers currently connected to
         this registration."""
-        qs = Receiver.objects.get(
-            registration=self.registration,
+        return self.blueprint.get_question(
+            "new_receiver",
+            question_pk=True,
         )
-        return qs
 
     def get_create_url(self):
         return reverse(

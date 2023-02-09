@@ -4,7 +4,7 @@
         <label class=uu-form-field" for="id_{{segment.field.name}}">
           {{ source_question.label }}
         </label>
-        {% for iq in source_question.get_queryset %}
+        {% for iq in source_question.get_existing %}
           {% with item=iq.instance %}
 
             <div class="form-control d-flex flex-row">
