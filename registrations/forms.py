@@ -1,8 +1,9 @@
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
+from django.template import loader
 
 from cdh.questions import questions
-from .models import Registration, ParticipantCategory, Involved
+from .models import Registration, ParticipantCategory, Involved, Receiver
 from .progress import ProgressItemMixin
 
 
@@ -56,7 +57,7 @@ class PlaceholderQuestion(RegistrationQuestionMixin, questions.Question):
     def get_edit_url(self):
         return False
 
-    
+
 class NewRegistrationQuestion(
         RegistrationQuestionMixin,
         questions.Question,
@@ -361,8 +362,135 @@ class RetentionQuestion(
         return self._fields_to_segments(
             fields_list=self.Meta.fields,
         )
-    
 
+
+class ReceiverQuestion(RegistrationQuestionMixin, questions.Question):
+    # Django ModelForm compatibility
+    class Meta:
+        model = Registration
+        fields = [
+            "third_party_sharing",
+        ]
+    # Procreg question stuff
+    model = Meta.model
+    title = _("registrations:forms:receiver_question_title")
+    description = _("registrations:forms:receiver_question_description")
+    slug = "receivers"
+    is_editable = True
+    show_progress = True
+    # Custom template for Manager inclusion
+    template_name = "forms/receiver_form.html"
+    use_custom_template = True
+
+    def get_queryset(self):
+        """Return the list of receivers currently connected to
+        this registration."""
+        if hasattr(self, "qs"):
+            return self.qs
+        self.qs = Receiver.objects.filter(
+            registration=self.registration,
+        )
+        return self.qs
+
+    def render(self, context={}):
+        """This is kind of silly, but I want to implement custom form
+        template  as closely as possible to the django 4 way so the
+        upgrade path is easy."""
+        if not self.use_custom_template:
+            return super().render()
+        template = loader.get_template(self.template_name)
+        context.update(
+            {
+                "question": self,
+                "editing": True,
+            }
+        )
+        if self.instance.third_party_sharing == "yes":
+            existing = self.blueprint.get_question(
+                always_list=True,
+                slug="new_receiver",
+                question_pk=True,
+            )
+            new = self.blueprint.get_question(
+                slug="new_receiver",
+                question_pk=None,
+            )
+            context.update(
+                {
+                    "source_question": new,
+                    "new": new,
+                    "existing": existing,
+                    "show_selector": True,
+                }
+            )
+        return template.render(context.flatten())
+
+    def get_segments(self):
+        # We still need this segment for easy rendering inside the
+        # custom form template
+        return self._fields_to_segments(
+            ["third_party_sharing", ]
+        )
+
+
+class NewReceiverQuestion(
+        RegistrationQuestionMixin,
+        questions.Question,
+):
+    """Question that creates new receivers and adds them to a registration"""
+
+    class Meta:
+        model = Receiver
+        fields = [
+            "name",
+            "outside_eer",
+            "basis_for_transfer",
+            "explanation",
+        ]
+    slug = "new_receiver"
+    model = Meta.model
+
+    def __init__(self, *args, **kwargs):
+        """Remove unnecessary fields of inside EER"""
+        super().__init__(*args, **kwargs)
+        if self.instance.outside_eer != "yes":
+            self.fields.pop("basis_for_transfer")
+            self.fields.pop("explanation")
+
+    def get_existing(self):
+        """Return the list of receivers currently connected to
+        this registration."""
+        return self.blueprint.get_question(
+            "new_receiver",
+            question_pk=True,
+        )
+
+    def get_create_url(self):
+        return reverse(
+            "registrations:edit_question",
+            kwargs={
+                "question": "new_receiver",
+                "reg_pk": self.blueprint.object.pk,
+            },
+        )
+
+    def get_delete_url(self):
+        return reverse(
+            "registrations:delete_receiver",
+            kwargs={
+                "reg_pk": self.get_registration().pk,
+                "receiver_pk": self.instance.pk,
+            }
+        )
+
+    def get_segments(self):
+        return self._fields_to_segments(
+            self.fields
+        )
+
+    def save(self):
+        self.instance.registration = self.get_registration()
+        return super().save()
 
 
 class SubmitQuestion(RegistrationQuestionMixin, questions.Question):
@@ -425,8 +553,6 @@ class CategoryQuestion(RegistrationQuestionMixin, questions.Question):
         segments.append(self._field_to_segment('name'))
         segments.append(self._field_to_segment('number'))
         segments.append(self._field_to_segment('has_consented'))
-
-
         return segments
 
     def save(self, *args, **kwargs):

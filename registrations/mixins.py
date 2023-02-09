@@ -71,12 +71,19 @@ class QuestionFromBlueprintMixin(
 
     question_class_kwarg = "question"
 
+    def get_question_pk(self,):
+        self.question_pk = self.kwargs.get("question_pk", None)
+        if not self.question_pk:
+            if hasattr(self, "instance"):
+                self.question_pk = self.instance.pk
+        return self.question_pk
+
     def get_question(self, extra_filter=None):
         """Use the provided kwarg to get the instatiated question
         from our blueprint."""
         blueprint = self.get_blueprint()
         slug = self.kwargs.get(self.question_class_kwarg)
-        question_pk = self.kwargs.get("question_pk")
+        question_pk = self.get_question_pk()
         search = blueprint.get_question(
             slug,
             question_pk=question_pk,
@@ -88,14 +95,18 @@ class QuestionFromBlueprintMixin(
                 {slug} with pk {question_pk}",
             )
         elif type(search) is list:
+            breakpoint()
             raise RuntimeError(
-                f"Got multiple possible questions for given query: \
-                {slug} with pk {question_pk} ({search})",
+                f"""Got multiple possible questions for given query: 
+                {slug} with pk {question_pk} ({search})""",
             )
         else:
             return search
 
-    def get_question_object(self):
+    def get_object(self,):
+        """Using this mixin, the questions provided by the
+        Blueprint should already be instantiated. So we can
+        just grab the object from the form."""
         return self.get_question().instance
 
     def get_form(self):

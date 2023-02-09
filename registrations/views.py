@@ -14,6 +14,7 @@ from .models import Registration, ParticipantCategory, Involved
 from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
 from .mixins import RegistrationMixin
 from .progress import ProgressItemMixin
+from .blueprints import RegistrationBlueprint
 
 debug = logging.debug
 
@@ -97,7 +98,7 @@ class BlueprintQuestionEditView(
         self.blueprint = None
         self.blueprint = self.get_blueprint()
         if hasattr(self.get_question(), 'get_success_url'):
-            return self.question.get_success_url()
+            return self.get_question().get_success_url()
         bp_next = self.blueprint.get_desired_next_url()
         if bp_next:
             return bp_next
@@ -266,6 +267,14 @@ class InvolvedManager(ProgressItemMixin,
         )
 
 
+class ReceiverDeleteView(
+        generic.DeleteView,
+        BlueprintMixin,
+):
+
+    blueprint_class = RegistrationBlueprint
+    blueprint_pk_kwarg = "reg_pk"
+
 class StepperView(RegistrationQuestionEditView):
     template_name = "registrations/stepper_view.html"
 
@@ -279,6 +288,7 @@ class StepperView(RegistrationQuestionEditView):
     def get_template_names(self):
         return [self.template_name]
 
+# Minimal views for HTMX testing
 
 class MinimalCategoryView(generic.TemplateView,
                           RegistrationMixin):
@@ -307,3 +317,4 @@ class MinimalDeleteView(QuestionDeleteView,
     def get_context_data(self, *args, **kwargs):
 
         context = super().get_context_data(*args, **kwargs)
+

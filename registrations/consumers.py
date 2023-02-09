@@ -3,8 +3,8 @@ from cdh.questions.blueprints import BaseConsumer, BaseQuestionConsumer
 from .forms import NewRegistrationQuestion, FacultyQuestion, \
     UsesInformationQuestion, InvolvedPeopleQuestion, NewInvolvedQuestion, \
     PurposeQuestion, RetentionQuestion, ConfirmInformationUseQuestion, \
-    TraversalQuestion, GoalQuestion
-from .models import Involved
+    TraversalQuestion, GoalQuestion, ReceiverQuestion, NewReceiverQuestion
+from .models import Involved, Receiver
 
 
 class RegistrationConsumer(BaseQuestionConsumer):
@@ -310,16 +310,79 @@ class RetentionConsumer(RegistrationConsumer):
         
         return [ReceiverConsumer]
 
+
 class ReceiverConsumer(RegistrationConsumer):
 
     question_class = ReceiverQuestion
 
     def consume(self):
-
+        registration = self.blueprint.object
         self.blueprint.questions.append(self.question)
+        if self.blueprint.object.third_party_sharing == "yes":
+            return [NewReceiverConsumer]
+        elif self.blueprint.object.third_party_sharing == "no":
+            return [SoftwareManagerConsumer]
+        else:
+            return []
 
+
+class NewReceiverConsumer(BaseConsumer):
+    """This consumer instantiates a question for each Receiver
+    connected to the registration. Additionally it instantiates
+    an empty one for the addition of a new Receiver."""
+
+    question_class = ReceiverQuestion
+
+    def consume(self):
+        self.registration = self.blueprint.object
+        self.instantiate_all()
+        if self.at_least_one_created():
+            if self.no_errors():
+                return [SoftwareManagerConsumer]
         return []
-    
+
+    def at_least_one_created(self):
+        return self.get_queryset().count() > 0
+
+    def no_errors(self):
+        return True
+
+    def instantiate_all(self):
+        """Populate self.questions with all Receivers plus one
+        empty one"""
+        self.questions = []
+        for receiver in self.get_queryset():
+            self.questions.append(
+                NewReceiverQuestion(
+                    blueprint=self.blueprint,
+                    instance=receiver,
+                )
+            )
+        self.questions.append(
+            NewReceiverQuestion(
+                blueprint=self.blueprint,
+                # NOTE: This one is intentionally empty
+                instance=Receiver(),
+            )
+        )
+        self.blueprint.questions += self.questions
+
+    def get_queryset(self):
+        return Receiver.objects.filter(
+            registration=self.blueprint.object,
+        )
+
+    def none_added(self):
+        self.blueprint.errors.add(
+            ReceiverQuestion.slug,
+        )
+        return []
+
+
+class SoftwareManagerConsumer(BaseConsumer):
+
+    def consume(self):
+        return []
 
 
 class ConfirmInformationUseConsumer(BaseQuestionConsumer):

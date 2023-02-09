@@ -28,7 +28,6 @@ class BlueprintErrors():
     def search(self, *args):
         result = []
         for e in self.all_errors:
-            pprint([e, args, self.rfilter2(e, args)])
             if self.rfilter2(e, args)[-1] != EndStop:
                 result.append(e)
         return result
@@ -133,7 +132,8 @@ class RegistrationBlueprint(Blueprint):
                 "reg_pk": self.object.pk,
             })
 
-    def get_question(self, slug, question_pk=False, extra_filter=None):
+    def get_question(self, slug, question_pk=False, extra_filter=None,
+                     always_list=False,):
         """
         Get questions matching kwargs from this blueprints list of
         instantiated questions.
@@ -143,8 +143,16 @@ class RegistrationBlueprint(Blueprint):
         for q in self.questions:
             if q.slug != slug:
                 continue
-            if question_pk is not False and hasattr(q, "instance"):
+            if not isinstance(question_pk, bool):
+                # We want a question with a specific pk,
+                # which may include None to specifically
+                # find a question with an unsaved instance
                 if q.instance.pk != question_pk:
+                    continue
+            if question_pk is True:
+                # We don't care about the instance pk other
+                # than that it's defined
+                if q.instance.pk is None:
                     continue
             match.append(q)
         if extra_filter:
@@ -153,9 +161,15 @@ class RegistrationBlueprint(Blueprint):
             )
         size = len(match)
         if size == 0:
-            return None
+            if always_list:
+                return []
+            else:
+                return None
         if size == 1:
-            return match[0]
+            if always_list:
+                return match
+            else:
+                return match[0]
         else:
             return match
 
