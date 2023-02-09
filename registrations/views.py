@@ -98,7 +98,7 @@ class BlueprintQuestionEditView(
         self.blueprint = None
         self.blueprint = self.get_blueprint()
         if hasattr(self.get_question(), 'get_success_url'):
-            return self.question.get_success_url()
+            return self.get_question().get_success_url()
         bp_next = self.blueprint.get_desired_next_url()
         if bp_next:
             return bp_next
