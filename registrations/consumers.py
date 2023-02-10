@@ -109,7 +109,18 @@ class TraversalConsumer(BaseQuestionConsumer):
         self.blueprint.questions.append(
             self.question,
         )
-        return [GoalConsumer]
+        if self.no_errors():
+            self.question.complete = True
+            return [GoalConsumer]
+        self.question.incomplete = True
+        return []
+
+    def no_errors(self):
+        reg = self.question.instance
+        for f in self.question.fields:
+            if getattr(reg, f) is None:
+                return False
+        return True
 
 
 class GoalConsumer(BaseQuestionConsumer):
@@ -120,8 +131,18 @@ class GoalConsumer(BaseQuestionConsumer):
         self.blueprint.questions.append(
             self.question,
         )
-        return [InvolvedPeopleConsumer]
+        if self.no_errors():
+            self.question.complete = True
+            return [InvolvedPeopleConsumer]
+        self.question.incomplete = True
+        return []
 
+    def no_errors(self):
+        reg = self.question.instance
+        for f in self.question.fields:
+            if getattr(reg, f) == "":
+                return False
+        return True
 
 class InvolvedPeopleConsumer(BaseQuestionConsumer):
 
@@ -308,8 +329,19 @@ class RetentionConsumer(RegistrationConsumer):
     def consume(self):
 
         self.blueprint.questions.append(self.question)
+        self.question.incomplete = True
+        if self.no_errors():
+            self.question.complete = True
+            self.question.incomplete = False
         
         return [ReceiverConsumer]
+
+    def no_errors(self):
+        reg = self.question.instance
+        for f in self.question.fields:
+            if getattr(reg, f) == "":
+                return False
+        return True
 
 
 class ReceiverConsumer(RegistrationConsumer):

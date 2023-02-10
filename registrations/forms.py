@@ -306,6 +306,13 @@ class NewInvolvedQuestion(
             "registrations:edit_question",
             kwargs=reverse_kwargs,
         )
+    
+    def get_success_url(self):
+        return reverse(
+            "registrations:involved_manager",
+            kwargs={
+                "reg_pk": self.get_blueprint().object.pk,
+            })
 
     def save(self, *args, **kwargs):
         "Set a registration and group type on creation."
