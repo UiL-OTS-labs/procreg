@@ -10,7 +10,8 @@ from cdh.questions.views import BlueprintMixin, QuestionView, \
     QuestionEditView
 
 
-from .models import Registration, ParticipantCategory, Involved
+from .models import Registration, ParticipantCategory, Involved, \
+    Software, Receiver
 from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
 from .mixins import RegistrationMixin
 from .progress import ProgressItemMixin
@@ -208,10 +209,11 @@ class RegistrationDeleteView(
     pk_url_kwarg = 'reg_pk'
 
 
-class InvolvedManager(ProgressItemMixin,
-                      RegistrationMixin,
-                      generic.TemplateView,
-                      ):
+class InvolvedManager(
+        ProgressItemMixin,
+        RegistrationMixin,
+        generic.TemplateView,
+):
 
     title = "registrations:views:involved_manager_title"
     description = "registrations:views:involved_manager_description"
@@ -267,6 +269,14 @@ class InvolvedManager(ProgressItemMixin,
         )
 
 
+class DocumentsManager(
+        ProgressItemMixin,
+        RegistrationMixin,
+        generic.TemplateView,
+):
+    pass
+
+
 class ReceiverDeleteView(
         generic.DeleteView,
         BlueprintMixin,
@@ -274,6 +284,39 @@ class ReceiverDeleteView(
 
     blueprint_class = RegistrationBlueprint
     blueprint_pk_kwarg = "reg_pk"
+    template_name = "registrations/crud/delete_receiver.html"
+    pk_url_kwarg = "receiver_pk"
+    model = Receiver
+
+    def get_success_url(self):
+        return reverse(
+            "registrations:edit_question",
+            kwargs={
+                "reg_pk": self.get_blueprint().object.pk,
+                "question": "receivers",
+                "question_pk": self.get_blueprint().object.pk,
+            })
+
+class SoftwareDeleteView(
+        generic.DeleteView,
+        BlueprintMixin,
+):
+
+    template_name = "registrations/crud/delete_software.html"
+    blueprint_class = RegistrationBlueprint
+    blueprint_pk_kwarg = "reg_pk"
+    pk_url_kwarg = "software_pk"
+    model = Software
+
+    def get_success_url(self):
+        return reverse(
+            "registrations:edit_question",
+            kwargs={
+                "reg_pk": self.get_blueprint().object.pk,
+                "question": "software",
+                "question_pk": self.get_blueprint().object.pk,
+            })
+
 
 class StepperView(RegistrationQuestionEditView):
     template_name = "registrations/stepper_view.html"
@@ -287,6 +330,7 @@ class StepperView(RegistrationQuestionEditView):
 
     def get_template_names(self):
         return [self.template_name]
+
 
 # Minimal views for HTMX testing
 

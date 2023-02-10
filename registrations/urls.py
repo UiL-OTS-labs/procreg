@@ -4,7 +4,7 @@ from .views import RegistrationsHomeView, RegistrationCreateView, \
     RegistrationOverview, RegistrationQuestionEditView, RegistrationDeleteView, \
     MinimalCategoryView, MinimalDeleteView, RegistrationSummaryView, \
     InvolvedManager, StepperView, BlueprintQuestionEditView, \
-    ReceiverDeleteView
+    ReceiverDeleteView, SoftwareDeleteView
 from .forms import QUESTIONS
 from .blueprints import RegistrationBlueprint
 from .models import ParticipantCategory
@@ -18,9 +18,9 @@ urlpatterns = [
          InvolvedManager.as_view(),
          name='involved_manager',
          ),
-    
+
     # Question edit views
-    path('<int:reg_pk>/<str:question>/edit2/<int:question_pk>/',
+    path('<int:reg_pk>/<str:question>/edit/<int:question_pk>/',
          BlueprintQuestionEditView.as_view(
              parent_pk_arg='reg_pk'),
          name='edit_question'),
@@ -52,6 +52,10 @@ urlpatterns = [
     path("<int:reg_pk>/delete/receiver/<int:receiver_pk>",
          ReceiverDeleteView.as_view(),
          name="delete_receiver",
+         ),
+    path("<int:reg_pk>/delete/software/<int:software_pk>",
+         SoftwareDeleteView.as_view(),
+         name="delete_software",
          ),
     
     # Debug
