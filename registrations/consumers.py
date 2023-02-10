@@ -144,6 +144,7 @@ class GoalConsumer(BaseQuestionConsumer):
                 return False
         return True
 
+
 class InvolvedPeopleConsumer(BaseQuestionConsumer):
 
     question_class = InvolvedPeopleQuestion
@@ -329,6 +330,7 @@ class RetentionConsumer(RegistrationConsumer):
     def consume(self):
 
         self.blueprint.questions.append(self.question)
+        self.blueprint.desired_next.append(self.question)
         self.question.incomplete = True
         if self.no_errors():
             self.question.complete = True
@@ -351,6 +353,7 @@ class ReceiverConsumer(RegistrationConsumer):
     def consume(self):
         registration = self.blueprint.object
         self.blueprint.questions.append(self.question)
+        self.blueprint.desired_next.append(self.question)
         if self.blueprint.object.third_party_sharing == "yes":
             return [NewReceiverConsumer]
         elif self.blueprint.object.third_party_sharing == "no":
@@ -416,6 +419,7 @@ class SoftwareConsumer(RegistrationConsumer):
 
     def consume(self):
         self.blueprint.questions.append(self.question)
+        self.blueprint.desired_next.append(self.question)
         if self.blueprint.object.uses_software == "yes":
             return [NewSoftwareConsumer]
         elif self.blueprint.object.uses_software == "no":
@@ -425,8 +429,6 @@ class SoftwareConsumer(RegistrationConsumer):
 
 
 class NewSoftwareConsumer(BaseConsumer):
-
-    question_class = SoftwareQuestion
 
     def consume(self):
         self.instantiate_all()
