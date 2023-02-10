@@ -3,8 +3,9 @@ from cdh.questions.blueprints import BaseConsumer, BaseQuestionConsumer
 from .forms import NewRegistrationQuestion, FacultyQuestion, \
     UsesInformationQuestion, InvolvedPeopleQuestion, NewInvolvedQuestion, \
     PurposeQuestion, RetentionQuestion, ConfirmInformationUseQuestion, \
-    TraversalQuestion, GoalQuestion, ReceiverQuestion, NewReceiverQuestion
-from .models import Involved, Receiver
+    TraversalQuestion, GoalQuestion, ReceiverQuestion, SecurityQuestion, \
+    NewReceiverQuestion, SoftwareQuestion, NewSoftwareQuestion
+from .models import Involved, Receiver, Software
 
 
 class RegistrationConsumer(BaseQuestionConsumer):
@@ -321,7 +322,7 @@ class ReceiverConsumer(RegistrationConsumer):
         if self.blueprint.object.third_party_sharing == "yes":
             return [NewReceiverConsumer]
         elif self.blueprint.object.third_party_sharing == "no":
-            return [SoftwareManagerConsumer]
+            return [SoftwareConsumer]
         else:
             return []
 
@@ -331,14 +332,12 @@ class NewReceiverConsumer(BaseConsumer):
     connected to the registration. Additionally it instantiates
     an empty one for the addition of a new Receiver."""
 
-    question_class = ReceiverQuestion
-
     def consume(self):
         self.registration = self.blueprint.object
         self.instantiate_all()
         if self.at_least_one_created():
             if self.no_errors():
-                return [SoftwareManagerConsumer]
+                return [SoftwareConsumer]
         return []
 
     def at_least_one_created(self):
@@ -379,10 +378,66 @@ class NewReceiverConsumer(BaseConsumer):
         return []
 
 
-class SoftwareManagerConsumer(BaseConsumer):
+class SoftwareConsumer(RegistrationConsumer):
+
+    question_class = SoftwareQuestion
 
     def consume(self):
+        self.blueprint.questions.append(self.question)
+        if self.blueprint.object.uses_software == "yes":
+            return [NewSoftwareConsumer]
+        elif self.blueprint.object.uses_software == "no":
+            return [SecurityConsumer]
         return []
+
+
+
+class NewSoftwareConsumer(BaseConsumer):
+
+    question_class = SoftwareQuestion
+
+    def consume(self):
+        self.instantiate_all()
+        if self.at_least_one_created():
+            if self.no_errors():
+                return [SecurityConsumer]
+        return []
+
+    
+    def instantiate_all(self):
+        """Populate self.questions with all Receivers plus one
+        empty one"""
+        self.questions = []
+        for software in self.get_queryset():
+            self.questions.append(
+                NewSoftwareQuestion(
+                    blueprint=self.blueprint,
+                    instance=software,
+                )
+            )
+        self.questions.append(
+            NewSoftwareQuestion(
+                blueprint=self.blueprint,
+                # NOTE: This one is intentionally empty
+                instance=Software(),
+            )
+        )
+        self.blueprint.questions += self.questions
+
+    def at_least_one_created(self):
+        return self.get_queryset().count() > 0
+
+    def get_queryset(self):
+        return Software.objects.filter(
+            registration=self.blueprint.object,
+        )
+
+    def no_errors(self):
+        return True
+
+class SecurityConsumer(RegistrationConsumer):
+
+    question_class = SecurityQuestion
 
 
 class ConfirmInformationUseConsumer(BaseQuestionConsumer):
