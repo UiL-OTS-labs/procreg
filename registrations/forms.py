@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.template import loader
 
 from cdh.questions import questions
-from .models import Registration, ParticipantCategory, Involved, Receiver
+from .models import Registration, ParticipantCategory, Involved, Receiver, Software
 from .progress import ProgressItemMixin
 
 
@@ -22,6 +22,9 @@ class RegistrationQuestionMixin(ProgressItemMixin):
         if not getattr(self, "registration"):
             self.registration = self.blueprint.object
         return self.registration
+
+    def get_blueprint(self):
+        return self.blueprint
 
     def get_edit_url(self):
 
@@ -418,8 +421,6 @@ class ReceiverQuestion(RegistrationQuestionMixin, questions.Question):
             context.update(
                 {
                     "source_question": new,
-                    "new": new,
-                    "existing": existing,
                     "show_selector": True,
                 }
             )
@@ -483,6 +484,15 @@ class NewReceiverQuestion(
             }
         )
 
+    def get_success_url(self):
+        return reverse(
+            "registrations:edit_question",
+            kwargs={
+                "reg_pk": self.get_blueprint().object.pk,
+                "question": "receivers",
+                "question_pk": self.get_blueprint().object.pk,
+            })
+
     def get_segments(self):
         return self._fields_to_segments(
             self.fields
@@ -491,6 +501,140 @@ class NewReceiverQuestion(
     def save(self):
         self.instance.registration = self.get_registration()
         return super().save()
+
+
+class SoftwareQuestion(
+        RegistrationQuestionMixin,
+        questions.Question,
+):
+    class Meta:
+        model = Registration
+        fields = [
+            "uses_software",
+        ]
+    slug = "software"
+    description = _("questions:software:description")
+    title = _("questions:software:title")
+    model = Meta.model
+    # Custom template for Manager inclusion
+    template_name = "forms/software_form.html"
+    use_custom_template = True
+
+    def render(self, context={}):
+        """This is kind of silly, but I want to implement custom form
+        template  as closely as possible to the django 4 way so the
+        upgrade path is easy."""
+        if not self.use_custom_template:
+            return super().render()
+        template = loader.get_template(self.template_name)
+        context.update(
+            {
+                "question": self,
+                "editing": True,
+            }
+        )
+        if self.instance.uses_software == "yes":
+            existing = self.blueprint.get_question(
+                always_list=True,
+                slug="new_software",
+                question_pk=True,
+            )
+            new = self.blueprint.get_question(
+                slug="new_software",
+                question_pk=None,
+            )
+            context.update(
+                {
+                    "source_question": new,
+                    "show_selector": True,
+                }
+            )
+        return template.render(context.flatten())
+
+    def get_segments(self):
+        # We still need this segment for easy rendering inside the
+        # custom form template
+        return self._fields_to_segments(
+            ["uses_software", ]
+        )
+
+
+class NewSoftwareQuestion(
+        RegistrationQuestionMixin,
+        questions.Question,
+):
+    """Question that creates new softwares and adds them to a registration"""
+
+    class Meta:
+        model = Software
+        fields = [
+            "name",
+            "not_approved",
+        ]
+    slug = "new_software"
+    model = Meta.model
+
+    def get_existing(self):
+        """Return the list of receivers currently connected to
+        this registration."""
+        return self.blueprint.get_question(
+            self.slug,
+            question_pk=True,
+            always_list=True,
+        )
+
+    def get_create_url(self):
+        return reverse(
+            "registrations:edit_question",
+            kwargs={
+                "question": self.slug,
+                "reg_pk": self.blueprint.object.pk,
+            },
+        )
+
+    def get_delete_url(self):
+        return reverse(
+            "registrations:delete_software",
+            kwargs={
+                "reg_pk": self.get_registration().pk,
+                "software_pk": self.instance.pk,
+            }
+        )
+
+    def get_success_url(self):
+        return reverse(
+            "registrations:edit_question",
+            kwargs={
+                "reg_pk": self.get_blueprint().object.pk,
+                "question": "software",
+                "question_pk": self.get_blueprint().object.pk,
+            })
+
+    def get_segments(self):
+        return self._fields_to_segments(
+            self.fields
+        )
+
+    def save(self):
+        self.instance.registration = self.get_registration()
+        breakpoint()
+        return super().save()
+
+
+class SecurityQuestion(
+        RegistrationQuestionMixin,
+        questions.Question,
+):
+    class Meta:
+        model = Registration
+        fields = [
+            "follows_policy",
+            "policy_exceptions",
+            "policy_additions",
+        ]
+    slug = "security"
+    description = _("questions:security:description")
+    title = _("questions:security:title")
 
 
 class SubmitQuestion(RegistrationQuestionMixin, questions.Question):
@@ -524,7 +668,6 @@ class SubmitQuestion(RegistrationQuestionMixin, questions.Question):
         segments.append(content)
 
         return segments
-
 
 
     
@@ -575,6 +718,8 @@ Q_LIST = [
     NewInvolvedQuestion,
     GoalQuestion,
     PurposeQuestion,
+    NewSoftwareQuestion,
+    SoftwareQuestion,
 ]
 
 QUESTIONS = {q.slug: q for q in Q_LIST}
