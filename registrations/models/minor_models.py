@@ -49,11 +49,16 @@ class Software(models.Model):
         blank=True,
         default="",
     )
-
-    not_approved = models.PositiveIntegerField(
+    not_approved = models.CharField(
+        max_length=10,
         choices=YES_NO,
         null=True,
         blank=True,
+    )
+    registration = models.ForeignKey(
+        Registration,
+        related_name="software",
+        on_delete=models.CASCADE,
     )
 
 
@@ -64,10 +69,13 @@ class Document(models.Model):
         blank=True,
         default=""
     )
-
     upload = models.FileField(
     )
-
+    registration = models.ForeignKey(
+        Registration,
+        related_name="documents",
+        on_delete=models.CASCADE,
+    )
 
 class ParticipantCategory(models.Model):
 

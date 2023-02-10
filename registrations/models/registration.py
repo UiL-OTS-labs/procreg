@@ -140,6 +140,14 @@ class Registration(models.Model):
         default="",
     )
 
+    # Software question
+
+    uses_software = models.CharField(
+        max_length=10,
+        choices=YES_NO,
+        default="",
+    )
+
     # Security questions
 
     follows_policy = models.CharField(
