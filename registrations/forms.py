@@ -416,11 +416,6 @@ class ReceiverQuestion(RegistrationQuestionMixin, questions.Question):
             }
         )
         if self.instance.third_party_sharing == "yes":
-            existing = self.blueprint.get_question(
-                always_list=True,
-                slug="new_receiver",
-                question_pk=True,
-            )
             new = self.blueprint.get_question(
                 slug="new_receiver",
                 question_pk=None,
@@ -471,6 +466,7 @@ class NewReceiverQuestion(
         return self.blueprint.get_question(
             "new_receiver",
             question_pk=True,
+            always_list=True,
         )
 
     def get_create_url(self):
