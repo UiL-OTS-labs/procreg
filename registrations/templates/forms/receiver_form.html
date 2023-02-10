@@ -11,12 +11,6 @@
 
 <section class="question">
 
-  {% for receiver in question.get_queryset %}
-    recolo pecolo
-  {% empty %}
-    zero recolo
-  {% endfor %}
-
   {% for segment in question.get_segments %}
     {% render_segment segment %}
   {% endfor %}
