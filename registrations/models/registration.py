@@ -139,3 +139,21 @@ class Registration(models.Model):
         choices=YES_NO,
         default="",
     )
+
+    # Security questions
+
+    follows_policy = models.CharField(
+        max_length=10,
+        choices=YES_NO,
+        default="",
+    )
+    policy_exceptions = models.TextField(
+        max_length=2000,
+        default="",
+        blank=True,
+    )
+    policy_additions = models.TextField(
+        max_length=2000,
+        default="",
+        blank=True,
+    )

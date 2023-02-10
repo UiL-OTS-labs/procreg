@@ -42,6 +42,33 @@ class Receiver(models.Model):
     )
 
 
+class Software(models.Model):
+
+    name = models.CharField(
+        max_length=200,
+        blank=True,
+        default="",
+    )
+
+    not_approved = models.PositiveIntegerField(
+        choices=YES_NO,
+        null=True,
+        blank=True,
+    )
+
+
+class Document(models.Model):
+
+    description = models.CharField(
+        max_length=500,
+        blank=True,
+        default=""
+    )
+
+    upload = models.FileField(
+    )
+
+
 class ParticipantCategory(models.Model):
 
     name = models.CharField(max_length=100,
