@@ -344,6 +344,92 @@ class PurposeQuestion(RegistrationQuestionMixin,
         )
 
 
+class SpecialDetailsQuestion(
+        RegistrationQuestionMixin,
+        questions.Question,
+):
+
+    class Meta:
+        model = Involved
+        fields = [
+            "special_details",
+            "gave_explicit_permission",
+            "explicit_permission_details",
+            "grounds_for_exception",
+            "grounds_for_exception_details",
+        ]
+
+    title = _("registrations:special_details_title")
+    description = _("registrations:forms:special_details_description")
+    model = Meta.model
+    slug = "special_details"
+    is_editable = True
+    show_progress = True
+
+    def get_segments(self):
+
+        return self._fields_to_segments(
+            fields_list=self.Meta.fields,
+        )
+
+
+
+class SensitiveDetailsQuestion(
+        RegistrationQuestionMixin,
+        questions.Question,
+):
+
+    class Meta:
+        model = Involved
+        fields = [
+            "provides_criminal_information",
+            "contains_u15",
+            "other_sensitive_details",
+            "provides_no_sensitive_details",
+        ]
+
+    title = _("registrations:sensitive_details_title")
+    description = _("registrations:forms:sensitive_details_description")
+    model = Meta.model
+    slug = "sensitive_details"
+    is_editable = True
+    show_progress = True
+
+    def get_segments(self):
+
+        return self._fields_to_segments(
+            fields_list=self.Meta.fields,
+        )
+
+
+class RegularDetailsQuestion(
+        RegistrationQuestionMixin,
+        questions.Question,
+):
+
+    class Meta:
+        model = Involved
+        fields = [
+            "regular_details",
+            "other_regular_details",
+            "provides_ic_form",
+            "ic_form_details",
+        ]
+
+    title = _("registrations:special_details_title")
+    description = _("registrations:forms:special_details_description")
+    model = Meta.model
+    slug = "special_details"
+    is_editable = True
+    show_progress = True
+
+    def get_segments(self):
+
+        return self._fields_to_segments(
+            fields_list=self.Meta.fields,
+        )
+
+
 class RetentionQuestion(
         RegistrationQuestionMixin,
         questions.Question,
