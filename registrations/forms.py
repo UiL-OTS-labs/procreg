@@ -356,7 +356,8 @@ class SpecialDetailsQuestion(
             "gave_explicit_permission",
             "explicit_permission_details",
             "grounds_for_exception",
-            "grounds_for_exception_details",
+            "algemeen_belang_details",
+            "legal_grounds_details",
         ]
 
     title = _("registrations:special_details_title")
