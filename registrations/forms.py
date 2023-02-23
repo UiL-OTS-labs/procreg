@@ -374,7 +374,6 @@ class SpecialDetailsQuestion(
         )
 
 
-
 class SensitiveDetailsQuestion(
         RegistrationQuestionMixin,
         questions.Question,
@@ -384,7 +383,7 @@ class SensitiveDetailsQuestion(
         model = Involved
         fields = [
             "provides_criminal_information",
-            "contains_u15",
+            "involves_children_under_15",
             "other_sensitive_details",
             "provides_no_sensitive_details",
         ]
