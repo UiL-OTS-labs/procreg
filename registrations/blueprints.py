@@ -173,6 +173,29 @@ class RegistrationBlueprint(Blueprint):
         else:
             return match
 
+    def get_involved_groups(self, group_type=None):
+        """
+        Return a dict of group types to list of involved
+        group instasnces.
+        """
+        group_types = [
+            "consent",
+            "non_consent",
+            "guardian_consent",
+            "other",
+        ]
+        out = dict()
+        for key in group_types:
+            qs = Involved.objects.filter(
+                registration=self.object,
+                group_type=key,
+            )
+            out[key] = {
+                "group_type": "models:involved:group_type_consent",
+                "groups": [involved for involved in qs],
+            }
+        return out
+
     def instantiate_question(self, question_or_list, **kwargs):
         """
         Return an instantiated question.

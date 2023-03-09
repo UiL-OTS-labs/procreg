@@ -4,7 +4,8 @@ from .forms import NewRegistrationQuestion, FacultyQuestion, \
     UsesInformationQuestion, InvolvedPeopleQuestion, NewInvolvedQuestion, \
     PurposeQuestion, RetentionQuestion, ConfirmInformationUseQuestion, \
     TraversalQuestion, GoalQuestion, ReceiverQuestion, SecurityQuestion, \
-    NewReceiverQuestion, SoftwareQuestion, NewSoftwareQuestion
+    NewReceiverQuestion, SoftwareQuestion, NewSoftwareQuestion, \
+    RegularDetailsQuestion, SpecialDetailsQuestion, SensitiveDetailsQuestion
 from .models import Involved, Receiver, Software
 
 
@@ -236,9 +237,9 @@ class BaseGroupConsumer(BaseQuestionConsumer):
 
     question_class = NewInvolvedQuestion
     group_type = None
-    success_list = []
 
     def __init__(self, *args, **kwargs):
+        self.success_list = []
         super().__init__(*args, **kwargs)
         # Add our group type to the blueprint for the
         # InvolvedManager can easily find which ones are selected
@@ -269,8 +270,6 @@ class BaseGroupConsumer(BaseQuestionConsumer):
     def consume(self):
         # First add the empty question to blueprint
         # This will allow the user to create new groups
-        if self.question.instance.group_type is None:
-            breakpoint()
         self.blueprint.questions.append(self.question)
         # Then search for existing groups to manage
         for group in self.group_qs:
@@ -280,16 +279,21 @@ class BaseGroupConsumer(BaseQuestionConsumer):
                 blueprint=self.blueprint,
             )
             self.blueprint.questions.append(iq)
+            # Add a purpose question
+            self.add_purpose(group)
         if self.has_entries():
             if self.check_details():
                 return self.success()
         return self.fail()
-
+    
     def check_details(self):
         return True
 
     def has_entries(self):
         return not len(self.group_qs) == 0
+
+    def add_purpose(self, instance):
+        self.success_list.insert(0, PurposeConsumer(instance))
 
     def success(self):
         return self.success_list
@@ -318,9 +322,58 @@ class OtherGroupConsumer(BaseGroupConsumer):
     group_type = "other"
 
 
-class PurposeConsumer(BaseQuestionConsumer):
+class OtherInstanceConsumer(BaseQuestionConsumer):
+    """Consumer that is to a degree pre-initialized with a different
+    instance than the default blueprint object, for example by a
+    previous consumer"""
 
-    question = PurposeQuestion
+    question_class = None
+
+    def __init__(self, instance):
+        self.instance = instance
+
+    def __call__(self, blueprint):
+        super().__init__(blueprint)
+        return self
+
+    def instantiate(self,):
+        self.question = self.question_class(
+            instance=self.instance,
+            blueprint=self.blueprint,
+        )
+        return self.question
+
+
+class PurposeConsumer(OtherInstanceConsumer):
+
+    question_class = PurposeQuestion
+    
+    def consume(self):
+        return [SpecialDetailsConsumer(self.instance)]
+
+
+class SpecialDetailsConsumer(OtherInstanceConsumer):
+
+    question_class = SpecialDetailsQuestion
+    
+    def consume(self):
+        return [SensitiveDetailsConsumer(self.instance)]
+
+
+class SensitiveDetailsConsumer(OtherInstanceConsumer):
+
+    question_class = SensitiveDetailsQuestion
+    
+    def consume(self):
+        return [RegularDetailsConsumer(self.instance)]
+
+    
+class RegularDetailsConsumer(OtherInstanceConsumer):
+
+    question_class = RegularDetailsQuestion
+    
+    def consume(self):
+        return []
 
 
 class RetentionConsumer(RegistrationConsumer):
@@ -427,7 +480,6 @@ class SoftwareConsumer(RegistrationConsumer):
         return []
 
 
-
 class NewSoftwareConsumer(BaseConsumer):
 
     def consume(self):
@@ -468,6 +520,7 @@ class NewSoftwareConsumer(BaseConsumer):
 
     def no_errors(self):
         return True
+
 
 class SecurityConsumer(RegistrationConsumer):
 
