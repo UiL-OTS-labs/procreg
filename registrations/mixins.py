@@ -95,7 +95,6 @@ class QuestionFromBlueprintMixin(
                 {slug} with pk {question_pk}",
             )
         elif type(search) is list:
-            breakpoint()
             raise RuntimeError(
                 f"""Got multiple possible questions for given query: 
                 {slug} with pk {question_pk} ({search})""",
