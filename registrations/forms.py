@@ -411,9 +411,9 @@ class RegularDetailsQuestion(
         model = Involved
         fields = [
             "regular_details",
-            "other_regular_details",
             "provides_ic_form",
             "ic_form_details",
+            "extra_details",
         ]
 
     title = _("registrations:special_details_title")
@@ -706,7 +706,6 @@ class NewSoftwareQuestion(
 
     def save(self):
         self.instance.registration = self.get_registration()
-        breakpoint()
         return super().save()
 
 
