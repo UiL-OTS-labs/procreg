@@ -26,6 +26,13 @@
         <li>
             {% progress_item_from_slug "involved_manager" text="Information" %}
         </li>
+        {% for group_type, data in blueprint.get_involved_groups.items %}
+          {% for involved in data.groups %}
+            <li>
+              {% progress_item_from_slug "new_involved" question_pk=involved.pk text=involved.name size="large" %}
+            </li>
+          {% endfor %}
+        {% endfor %}
         <li>
             {% progress_item_from_slug "retention" text="Retention" %}
         </li>

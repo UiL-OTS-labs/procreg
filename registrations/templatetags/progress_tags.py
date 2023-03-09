@@ -46,9 +46,11 @@ def progress_bar(blueprint, current):
     "registrations/templatetags/progress_item_question.html",
     takes_context=True,
 )
-def progress_item_from_question(context, question, size="largest",
-                                text=None, url=True, number=True,
-                                incomplete=False,):
+def progress_item_from_question(
+        context, question, size="largest",
+        text=None, url=True, number=True,
+        incomplete=False, question_pk=None,
+):
     if question in ["", None]:
         return None
     # Caller can set url to False or None to disable
@@ -61,7 +63,7 @@ def progress_item_from_question(context, question, size="largest",
     span_classes = ["stepper-bubble", size]
     item_classes = []
     current = context.get("current_question")
-    if question.slug == current.slug:
+    if question == current:
         item_classes.append("active")
     if question.disabled:
         item_classes.append("disabled")
@@ -75,6 +77,8 @@ def progress_item_from_question(context, question, size="largest",
     if number is True:
         enumerator = context.get("enumerator")
         number = enumerator(question.slug)
+    if number is False:
+        number = ""
 
     tag_context = {
         "title": text,
@@ -93,11 +97,15 @@ def progress_item_from_question(context, question, size="largest",
 def progress_item_from_slug(context, slug, **kwargs):
     from ..forms import PlaceholderQuestion
     blueprint = context.get("blueprint")
-    question_kwargs = kwargs.get("question_kwargs", {})
+    question_pk = kwargs.pop("question_pk", False)
     question = blueprint.get_question(
         slug=slug,
-        **question_kwargs,
+        question_pk=question_pk,
+    )
+    number = kwargs.get(
+        "number",
+        question_pk is False,
     )
     if not question:
         question = PlaceholderQuestion(slug=slug)
-    return progress_item_from_question(context, question, **kwargs)
+    return progress_item_from_question(context, question, number=number, **kwargs)
