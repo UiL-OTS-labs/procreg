@@ -279,8 +279,9 @@ class BaseGroupConsumer(BaseQuestionConsumer):
                 blueprint=self.blueprint,
             )
             self.blueprint.questions.append(iq)
+            # Add a purpose question
+            self.add_purpose(group)
         if self.has_entries():
-            self.add_purpose()
             if self.check_details():
                 return self.success()
         return self.fail()
@@ -291,8 +292,8 @@ class BaseGroupConsumer(BaseQuestionConsumer):
     def has_entries(self):
         return not len(self.group_qs) == 0
 
-    def add_purpose(self):
-        self.success_list.insert(0, PurposeConsumer)
+    def add_purpose(self, instance):
+        self.success_list.insert(0, PurposeConsumer(instance))
 
     def success(self):
         return self.success_list
@@ -332,7 +333,8 @@ class OtherInstanceConsumer(BaseQuestionConsumer):
         self.instance = instance
 
     def __call__(self, blueprint):
-        return super().__init__(self, blueprint)
+        super().__init__(blueprint)
+        return self
 
     def instantiate(self,):
         self.question = self.question_class(
@@ -342,8 +344,7 @@ class OtherInstanceConsumer(BaseQuestionConsumer):
         return self.question
 
 
-
-class PurposeConsumer(BaseQuestionConsumer):
+class PurposeConsumer(OtherInstanceConsumer):
 
     question_class = PurposeQuestion
     
@@ -351,7 +352,7 @@ class PurposeConsumer(BaseQuestionConsumer):
         return [SpecialDetailsConsumer(self.instance)]
 
 
-class SpecialDetailsConsumer(BaseQuestionConsumer):
+class SpecialDetailsConsumer(OtherInstanceConsumer):
 
     question_class = SpecialDetailsQuestion
     
@@ -359,7 +360,7 @@ class SpecialDetailsConsumer(BaseQuestionConsumer):
         return [SensitiveDetailsConsumer(self.instance)]
 
 
-class SensitiveDetailsConsumer(BaseQuestionConsumer):
+class SensitiveDetailsConsumer(OtherInstanceConsumer):
 
     question_class = SensitiveDetailsQuestion
     
@@ -367,12 +368,12 @@ class SensitiveDetailsConsumer(BaseQuestionConsumer):
         return [RegularDetailsConsumer(self.instance)]
 
     
-class RegularDetailsConsumer(BaseQuestionConsumer):
+class RegularDetailsConsumer(OtherInstanceConsumer):
 
     question_class = RegularDetailsQuestion
     
     def consume(self):
-        return [RegularDetailsConsumer(self.instance)]
+        return []
 
 
 class RetentionConsumer(RegistrationConsumer):
