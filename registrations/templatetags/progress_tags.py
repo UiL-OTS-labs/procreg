@@ -97,12 +97,12 @@ def progress_item_from_question(
 def progress_item_from_slug(context, slug, **kwargs):
     from ..forms import PlaceholderQuestion
     blueprint = context.get("blueprint")
-    question_pk = kwargs.pop("question_pk", False)
+    question_pk = kwargs.get("question_pk", False)
     question = blueprint.get_question(
         slug=slug,
         question_pk=question_pk,
     )
-    number = kwargs.pop(
+    number = kwargs.get(
         "number",
         question_pk is False,
     )

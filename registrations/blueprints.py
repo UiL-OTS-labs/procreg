@@ -141,7 +141,7 @@ class RegistrationBlueprint(Blueprint):
         match = []
         # Basic matching on attributes
         for q in self.questions:
-            if slug:
+            if slug is not None:
                 if q.slug != slug:
                     continue
             if not isinstance(question_pk, bool):
