@@ -79,7 +79,6 @@ def progress_item_from_question(
         number = enumerator(question.slug)
     if number is False:
         number = ""
-
     tag_context = {
         "title": text,
         "span_classes": " ".join(span_classes),
@@ -97,15 +96,36 @@ def progress_item_from_question(
 def progress_item_from_slug(context, slug, **kwargs):
     from ..forms import PlaceholderQuestion
     blueprint = context.get("blueprint")
-    question_pk = kwargs.pop("question_pk", False)
+    question_pk = kwargs.get("question_pk", False)
     question = blueprint.get_question(
         slug=slug,
         question_pk=question_pk,
     )
-    number = kwargs.pop(
+    number = kwargs.get(
         "number",
         question_pk is False,
     )
     if not question:
         question = PlaceholderQuestion(slug=slug)
     return progress_item_from_question(context, question, number=number, **kwargs)
+
+@register.inclusion_tag(
+    "registrations/templatetags/progress_items_involved.html",
+    takes_context=True,
+)
+def involved_progress_items(context):
+    blueprint = context.get("blueprint")
+    involved = context.get("involved")
+    current = context.get("current_question")
+    expand = getattr(current, "instance", False) == involved
+    questions = []
+    if expand:
+        questions = blueprint.get_questions_for_involved(involved)
+    tag_context = {
+        "blueprint": blueprint,
+        "involved": involved,
+        "questions": questions,
+        "expand": expand,
+        "current_question": current,
+    }
+    return tag_context

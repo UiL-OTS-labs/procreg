@@ -416,10 +416,10 @@ class RegularDetailsQuestion(
             "extra_details",
         ]
 
-    title = _("registrations:special_details_title")
-    description = _("registrations:forms:special_details_description")
+    title = _("registrations:regular_details_title")
+    description = _("registrations:forms:regular_details_description")
     model = Meta.model
-    slug = "special_details"
+    slug = "regular_details"
     is_editable = True
     show_progress = True
 
@@ -550,7 +550,7 @@ class NewReceiverQuestion(
         """Return the list of receivers currently connected to
         this registration."""
         return self.blueprint.get_question(
-            "new_receiver",
+            slug="new_receiver",
             question_pk=True,
             always_list=True,
         )
@@ -667,7 +667,7 @@ class NewSoftwareQuestion(
         """Return the list of receivers currently connected to
         this registration."""
         return self.blueprint.get_question(
-            self.slug,
+            slug=self.slug,
             question_pk=True,
             always_list=True,
         )

@@ -349,6 +349,7 @@ class PurposeConsumer(OtherInstanceConsumer):
     question_class = PurposeQuestion
     
     def consume(self):
+        self.blueprint.questions.append(self.question)
         return [SpecialDetailsConsumer(self.instance)]
 
 
@@ -357,6 +358,7 @@ class SpecialDetailsConsumer(OtherInstanceConsumer):
     question_class = SpecialDetailsQuestion
     
     def consume(self):
+        self.blueprint.questions.append(self.question)
         return [SensitiveDetailsConsumer(self.instance)]
 
 
@@ -365,6 +367,7 @@ class SensitiveDetailsConsumer(OtherInstanceConsumer):
     question_class = SensitiveDetailsQuestion
     
     def consume(self):
+        self.blueprint.questions.append(self.question)
         return [RegularDetailsConsumer(self.instance)]
 
     
@@ -373,6 +376,7 @@ class RegularDetailsConsumer(OtherInstanceConsumer):
     question_class = RegularDetailsQuestion
     
     def consume(self):
+        self.blueprint.questions.append(self.question)
         return []
 
 
