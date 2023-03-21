@@ -416,10 +416,10 @@ class RegularDetailsQuestion(
             "extra_details",
         ]
 
-    title = _("registrations:special_details_title")
-    description = _("registrations:forms:special_details_description")
+    title = _("registrations:regular_details_title")
+    description = _("registrations:forms:regular_details_description")
     model = Meta.model
-    slug = "special_details"
+    slug = "regular_details"
     is_editable = True
     show_progress = True
 

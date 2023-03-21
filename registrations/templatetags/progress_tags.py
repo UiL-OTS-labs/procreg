@@ -79,7 +79,6 @@ def progress_item_from_question(
         number = enumerator(question.slug)
     if number is False:
         number = ""
-
     tag_context = {
         "title": text,
         "span_classes": " ".join(span_classes),
@@ -127,5 +126,6 @@ def involved_progress_items(context):
         "involved": involved,
         "questions": questions,
         "expand": expand,
+        "current_question": current,
     }
     return tag_context
