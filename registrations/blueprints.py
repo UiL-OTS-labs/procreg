@@ -132,17 +132,18 @@ class RegistrationBlueprint(Blueprint):
                 "reg_pk": self.object.pk,
             })
 
-    def get_question(self, slug, question_pk=False, extra_filter=None,
+    def get_question(self, slug=None, question_pk=False, extra_filter=None,
                      always_list=False,):
         """
         Get questions matching kwargs from this blueprints list of
         instantiated questions.
         """
         match = []
-        # Basic matching on 
+        # Basic matching on attributes
         for q in self.questions:
-            if q.slug != slug:
-                continue
+            if slug:
+                if q.slug != slug:
+                    continue
             if not isinstance(question_pk, bool):
                 # We want a question with a specific pk,
                 # which may include None to specifically
@@ -155,6 +156,7 @@ class RegistrationBlueprint(Blueprint):
                 if q.instance.pk is None:
                     continue
             match.append(q)
+        # Extra arbitrary filter
         if extra_filter:
             match = list(
                 filter(extra_filter, match)
