@@ -109,3 +109,23 @@ def progress_item_from_slug(context, slug, **kwargs):
     if not question:
         question = PlaceholderQuestion(slug=slug)
     return progress_item_from_question(context, question, number=number, **kwargs)
+
+@register.inclusion_tag(
+    "registrations/templatetags/progress_items_involved.html",
+    takes_context=True,
+)
+def involved_progress_items(context):
+    blueprint = context.get("blueprint")
+    involved = context.get("involved")
+    current = context.get("current_question")
+    expand = getattr(current, "instance", False) == involved
+    questions = []
+    if expand:
+        questions = blueprint.get_questions_for_involved(involved)
+    tag_context = {
+        "blueprint": blueprint,
+        "involved": involved,
+        "questions": questions,
+        "expand": expand,
+    }
+    return tag_context

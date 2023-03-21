@@ -178,7 +178,7 @@ class RegistrationBlueprint(Blueprint):
     def get_involved_groups(self, group_type=None):
         """
         Return a dict of group types to list of involved
-        group instasnces.
+        group instances.
         """
         group_types = [
             "consent",
@@ -186,6 +186,18 @@ class RegistrationBlueprint(Blueprint):
             "guardian_consent",
             "other",
         ]
+
+        def make_question_filter(our_involved):
+            """Return a filtering function determining if given question
+            has given involved group as instance"""
+            def filter_function(question):
+                question_model = getattr(question, "model", False)
+                if question_model:
+                    if question_model is Involved:
+                        return question.instance is our_involved
+                return False
+            return filter_function
+
         out = dict()
         for key in group_types:
             qs = Involved.objects.filter(
@@ -193,10 +205,35 @@ class RegistrationBlueprint(Blueprint):
                 group_type=key,
             )
             out[key] = {
-                "group_type": "models:involved:group_type_consent",
+                "group_type": "models:involved:group_type_" + key,
                 "groups": [involved for involved in qs],
+                "questions": {
+                    involved: self.get_question(
+                        extra_filter=make_question_filter(involved),
+                        always_list=True,
+                    )
+                    for involved in qs
+                }
             }
         return out
+
+    def get_questions_for_involved(self, involved):
+
+        def make_question_filter(our_involved):
+            """Return a filtering function determining if given question
+            has given involved group as instance"""
+            def filter_function(question):
+                try:
+                    return question.instance == our_involved
+                except AttributeError:
+                    return False
+                return False
+            return filter_function
+
+        return self.get_question(
+            extra_filter=make_question_filter(involved),
+            always_list=True,
+        )
 
     def instantiate_question(self, question_or_list, **kwargs):
         """
