@@ -101,7 +101,10 @@ def progress_item_from_slug(context, slug, **kwargs):
         slug=slug,
         question_pk=question_pk,
     )
-    number = kwargs.get(
+    # The number must be popped because we modify it
+    # Otherwise the next function would get multiple values for it
+    # because the original remains in **kwargs
+    number = kwargs.pop(
         "number",
         question_pk is False,
     )
