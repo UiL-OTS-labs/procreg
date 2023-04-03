@@ -13,19 +13,7 @@
     {% progress_bar blueprint form %}
   {% endwith %}
 
-  <h4 class="mt-4">Completed</h4>
-  <ul>
-  {% for q in blueprint.completed %}
-<li>{{q.slug}} (<a href="{{q.get_edit_url}}">edit</a>)</li>
-  {% endfor %}
-  </ul>
-  <ul>
-  {% for q in blueprint.available %}
-<li>{{q.slug}} (<a href="{{q.get_edit_url}}">edit</a>)</li>
-  {% endfor %}
-  </ul>
 
-  <h4>All available</h4>
 {% endblock %}
 {% block form %}
   <div class="uu-form-text-row">

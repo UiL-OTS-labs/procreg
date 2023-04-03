@@ -802,12 +802,16 @@ Q_LIST = [
     UsesInformationQuestion,
     ConfirmInformationUseQuestion,
     InvolvedPeopleQuestion,
+    ReceiverQuestion,
     RetentionQuestion,
     NewInvolvedQuestion,
     GoalQuestion,
     PurposeQuestion,
     NewSoftwareQuestion,
     SoftwareQuestion,
+    SensitiveDetailsQuestion,
+    SpecialDetailsQuestion,
+    RegularDetailsQuestion,
 ]
 
 QUESTIONS = {q.slug: q for q in Q_LIST}
