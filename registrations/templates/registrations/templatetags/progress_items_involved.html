@@ -4,7 +4,8 @@
 
 <li>
   {% progress_item_from_slug "new_involved" question_pk=involved.pk text=involved.name size="large" %}
-  {% if expand %}
+  
+{% if expand %}
     <ul>
       <li>
         {% progress_item_from_slug "purpose" question_pk=involved.pk text="Purpose" size="medium" %}
@@ -19,5 +20,6 @@
         {% progress_item_from_slug "regular_details" question_pk=involved.pk text="Regular details" size="medium" %}
       </li>
     </ul>
-  {% endif %}
+    {% endif %}
+
 </li>
