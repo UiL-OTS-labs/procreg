@@ -11,7 +11,7 @@ from cdh.questions.views import BlueprintMixin, QuestionView, \
 
 
 from .models import Registration, ParticipantCategory, Involved, \
-    Software, Receiver
+    Software, Receiver, Faq
 from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
 from .mixins import RegistrationMixin
 from .progress import ProgressItemMixin
@@ -33,6 +33,21 @@ class RegistrationsHomeView(LoginRequiredMixin,
 
         qs = Registration.objects.all()
         return qs
+
+class LandingView(
+        generic.TemplateView,
+):
+    template_name = "registrations/landing.html"
+
+    def get_faqs(self,):
+        qs = Faq.objects.filter(
+            front_page=True,
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["faqs"] = self.get_faqs()
+        return context
 
 
 class RegistrationOverview(RegistrationMixin,
