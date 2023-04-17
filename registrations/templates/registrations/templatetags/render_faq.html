@@ -1,0 +1,11 @@
+<div class="faq" style="border-bottom: 1px solid darkgrey;">
+  <h3>{{title}}</h3>
+  <p>{{answer}}</p>
+  {% if external_url %}
+  <p>
+    <a href={{external_url}}>
+      {{external_url_text}}
+    </a>
+  </p>
+  {% endif %}
+</div>
