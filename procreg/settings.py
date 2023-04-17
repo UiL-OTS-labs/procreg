@@ -34,6 +34,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+
+    # Django model translation must come before admin
+    'modeltranslation',
+    
     # Django supplied apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,9 +57,6 @@ INSTALLED_APPS = [
 
     # Impersonate
     'impersonate',
-
-    # Django model translation
-    'modeltranslation',
 
     # UiL Core libraries
     'cdh.core',
@@ -211,14 +212,6 @@ LANGUAGES = (
 )
 
 
-LOCALE_PATHS = (
-
-    # Merges all translations files into one
-    os.path.join(BASE_DIR, 'locale'),
-
-    # For per-app translations files
-    #'locale',
-)
 
 TIME_ZONE = 'UTC'
 
@@ -273,3 +266,4 @@ MENU_HIDE_EMPTY = False
 # Default media directory (served statically!)
 MEDIA_ROOT = 'media'
 MEDIA_URL = '/media/'
+
