@@ -10,7 +10,8 @@ class Faq(models.Model):
     )
     answer = models.TextField(
         max_length=5000,
-        default=""
+        default="",
+        blank=True,
     )
     front_page = models.BooleanField(
         default=False,
