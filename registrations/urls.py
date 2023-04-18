@@ -4,7 +4,7 @@ from .views import RegistrationsHomeView, RegistrationCreateView, \
     RegistrationOverview, RegistrationQuestionEditView, RegistrationDeleteView, \
     MinimalCategoryView, MinimalDeleteView, RegistrationSummaryView, \
     InvolvedManager, StepperView, BlueprintQuestionEditView, \
-    ReceiverDeleteView, SoftwareDeleteView
+    ReceiverDeleteView, SoftwareDeleteView, LandingView
 from .forms import QUESTIONS
 from .blueprints import RegistrationBlueprint
 from .models import ParticipantCategory
@@ -13,6 +13,7 @@ app_name = 'registrations'
 
 urlpatterns = [
     path('', RegistrationsHomeView.as_view(), name='home'),
+    path('landing/', LandingView.as_view(), name='landing'),
     path('<int:reg_pk>/', RegistrationOverview.as_view(), name='overview'),
     path('<int:reg_pk>/manager/',
          InvolvedManager.as_view(),

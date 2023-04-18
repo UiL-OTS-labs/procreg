@@ -34,6 +34,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+
+    # Django model translation must come before admin
+    'modeltranslation',
+    
     # Django supplied apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,9 +57,6 @@ INSTALLED_APPS = [
 
     # Impersonate
     'impersonate',
-
-    # Django model translation
-    'modeltranslation',
 
     # UiL Core libraries
     'cdh.core',
@@ -147,7 +148,7 @@ LOGGING = {
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
     EMAIL_FILE_PATH = '/tmp/django-email'
-else:        
+else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = 'localhost'
     EMAIL_PORT = 2525
@@ -211,14 +212,6 @@ LANGUAGES = (
 )
 
 
-LOCALE_PATHS = (
-
-    # Merges all translations files into one
-    os.path.join(BASE_DIR, 'locale'),
-
-    # For per-app translations files
-    #'locale',
-)
 
 TIME_ZONE = 'UTC'
 
@@ -227,6 +220,10 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+LOCALE_PATHS = (
+    'locale',
+)
 
 
 # Static files (CSS, JavaScript, Images)
@@ -273,3 +270,4 @@ MENU_HIDE_EMPTY = False
 # Default media directory (served statically!)
 MEDIA_ROOT = 'media'
 MEDIA_URL = '/media/'
+
