@@ -69,13 +69,13 @@
   <div class="uu-row w-100 d-flex justify-content-between">
     
       <div class="p-3 border m-3 flex-fill" >
-        <h1>{% trans "landing:faq:faq_h1" %}</h1>
+        <h1 classs="mb-3">{% trans "landing:faq:faq_h1" %}</h1>
         {% for faq in faqs %}
           {% render_faq faq %}
         {% empty %}
         <p>{% trans "landing:faqs:no_faqs_yet" %}</p>
         {% endfor %}
-        <p><a href="#all_faqs">
+        <p class="text-end mt-3"><a href="#all_faqs">
           {% trans "landing:faq:all_faqs_link" %}
         </a></p>
       </div>

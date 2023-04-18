@@ -1,11 +1,10 @@
-<div class="faq" style="border-bottom: 1px solid darkgrey;">
-  <h3>{{title}}</h3>
-  <p>{{answer}}</p>
-  {% if external_url %}
-  <p>
-    <a href={{external_url}}>
-      {{external_url_text}}
-    </a>
-  </p>
-  {% endif %}
+<div class="faq" style="border-bottom: 1px solid lightgrey;">
+  <a class="d-flex justify-content-between mt-2" href="{{faq.external_url}}">
+    <span>
+      <h3>{{faq.title}}</h3>
+    </span>
+    <span>
+      &gt;
+    </span>
+  </a>
 </div>
