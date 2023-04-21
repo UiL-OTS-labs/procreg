@@ -12,7 +12,7 @@ from cdh.questions.views import BlueprintMixin, QuestionView, \
 
 from .models import Registration, ParticipantCategory, Involved, \
     Software, Receiver, Faq
-from .forms import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
+from .questions import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
 from .mixins import RegistrationMixin
 from .progress import ProgressItemMixin
 from .blueprints import RegistrationBlueprint

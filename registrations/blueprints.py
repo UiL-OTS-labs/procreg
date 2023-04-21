@@ -1,6 +1,6 @@
 from django.urls import reverse
-from .forms import QUESTIONS
-                     
+from .questions import QUESTIONS
+
 import logging
 
 

@@ -5,7 +5,7 @@ from .views import RegistrationsHomeView, RegistrationCreateView, \
     MinimalCategoryView, MinimalDeleteView, RegistrationSummaryView, \
     InvolvedManager, StepperView, BlueprintQuestionEditView, \
     ReceiverDeleteView, SoftwareDeleteView, LandingView
-from .forms import QUESTIONS
+from .questions import QUESTIONS
 from .blueprints import RegistrationBlueprint
 from .models import ParticipantCategory
 

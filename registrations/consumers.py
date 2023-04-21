@@ -1,8 +1,8 @@
 from cdh.questions.blueprints import BaseConsumer, BaseQuestionConsumer
 
-from .forms import NewRegistrationQuestion, FacultyQuestion, \
-    UsesInformationQuestion, InvolvedPeopleQuestion, NewInvolvedQuestion, \
-    PurposeQuestion, RetentionQuestion, ConfirmInformationUseQuestion, \
+from registrations.questions import NewRegistrationQuestion, FacultyQuestion, \
+    InvolvedPeopleQuestion, NewInvolvedQuestion, \
+    PurposeQuestion, RetentionQuestion, \
     TraversalQuestion, GoalQuestion, ReceiverQuestion, SecurityQuestion, \
     NewReceiverQuestion, SoftwareQuestion, NewSoftwareQuestion, \
     RegularDetailsQuestion, SpecialDetailsQuestion, SensitiveDetailsQuestion
@@ -529,12 +529,3 @@ class NewSoftwareConsumer(BaseConsumer):
 class SecurityConsumer(RegistrationConsumer):
 
     question_class = SecurityQuestion
-
-
-class ConfirmInformationUseConsumer(BaseQuestionConsumer):
-
-    question_class = ConfirmInformationUseQuestion
-
-    def consume(self):
-        self.blueprint.desired_next.append(self.question)
-        return []
