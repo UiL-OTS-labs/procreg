@@ -25,15 +25,15 @@
     </li>
     <li>
       {% progress_item_from_slug "involved_manager" text="Information" %}
-    </li>
-    <ul>
-      {% for group_type, data in blueprint.get_involved_groups.items %}
+      <ul>
+        {% for group_type, data in blueprint.get_involved_groups.items %}
         {% for involved in data.groups %}
-          {% involved_progress_items  %}
+        {% involved_progress_items  %}
         {% endfor %}
-      {% endfor %}
+        {% endfor %}
       </ul>
-      <li>
+    </li>
+    <li>
         {% progress_item_from_slug "retention" text="Retention" %}
       </li>
       <li>
