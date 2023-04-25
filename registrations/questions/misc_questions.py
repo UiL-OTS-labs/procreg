@@ -527,4 +527,3 @@ class CategoryQuestion(RegistrationQuestionMixin, questions.Question):
         self.instance.registration = reg
         return super().save(*args, **kwargs)
 
-
