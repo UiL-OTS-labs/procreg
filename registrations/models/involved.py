@@ -17,9 +17,9 @@ class Involved(models.Model):
     registration_related_name = "involved_groups"
 
     GROUP_TYPES = (
-        ('consent', _("models:involved:consent")),
-        ('non_consent', _("models:involved:non_consent")),
-        ('guardian_consent', _("models:involved:guardian")),
+        ('knowingly', _("models:involved:knowingly")),
+        ('not_knowingly', _("models:involved:not_knowingly")),
+        ('guardian', _("models:involved:guardian")),
         ('other', _("models:involved:other")),
     )
 
