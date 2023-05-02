@@ -157,8 +157,8 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
         self.blueprint.questions.append(self.question)
         # Check if one required groups are checked
         if True not in [
-                registration.involves_consent,
-                registration.involves_non_consent,
+                registration.involves_knowingly,
+                registration.involves_not_knowingly,
         ]:
             return self.no_group_selected()
         self.question.complete = True
@@ -181,13 +181,13 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
         selected = []
         managers = []
         consumer_dict = {
-            'involves_consent':
+            'involves_knowingly':
             (ConsentGroupConsumer, "consent"),
-            'involves_non_consent':
+            'involves_not_knowingly':
             (NonConsentGroupConsumer, "non_consent"),
-            'involves_guardian_consent':
+            'involves_guardian':
             (GuardianGroupConsumer, "guardian_consent"),
-            'involves_other_people':
+            'involves_other':
             (OtherGroupConsumer, "other"),
         }
         for group in self.question.Meta.fields:

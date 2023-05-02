@@ -14,10 +14,10 @@ class InvolvedPeopleQuestion(
     class Meta:
         model = Registration
         fields = [
-            'involves_consent',
-            'involves_non_consent',
-            'involves_guardian_consent',
-            'involves_other_people',
+            'involves_knowingly',
+            'involves_not_knowingly',
+            'involves_guardian',
+            'involves_other',
         ]
 
     title = _("registrations:forms:involved_people_question_title")

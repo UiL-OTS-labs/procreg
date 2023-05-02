@@ -181,9 +181,9 @@ class RegistrationBlueprint(Blueprint):
         group instances.
         """
         group_types = [
-            "consent",
-            "non_consent",
-            "guardian_consent",
+            "knowingly",
+            "not_knowingly",
+            "guardian",
             "other",
         ]
 

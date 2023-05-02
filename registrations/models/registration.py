@@ -67,16 +67,16 @@ class Registration(models.Model):
              )
         )
 
-    involves_consent = models.BooleanField(
+    involves_knowingly = models.BooleanField(
         default=False,
     )
-    involves_non_consent = models.BooleanField(
+    involves_not_knowingly = models.BooleanField(
         default=False,
     )
-    involves_guardian_consent = models.BooleanField(
+    involves_guardian = models.BooleanField(
         default=False,
     )
-    involves_other_people = models.BooleanField(
+    involves_other = models.BooleanField(
         default=False,
     )
 
