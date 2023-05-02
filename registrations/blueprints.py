@@ -1,6 +1,6 @@
 from django.urls import reverse
-from .forms import QUESTIONS
-                     
+from .questions import QUESTIONS
+
 import logging
 
 
@@ -181,9 +181,9 @@ class RegistrationBlueprint(Blueprint):
         group instances.
         """
         group_types = [
-            "consent",
-            "non_consent",
-            "guardian_consent",
+            "knowingly",
+            "not_knowingly",
+            "guardian",
             "other",
         ]
 

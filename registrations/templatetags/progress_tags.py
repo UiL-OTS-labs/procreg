@@ -94,7 +94,7 @@ def progress_item_from_question(
     takes_context=True,
 )
 def progress_item_from_slug(context, slug, **kwargs):
-    from ..forms import PlaceholderQuestion
+    from registrations.questions import PlaceholderQuestion
     blueprint = context.get("blueprint")
     question_pk = kwargs.get("question_pk", False)
     question = blueprint.get_question(
