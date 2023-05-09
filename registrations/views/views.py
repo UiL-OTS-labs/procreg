@@ -10,12 +10,12 @@ from cdh.questions.views import BlueprintMixin, QuestionView, \
     QuestionEditView
 
 
-from .models import Registration, ParticipantCategory, Involved, \
+from registrations.models import Registration, ParticipantCategory, Involved, \
     Software, Receiver, Faq
-from .questions import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
-from .mixins import RegistrationMixin
-from .progress import ProgressItemMixin
-from .blueprints import RegistrationBlueprint
+from registrations.questions import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
+from registrations.mixins import RegistrationMixin
+from registrations.progress import ProgressItemMixin
+from registrations.blueprints import RegistrationBlueprint
 
 debug = logging.debug
 
@@ -30,7 +30,6 @@ class RegistrationsHomeView(LoginRequiredMixin,
     template_name = 'registrations/home.html'
 
     def get_queryset(self,):
-
         qs = Registration.objects.all()
         return qs
 

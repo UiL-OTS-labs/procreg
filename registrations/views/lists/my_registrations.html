@@ -1,0 +1,51 @@
+{% extends "registrations/base.html" %}
+{% load i18n %}
+
+{% block hero_text %}
+registrations:home:registration_list_hero
+{% endblock %}
+
+{% block main_content %}
+<h2>{% trans "registrations:main:home" %}</h2>
+
+
+<div class="projects_list">
+    {% for object in results %}
+    <div class="item">
+        <a href="{% url 'registrations:overview' object.pk %}">
+            <h5>{{object.title}}</h5>
+        </a>
+        <ul>
+            <li><a href="{% url 'registrations:overview' object.pk %}">
+                {% trans "registration:actions:overview" %}
+            </a></li>
+            <li><a href="{% url 'registrations:delete' object.pk %}">
+                {% trans "registration:actions:delete" %}
+            </a></li>
+        </ul>
+
+    </div>
+    {% empty %}
+    <div class="item">
+        <h5>{% trans "registrations:home:list_empty" %}</h5>
+    </div>
+
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
+
+{% block sidebar %}
+<h3>Filters</h3>
+<br />
+<section class="">
+<form>
+  {{form.as_p}}
+  <input type="submit" />
+</form>
+</section>
+
+
+{% endblock %}
