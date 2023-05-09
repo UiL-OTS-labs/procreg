@@ -87,11 +87,12 @@ if DEBUG and ENABLE_DEBUG_TOOLBAR:
 
 ROOT_URLCONF = 'procreg.urls'
 
+LOCAL_APP_DIRS = [BASE_DIR / app / 'views' for app in INSTALLED_APPS]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / "templates"],
-        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -99,6 +100,12 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'loaders': [
+                ('django.template.loaders.filesystem.Loader', LOCAL_APP_DIRS,),
+                (
+                    'django.template.loaders.app_directories.Loader'
+                ),
+            ]
         },
     },
 ]
