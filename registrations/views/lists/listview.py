@@ -30,7 +30,7 @@ class SearchableListView(
     def get_form(self,):
         return self.form_class(initial=self.request.GET)
 
-class MyRegistrationsForm(forms.Form,):
+class AllRegistrationsForm(forms.Form,):
 
     search = forms.CharField(
         max_length=200,
@@ -49,6 +49,41 @@ class MyRegistrationsForm(forms.Form,):
         required=False,
     )
 
+class MyRegistrationsForm(forms.Form,):
+
+    search = forms.CharField(
+        max_length=200,
+        required=False,
+    )
+    include_drafts = forms.BooleanField(
+        label=_("lists:registrations:filter_label_drafts"),
+        required=False,
+    )
+    include_submitted = forms.BooleanField(
+        label=_("lists:registrations:filter_label_submitted"),
+        required=False,
+    )
+    include_registered = forms.BooleanField(
+        label=_("lists:registrations:filter_label_registered"),
+        required=False,
+    )
+    include_favourites = forms.BooleanField(
+        label=_("lists:registrations:filter_label_favourites"),
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        """Set correct CSS classes and attributes on form """
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            if type(field.widget) == forms.widgets.CheckboxInput:
+                field.widget.attrs["class"] = "form-check-input"
+            if type(field.widget) == forms.widgets.TextInput:
+                field.widget.attrs["class"] = "form-control"
+                field.widget.attrs["placeholder"] = _(
+                    "lists:registrations:placeholder_search"
+                )
+
 class MyRegistrationsList(
         LoginRequiredMixin,
         SearchableListView,
@@ -60,8 +95,42 @@ class MyRegistrationsList(
 
     def get_queryset(self,):
         user = self.request.user
-        qs = Registration.objects.filter(created_by=user)
-        return qs
+        self.starting_qs = Registration.objects.filter(created_by=user)
+        return self.apply_filters(self.starting_qs)
+
+    def apply_filters(self, qs,):
+        def favs(qs):
+            """Once implemented, this will filter a user's favourites"""
+            return Registration.objects.none()
+
+        def drafts(qs):
+            return qs.filter(status="draft")
+
+        def submitted(qs):
+            return qs.filter(status="submitted")
+
+        def registered(qs):
+            return qs.filter(status="registered")
+
+        filters = {
+            "include_favourites": favs,
+            "include_drafts": drafts,
+            "include_submitted": submitted,
+            "include_registered": registered,
+        }
+        checkboxes = {
+            name: self.get_form()[name].value() for name in filters.keys()
+        }
+        applied = [
+            filters[f](qs) for f in filters if checkboxes[f] is not None
+        ]
+
+        output_qs = Registration.objects.none()
+        while applied != []:
+            f = applied.pop()
+            output_qs = output_qs | f
+
+        return output_qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
