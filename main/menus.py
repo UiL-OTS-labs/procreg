@@ -8,7 +8,7 @@ Menu.add_item("home", MenuItem(_('main:menu:home'),
                                ))
 
 Menu.add_item("main", MenuItem(_('main:menu:registrations'),
-                               reverse('registrations:home'),
+                               reverse('registrations:my_list'),
                                exact_url=True
                                ))
 
