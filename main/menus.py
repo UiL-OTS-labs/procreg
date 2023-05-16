@@ -7,9 +7,17 @@ Menu.add_item("home", MenuItem(_('main:menu:home'),
                                exact_url=True
                                ))
 
-Menu.add_item("main", MenuItem(_('main:menu:registrations'),
+Menu.add_item("main", MenuItem(_('main:menu:my_list'),
                                reverse('registrations:my_list'),
                                exact_url=True
+                               ))
+
+Menu.add_item("main", MenuItem(_('main:menu:po_list'),
+                               reverse('registrations:po_list'),
+                               exact_url=True,
+                               check=lambda x: "PO" in [
+                                   g.name for g in x.user.groups.all()
+                               ],
                                ))
 
 

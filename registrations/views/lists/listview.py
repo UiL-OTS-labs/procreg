@@ -1,7 +1,8 @@
 from django.views import generic
 from django.urls import reverse
 from django.utils.translation import ugettext as _
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, \
+    UserPassesTestMixin, PermissionDenied
 from django.core.exceptions import ImproperlyConfigured
 from django import forms
 
@@ -140,6 +141,23 @@ class MyRegistrationsList(
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+class PORegistrationsList(
+        MyRegistrationsList,
+        UserPassesTestMixin,
+):
+    template_name = "lists/po_list.html"
+
+    def get_queryset(self):
+        self.starting_qs = Registration.objects.all()
+        return self.apply_filters(self.starting_qs)
+
+    def test_func(self):
+        user = self.request.user
+        if "PO" in [g.name for g in user.groups.all()]:
+            return True
+
 
 
 class OwnListForm(forms.Form):
