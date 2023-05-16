@@ -54,22 +54,27 @@ class MyRegistrationsForm(forms.Form,):
     search = forms.CharField(
         max_length=200,
         required=False,
+        initial="",
     )
     include_drafts = forms.BooleanField(
         label=_("lists:registrations:filter_label_drafts"),
         required=False,
+        initial=True,
     )
     include_submitted = forms.BooleanField(
         label=_("lists:registrations:filter_label_submitted"),
         required=False,
+        initial=True,
     )
     include_registered = forms.BooleanField(
         label=_("lists:registrations:filter_label_registered"),
         required=False,
+        initial=True,
     )
     include_favourites = forms.BooleanField(
         label=_("lists:registrations:filter_label_favourites"),
         required=False,
+        initial=True,
     )
 
     def __init__(self, *args, **kwargs):
@@ -121,13 +126,13 @@ class MyRegistrationsList(
         checkboxes = {
             name: self.get_form()[name].value() for name in filters.keys()
         }
-        applied = [
+        to_be_applied = [
             filters[f](qs) for f in filters if checkboxes[f] is not None
         ]
 
         output_qs = Registration.objects.none()
-        while applied != []:
-            f = applied.pop()
+        while to_be_applied != []:
+            f = to_be_applied.pop()
             output_qs = output_qs | f
 
         return output_qs
