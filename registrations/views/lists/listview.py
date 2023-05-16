@@ -1,4 +1,5 @@
 from django.views import generic
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.contrib.auth.mixins import LoginRequiredMixin, \
@@ -31,24 +32,6 @@ class SearchableListView(
     def get_form(self,):
         return self.form_class(initial=self.request.GET)
 
-class AllRegistrationsForm(forms.Form,):
-
-    search = forms.CharField(
-        max_length=200,
-        required=False,
-    )
-    include_drafts = forms.BooleanField(
-        label=_("lists:registrations:filter_label_drafts"),
-        required=False,
-    )
-    include_submitted = forms.BooleanField(
-        label=_("lists:registrations:filter_label_submitted"),
-        required=False,
-    )
-    include_registered = forms.BooleanField(
-        label=_("lists:registrations:filter_label_registered"),
-        required=False,
-    )
 
 class MyRegistrationsForm(forms.Form,):
 
@@ -89,6 +72,8 @@ class MyRegistrationsForm(forms.Form,):
                 field.widget.attrs["placeholder"] = _(
                     "lists:registrations:placeholder_search"
                 )
+
+
 
 class MyRegistrationsList(
         LoginRequiredMixin,
@@ -136,7 +121,28 @@ class MyRegistrationsList(
             f = to_be_applied.pop()
             output_qs = output_qs | f
 
-        return output_qs
+        return self.apply_search(output_qs)
+
+    def apply_search(self, qs):
+        query = self.get_form()["search"].value()
+        query = query.strip().split()
+        if query in ["", None]:
+            return qs
+        filters = []
+        for w in query:
+            # The order of operations here is deliberate.
+            # Each word may occur in either of these fields.
+            filters += [
+                Q(title__icontains=w) | \
+                Q(created_by__first_name__icontains=w) | \
+                Q(created_by__last_name__icontains=w)
+            ]
+        while filters != []:
+            # And finally all the OR'ed filters get AND'ed together.
+            # Every word must match in at least one of the fields.
+            f = filters.pop(0)
+            qs = qs.filter(f)
+        return qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
