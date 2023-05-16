@@ -8,7 +8,8 @@
 
 {% block main_content %}
 
-
+<div class="d-flex flex-column justify-content-between">
+  {% block projects_list %}
   <div class="projects_list">
     <table class="table">
       <thead>
@@ -40,6 +41,8 @@
         {% endfor %}
       </tbody>
     </table>
+  </div>
+  {% endblock %}
 
     <div class="pagination mt-4">
       <h4 class="step-links">
