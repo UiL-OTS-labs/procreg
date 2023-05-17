@@ -2,7 +2,6 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
-from .views import HomeView
 from registrations.views import LandingView
 
 app_name = 'main'
