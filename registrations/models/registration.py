@@ -19,8 +19,8 @@ YES_NO_NA = (
 )
 
 class Registration(models.Model):
-    
 
+    # Meta information
     title = models.CharField(max_length=200,
                              help_text="models:registration_title_help_text",
                              )
@@ -32,6 +32,18 @@ class Registration(models.Model):
                                    default=None,
                                    )
     created_on = models.DateTimeField(auto_now=True)
+    STATUSES = (
+        ("draft", "models:registration:status_draft"),
+        ("submitted", "models:registration:status_submitted"),
+        ("registered", "models:registration:status_registered"),
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=STATUSES,
+        default="draft",
+    )
+
+    # Blueprint information
     applicants = models.ManyToManyField(USER_MODEL,
                                         related_name="applicant_for",
                                         blank=True,

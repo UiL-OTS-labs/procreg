@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 from pathlib import Path
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -90,8 +89,6 @@ ROOT_URLCONF = 'procreg.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
-        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -99,6 +96,15 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'loaders': [
+                (
+                    'django.template.loaders.app_directories.Loader'
+                ),
+                (
+                    'django.template.loaders.filesystem.Loader',
+                    [BASE_DIR / "registrations" / "views"],
+                ),
+            ]
         },
     },
 ]
