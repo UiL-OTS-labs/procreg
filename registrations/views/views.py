@@ -195,15 +195,17 @@ class RegistrationQuestionEditView(
         return super().form_invalid()
 
 
-class RegistrationCreateView(generic.CreateView,
-                             LoginRequiredMixin):
+class RegistrationCreateView(
+        LoginRequiredMixin,
+        generic.CreateView,
+):
 
     "Create a new Registration object using the title question."
 
     model = Registration
     template_name = 'registrations/new_registration.html'
     form_class = NewRegistrationQuestion
-    success_url = reverse_lazy("registrations:home")
+    success_url = reverse_lazy("registrations:my_list")
 
     def form_valid(self, form):
         """Set creator of registration."""
