@@ -109,8 +109,9 @@ class MyRegistrationsList(
             "include_submitted": submitted,
             "include_registered": registered,
         }
+        form = self.get_form()
         checkboxes = {
-            name: self.get_form()[name].value() for name in filters.keys()
+            name: form[name].value() for name in filters.keys()
         }
         to_be_applied = [
             filters[f](qs) for f in filters if checkboxes[f] is not None
@@ -124,7 +125,8 @@ class MyRegistrationsList(
         return self.apply_search(output_qs)
 
     def apply_search(self, qs):
-        query = self.get_form()["search"].value()
+        form = self.get_form()
+        query = form["search"].value()
         query = query.strip().split()
         if query in ["", None]:
             return qs
