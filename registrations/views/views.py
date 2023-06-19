@@ -195,8 +195,10 @@ class RegistrationQuestionEditView(
         return super().form_invalid()
 
 
-class RegistrationCreateView(generic.CreateView,
-                             LoginRequiredMixin):
+class RegistrationCreateView(
+        LoginRequiredMixin,
+        generic.CreateView,
+):
 
     "Create a new Registration object using the title question."
 
@@ -209,6 +211,13 @@ class RegistrationCreateView(generic.CreateView,
         """Set creator of registration."""
         form.instance.created_by = self.request.user
         return super().form_valid(form)
+
+    def get_success_url(self):
+        registration = self.object
+        return reverse(
+            "registrations:overview",
+            kwargs={"reg_pk": registration.pk},
+        )
 
 
 class RegistrationDeleteView(

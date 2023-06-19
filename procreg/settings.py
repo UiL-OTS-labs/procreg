@@ -236,6 +236,7 @@ LOCALE_PATHS = (
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = "static_root"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
@@ -251,7 +252,6 @@ SECURE_SSL_REDIRECT = not DEBUG
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 60 * 60 * 12  # 12 hours
-
 
 # Django CSP
 # http://django-csp.readthedocs.io/en/latest/index.html
@@ -276,4 +276,3 @@ MENU_HIDE_EMPTY = False
 # Default media directory (served statically!)
 MEDIA_ROOT = 'media'
 MEDIA_URL = '/media/'
-
