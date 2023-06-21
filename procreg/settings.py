@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     # Local apps
     'main',
     'registrations',
+    "procreg",
 ]
 
 MIDDLEWARE = [
@@ -89,6 +90,12 @@ ROOT_URLCONF = 'procreg.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        "NAME": "app_dirs",
+        "APP_DIRS": True,
+        "DIRS": [
+            BASE_DIR / "templates",
+            BASE_DIR / "registrations/views",
+        ],
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -96,17 +103,26 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            'loaders': [
-                (
-                    'django.template.loaders.app_directories.Loader'
-                ),
-                (
-                    'django.template.loaders.filesystem.Loader',
-                    [BASE_DIR / "registrations" / "views"],
-                ),
-            ]
         },
     },
+    # {
+    #     'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    #     "NAME": "views_subdir",
+    #     'OPTIONS': {
+    #         'context_processors': [
+    #             'django.template.context_processors.debug',
+    #             'django.template.context_processors.request',
+    #             'django.contrib.auth.context_processors.auth',
+    #             'django.contrib.messages.context_processors.messages',
+    #         ],
+    #         'loaders': [
+    #             (
+    #                 'django.template.loaders.filesystem.Loader',
+    #                 [BASE_DIR / "registrations/views"],
+    #             ),
+    #         ]
+    #     },
+    # },
 ]
 
 WSGI_APPLICATION = 'procreg.wsgi.application'
