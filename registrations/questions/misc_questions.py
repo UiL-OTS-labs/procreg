@@ -460,9 +460,14 @@ class SecurityQuestion(
             "policy_exceptions",
             "policy_additions",
         ]
+    model = Meta.model
     slug = "security"
     description = _("questions:security:description")
     title = _("questions:security:title")
+
+    def get_segments(self):
+        return self._fields_to_segments(self.fields)
+
 
 
 class SubmitQuestion(RegistrationQuestionMixin, questions.Question):
@@ -499,7 +504,6 @@ class SubmitQuestion(RegistrationQuestionMixin, questions.Question):
 
 
     
-
 class CategoryQuestion(RegistrationQuestionMixin, questions.Question):
 
     show_progress = True
