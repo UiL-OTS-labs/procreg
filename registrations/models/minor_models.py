@@ -62,7 +62,7 @@ class Software(models.Model):
     )
 
 
-class Document(models.Model):
+class Attachment(models.Model):
 
     description = models.CharField(
         max_length=500,
@@ -73,7 +73,7 @@ class Document(models.Model):
     )
     registration = models.ForeignKey(
         Registration,
-        related_name="documents",
+        related_name="attachments",
         on_delete=models.CASCADE,
     )
 
