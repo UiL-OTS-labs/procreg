@@ -5,7 +5,7 @@ from .views import RegistrationsHomeView, RegistrationCreateView, \
     MinimalCategoryView, MinimalDeleteView, RegistrationSummaryView, \
     InvolvedManager, StepperView, BlueprintQuestionEditView, \
     ReceiverDeleteView, SoftwareDeleteView, LandingView, MyRegistrationsList, \
-    PORegistrationsList
+    PORegistrationsList, AttachmentDeleteView
 from .questions import QUESTIONS
 from .blueprints import RegistrationBlueprint
 from .models import ParticipantCategory
@@ -60,6 +60,10 @@ urlpatterns = [
     path("<int:reg_pk>/delete/software/<int:software_pk>",
          SoftwareDeleteView.as_view(),
          name="delete_software",
+         ),
+    path("<int:reg_pk>/delete/attachment/<int:attachment_pk>",
+         AttachmentDeleteView.as_view(),
+         name="delete_attachment",
          ),
     
     # Debug
