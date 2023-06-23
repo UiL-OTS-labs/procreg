@@ -5,7 +5,8 @@ from registrations.questions import NewRegistrationQuestion, FacultyQuestion, \
     PurposeQuestion, RetentionQuestion, \
     TraversalQuestion, GoalQuestion, ReceiverQuestion, SecurityQuestion, \
     NewReceiverQuestion, SoftwareQuestion, NewSoftwareQuestion, \
-    RegularDetailsQuestion, SpecialDetailsQuestion, SensitiveDetailsQuestion
+    RegularDetailsQuestion, SpecialDetailsQuestion, SensitiveDetailsQuestion, \
+    AttachmentsQuestion
 from .models import Involved, Receiver, Software
 
 
@@ -529,3 +530,22 @@ class NewSoftwareConsumer(BaseConsumer):
 class SecurityConsumer(RegistrationConsumer):
 
     question_class = SecurityQuestion
+
+    def consume(self):
+        self.blueprint.questions.append(self.question)
+        self.blueprint.desired_next.append(self.question)
+        if len(self.empty_fields) == 0:
+            return [AttachmentsConsumer]
+        return []
+
+
+class AttachmentsConsumer(RegistrationConsumer):
+
+    question_class = AttachmentsQuestion
+
+    def consume(self):
+        self.blueprint.questions.append(self.question)
+        self.blueprint.desired_next.append(self.question)
+        if len(self.empty_fields) == 0:
+            return []
+        return []
