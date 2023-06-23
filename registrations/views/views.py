@@ -11,7 +11,7 @@ from cdh.questions.views import BlueprintMixin, QuestionView, \
 
 
 from registrations.models import Registration, ParticipantCategory, Involved, \
-    Software, Receiver, Faq
+    Software, Receiver, Faq, Attachment
 from registrations.questions import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
 from registrations.mixins import RegistrationMixin
 from registrations.progress import ProgressItemMixin
@@ -338,6 +338,27 @@ class SoftwareDeleteView(
             kwargs={
                 "reg_pk": self.get_blueprint().object.pk,
                 "question": "software",
+                "question_pk": self.get_blueprint().object.pk,
+            })
+
+
+class AttachmentDeleteView(
+        generic.DeleteView,
+        BlueprintMixin,
+):
+
+    template_name = "registrations/crud/delete_software.html"
+    blueprint_class = RegistrationBlueprint
+    blueprint_pk_kwarg = "reg_pk"
+    pk_url_kwarg = "attachment_pk"
+    model = Attachment
+
+    def get_success_url(self):
+        return reverse(
+            "registrations:edit_question",
+            kwargs={
+                "reg_pk": self.get_blueprint().object.pk,
+                "question": "attachments",
                 "question_pk": self.get_blueprint().object.pk,
             })
 
