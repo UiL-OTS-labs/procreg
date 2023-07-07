@@ -76,12 +76,15 @@ class TemplatedFormMixin():
             return super().render()
         template = loader.get_template(self.template_name)
         context.update(
-            {
-                "question": self,
-                "editing": True,
-            }
+            self.get_form_context()
         )
         return template.render(context.flatten())
+
+    def get_form_context(self):
+        return {
+            "question": self,
+            "editing": True,
+        }
 
 
 
