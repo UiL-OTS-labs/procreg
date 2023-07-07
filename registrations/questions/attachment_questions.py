@@ -17,8 +17,8 @@ class AttachmentsQuestion(
         ]
     # Procreg question stuff
     model = Meta.model
-    title = _("registrations:forms:receiver_question_title")
-    description = _("registrations:forms:receiver_question_description")
+    title = _("registrations:forms:attachments_question_title")
+    description = _("registrations:forms:attachments_question_description")
     slug = "attachments"
     is_editable = True
     show_progress = True
@@ -27,7 +27,7 @@ class AttachmentsQuestion(
     use_custom_template = True
 
     def get_queryset(self):
-        """Return the list of receivers currently connected to
+        """Return the list of attachments currently connected to
         this registration."""
         if hasattr(self, "qs"):
             return self.qs
@@ -36,6 +36,25 @@ class AttachmentsQuestion(
         )
         return self.qs
 
+    def get_form_context(self):
+        context = super().get_form_context()
+        existing = self.blueprint.get_question(
+            "new_attachment",
+            question_pk=True,
+            always_list=True,
+        )
+        new = self.blueprint.get_question(
+            "new_attachment",
+            question_pk=None,
+        )
+        context.update(
+            {
+                "existing": existing,
+                "new": new,
+            }
+        )
+        return context
+    
     def get_segments(self):
         # We still need this segment for easy rendering inside the
         # custom form template
@@ -48,6 +67,9 @@ class NewAttachmentQuestion(
         RegistrationQuestionMixin,
         questions.Question,
 ):
+
+    slug = "new_attachment"
+    model = Attachment
 
     class Meta:
         model = Attachment
