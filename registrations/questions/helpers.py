@@ -1,4 +1,5 @@
 from django.urls import reverse
+from django.template import loader
 
 from cdh.questions import questions
 
@@ -63,6 +64,27 @@ class PlaceholderQuestion(RegistrationQuestionMixin, questions.Question):
     def get_edit_url(self):
         return False
 
+
+
+class TemplatedFormMixin():
+
+    def render(self, context={}):
+        """This is kind of silly, but I want to implement custom form
+        template  as closely as possible to the django 4 way so the
+        upgrade path is easy."""
+        if not self.use_custom_template:
+            return super().render()
+        template = loader.get_template(self.template_name)
+        context.update(
+            self.get_form_context()
+        )
+        return template.render(context.flatten())
+
+    def get_form_context(self):
+        return {
+            "question": self,
+            "editing": True,
+        }
 
 
 

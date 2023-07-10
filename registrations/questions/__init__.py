@@ -6,6 +6,7 @@ from .misc_questions import NewRegistrationQuestion, FacultyQuestion, \
     TraversalQuestion, GoalQuestion, CategoryQuestion, SoftwareQuestion, \
     NewSoftwareQuestion, RetentionQuestion, ReceiverQuestion, \
     NewReceiverQuestion, SecurityQuestion
+from .attachment_questions import AttachmentsQuestion, NewAttachmentQuestion
 
 Q_LIST = [
     NewRegistrationQuestion,

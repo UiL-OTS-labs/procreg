@@ -5,8 +5,9 @@ from registrations.questions import NewRegistrationQuestion, FacultyQuestion, \
     PurposeQuestion, RetentionQuestion, \
     TraversalQuestion, GoalQuestion, ReceiverQuestion, SecurityQuestion, \
     NewReceiverQuestion, SoftwareQuestion, NewSoftwareQuestion, \
-    RegularDetailsQuestion, SpecialDetailsQuestion, SensitiveDetailsQuestion
-from .models import Involved, Receiver, Software
+    RegularDetailsQuestion, SpecialDetailsQuestion, SensitiveDetailsQuestion, \
+    AttachmentsQuestion, NewAttachmentQuestion
+from .models import Involved, Receiver, Software, Attachment
 
 
 class RegistrationConsumer(BaseQuestionConsumer):
@@ -529,3 +530,41 @@ class NewSoftwareConsumer(BaseConsumer):
 class SecurityConsumer(RegistrationConsumer):
 
     question_class = SecurityQuestion
+
+    def consume(self):
+        self.blueprint.questions.append(self.question)
+        self.blueprint.desired_next.append(self.question)
+        if len(self.empty_fields) == 0:
+            return [AttachmentsConsumer]
+        return []
+
+
+class AttachmentsConsumer(RegistrationConsumer):
+
+    question_class = AttachmentsQuestion
+
+    def instantiate_attachments(self):
+        registration = self.blueprint.object
+        # Instantiate questions for existing attachments
+        for attachment in self.question.get_queryset():
+            self.blueprint.questions.append(
+                NewAttachmentQuestion(
+                    instance=attachment,
+                    blueprint=self.blueprint
+                ),
+            )
+        # Append an empty attachment question for creating a new one
+        self.blueprint.questions.append(
+            NewAttachmentQuestion(
+                instance=Attachment(),
+                blueprint=self.blueprint,
+            )
+        )
+
+    def consume(self):
+        self.blueprint.questions.append(self.question)
+        self.blueprint.desired_next.append(self.question)
+        self.instantiate_attachments()
+        if len(self.empty_fields) == 0:
+            return []
+        return []

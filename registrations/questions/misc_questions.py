@@ -2,6 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
 from django.template import loader
 
+from cdh.core import forms as cdh_fields
 from cdh.questions import questions
 from registrations.models import Registration, ParticipantCategory, Receiver, Software
 
@@ -71,6 +72,10 @@ class TraversalQuestion(RegistrationQuestionMixin, questions.Question):
             'date_start',
             'date_end',
         ]
+        widgets = {
+            'date_end': cdh_fields.DateInput,
+            'date_start': cdh_fields.DateInput,
+        }
 
     title = _("registrations:forms:traversal_question_title")
     description = _("registrations:forms:traversal_question_description")
@@ -455,9 +460,14 @@ class SecurityQuestion(
             "policy_exceptions",
             "policy_additions",
         ]
+    model = Meta.model
     slug = "security"
     description = _("questions:security:description")
     title = _("questions:security:title")
+
+    def get_segments(self):
+        return self._fields_to_segments(self.fields)
+
 
 
 class SubmitQuestion(RegistrationQuestionMixin, questions.Question):
@@ -494,7 +504,6 @@ class SubmitQuestion(RegistrationQuestionMixin, questions.Question):
 
 
     
-
 class CategoryQuestion(RegistrationQuestionMixin, questions.Question):
 
     show_progress = True

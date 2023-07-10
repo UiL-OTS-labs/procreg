@@ -10,12 +10,12 @@ from cdh.questions.views import BlueprintMixin, QuestionView, \
     QuestionEditView
 
 
-from .models import Registration, ParticipantCategory, Involved, \
-    Software, Receiver, Faq
-from .questions import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
-from .mixins import RegistrationMixin
-from .progress import ProgressItemMixin
-from .blueprints import RegistrationBlueprint
+from registrations.models import Registration, ParticipantCategory, Involved, \
+    Software, Receiver, Faq, Attachment
+from registrations.questions import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
+from registrations.mixins import RegistrationMixin
+from registrations.progress import ProgressItemMixin
+from registrations.blueprints import RegistrationBlueprint
 
 debug = logging.debug
 
@@ -30,7 +30,6 @@ class RegistrationsHomeView(LoginRequiredMixin,
     template_name = 'registrations/home.html'
 
     def get_queryset(self,):
-
         qs = Registration.objects.all()
         return qs
 
@@ -196,8 +195,10 @@ class RegistrationQuestionEditView(
         return super().form_invalid()
 
 
-class RegistrationCreateView(generic.CreateView,
-                             LoginRequiredMixin):
+class RegistrationCreateView(
+        LoginRequiredMixin,
+        generic.CreateView,
+):
 
     "Create a new Registration object using the title question."
 
@@ -210,6 +211,13 @@ class RegistrationCreateView(generic.CreateView,
         """Set creator of registration."""
         form.instance.created_by = self.request.user
         return super().form_valid(form)
+
+    def get_success_url(self):
+        registration = self.object
+        return reverse(
+            "registrations:overview",
+            kwargs={"reg_pk": registration.pk},
+        )
 
 
 class RegistrationDeleteView(
@@ -330,6 +338,27 @@ class SoftwareDeleteView(
             kwargs={
                 "reg_pk": self.get_blueprint().object.pk,
                 "question": "software",
+                "question_pk": self.get_blueprint().object.pk,
+            })
+
+
+class AttachmentDeleteView(
+        generic.DeleteView,
+        BlueprintMixin,
+):
+
+    template_name = "registrations/crud/delete_software.html"
+    blueprint_class = RegistrationBlueprint
+    blueprint_pk_kwarg = "reg_pk"
+    pk_url_kwarg = "attachment_pk"
+    model = Attachment
+
+    def get_success_url(self):
+        return reverse(
+            "registrations:edit_question",
+            kwargs={
+                "reg_pk": self.get_blueprint().object.pk,
+                "question": "attachments",
                 "question_pk": self.get_blueprint().object.pk,
             })
 

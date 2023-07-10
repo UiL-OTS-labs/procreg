@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 from pathlib import Path
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -67,6 +66,7 @@ INSTALLED_APPS = [
     # Local apps
     'main',
     'registrations',
+    "procreg",
 ]
 
 MIDDLEWARE = [
@@ -90,8 +90,12 @@ ROOT_URLCONF = 'procreg.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
-        'APP_DIRS': True,
+        "NAME": "app_dirs",
+        "APP_DIRS": True,
+        "DIRS": [
+            BASE_DIR / "templates",
+            BASE_DIR / "registrations/views",
+        ],
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -101,6 +105,24 @@ TEMPLATES = [
             ],
         },
     },
+    # {
+    #     'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    #     "NAME": "views_subdir",
+    #     'OPTIONS': {
+    #         'context_processors': [
+    #             'django.template.context_processors.debug',
+    #             'django.template.context_processors.request',
+    #             'django.contrib.auth.context_processors.auth',
+    #             'django.contrib.messages.context_processors.messages',
+    #         ],
+    #         'loaders': [
+    #             (
+    #                 'django.template.loaders.filesystem.Loader',
+    #                 [BASE_DIR / "registrations/views"],
+    #             ),
+    #         ]
+    #     },
+    # },
 ]
 
 WSGI_APPLICATION = 'procreg.wsgi.application'
@@ -230,6 +252,7 @@ LOCALE_PATHS = (
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = "static_root"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
@@ -245,7 +268,6 @@ SECURE_SSL_REDIRECT = not DEBUG
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 60 * 60 * 12  # 12 hours
-
 
 # Django CSP
 # http://django-csp.readthedocs.io/en/latest/index.html
@@ -270,4 +292,3 @@ MENU_HIDE_EMPTY = False
 # Default media directory (served statically!)
 MEDIA_ROOT = 'media'
 MEDIA_URL = '/media/'
-
