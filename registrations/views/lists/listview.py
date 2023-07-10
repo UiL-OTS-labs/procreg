@@ -29,8 +29,17 @@ class SearchableListView(
         context["current_get_params"] = self.request.GET.copy()
         return context
 
-    def get_form(self,):
-        return self.form_class(initial=self.request.GET)
+    def get_form_kwargs(self,):
+        """To make the checkboxes stateful, we set initial to the GET data,
+        and also add hidden inputs in the template to always pass a value even
+        the box is unchecked."""
+        kwargs = super().get_form_kwargs()
+        kwargs.update(
+            {
+                "initial": self.request.GET,
+            }
+        )
+        return kwargs
 
 
 class MyRegistrationsForm(forms.Form,):
