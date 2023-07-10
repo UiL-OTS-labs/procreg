@@ -21,9 +21,10 @@ YES_NO_NA = (
 class Registration(models.Model):
 
     # Meta information
-    title = models.CharField(max_length=200,
-                             help_text="models:registration_title_help_text",
-                             )
+    title = models.CharField(
+        max_length=200,
+        help_text=_("models:registration_title_help_text"),
+    )
     created_by = models.ForeignKey(USER_MODEL,
                                    on_delete=models.SET_DEFAULT,
                                    related_name="registrations_created",

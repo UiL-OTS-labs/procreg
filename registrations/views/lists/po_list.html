@@ -1,6 +1,10 @@
 {% extends "lists/my_registrations.html" %}
 {% load i18n %}
 
+{% block hero_text %}
+  {% trans "registrations:home:po_list_hero" %}
+{% endblock %}
+
 {% block projects_list %}
 
   <div class="projects_list">

@@ -15,16 +15,16 @@
       {% endif %}
     </li>
     <li>
-      {% progress_item_from_slug "traversal" text="Traversal" %}
+      {% progress_item_from_slug "traversal" %}
     </li>
     <li>
-      {% progress_item_from_slug "goal" text="Goal" %}
+      {% progress_item_from_slug "goal" %}
     </li>
     <li>
-      {% progress_item_from_slug "involved_people" text="Involved people" %}
+      {% progress_item_from_slug "involved_people"  %}
     </li>
     <li>
-      {% progress_item_from_slug "involved_manager" text="Information" %}
+      {% progress_item_from_slug "involved_manager" %}
       <ul>
         {% for group_type, data in blueprint.get_involved_groups.items %}
         {% for involved in data.groups %}
@@ -34,22 +34,22 @@
       </ul>
     </li>
     <li>
-        {% progress_item_from_slug "retention" text="Retention" %}
+        {% progress_item_from_slug "retention" %}
       </li>
       <li>
-        {% progress_item_from_slug "receivers" text="Receivers" %}
+        {% progress_item_from_slug "receivers" %}
       </li>
       <li>
-        {% progress_item_from_slug "software" text="Software" %}
+        {% progress_item_from_slug "software" %}
       </li>
       <li>
-        {% progress_item_from_slug "security" text="Security" %}
+        {% progress_item_from_slug "security" %}
       </li>
       <li>
-        {% progress_item_from_slug "attachments" text="Documents" %}
+        {% progress_item_from_slug "attachments" %}
       </li>
       <li>
-        {% progress_item_from_slug "summary" text="Summary" %}
+        {% progress_item_from_slug "summary" %}
       </li>
   </ul>
 </div>
