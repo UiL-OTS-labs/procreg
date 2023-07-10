@@ -556,7 +556,7 @@ class AttachmentsConsumer(RegistrationConsumer):
         # Append an empty attachment question for creating a new one
         self.blueprint.questions.append(
             NewAttachmentQuestion(
-                Attachment(),
+                instance=Attachment(),
                 blueprint=self.blueprint,
             )
         )

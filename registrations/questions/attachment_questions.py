@@ -32,7 +32,7 @@ class AttachmentsQuestion(
         if hasattr(self, "qs"):
             return self.qs
         self.qs = Attachment.objects.filter(
-            registration=self.registration,
+            registration=self.get_registration(),
         )
         return self.qs
 
@@ -54,7 +54,7 @@ class AttachmentsQuestion(
             }
         )
         return context
-    
+
     def get_segments(self):
         # We still need this segment for easy rendering inside the
         # custom form template
