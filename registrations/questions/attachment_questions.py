@@ -110,3 +110,17 @@ class NewAttachmentQuestion(
                 "attachment_pk": self.get_object().pk,
             }
         )
+
+    def get_success_url(self):
+        return reverse(
+            "registrations:edit_question",
+            kwargs={
+                "reg_pk": self.get_registration().pk,
+                "question": "attachments",
+                "question_pk": self.get_registration().pk,
+            }
+        )
+
+    def save(self):
+        self.instance.registration = self.get_registration()
+        return super().save()
