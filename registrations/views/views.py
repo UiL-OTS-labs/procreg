@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views import generic
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.translation import gettext_lazy as _
 
 from cdh.questions.views import BlueprintMixin, QuestionView, \
     QuestionDeleteView, QuestionCreateView, QuestionFromURLMixin, \
@@ -239,8 +240,8 @@ class InvolvedManager(
         generic.TemplateView,
 ):
 
-    title = "registrations:views:involved_manager_title"
-    description = "registrations:views:involved_manager_description"
+    title = _("registrations:views:involved_manager_title")
+    description = _("registrations:views:involved_manager_description")
     template_name = "registrations/involved_manager.html"
     slug = "involved_manager"
     extra_context = {
