@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-10 14:11+0000\n"
+"POT-Creation-Date: 2023-07-12 11:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,11 +24,11 @@ msgstr ""
 
 #: main/menus.py:10
 msgid "main:menu:my_list"
-msgstr ""
+msgstr "My registrations"
 
 #: main/menus.py:15
 msgid "main:menu:po_list"
-msgstr ""
+msgstr "All registrations"
 
 #: main/menus.py:24
 msgid "main:footer:login"
@@ -159,19 +159,25 @@ msgstr ""
 msgid "models:involved:legal_grounds"
 msgstr ""
 
-#: registrations/models/registration.py:60
+#: registrations/models/registration.py:26
+#, fuzzy
+#| msgid "lists:registrations:filter_label_submitted"
+msgid "models:registration_title_help_text"
+msgstr "Submitted"
+
+#: registrations/models/registration.py:61
 msgid "models:registration:registration_uses_information_false"
 msgstr ""
 
-#: registrations/models/registration.py:61
+#: registrations/models/registration.py:62
 msgid "models:registration:registration_uses_information_true"
 msgstr ""
 
-#: registrations/models/registration.py:77
+#: registrations/models/registration.py:78
 msgid "models:registration:confirm_submission_false"
 msgstr ""
 
-#: registrations/models/registration.py:78
+#: registrations/models/registration.py:79
 msgid "models:registration:confirm_submission_true"
 msgstr ""
 
@@ -546,3 +552,11 @@ msgstr "List for Privacy Officer"
 #: registrations/views/lists/po_list.html:17
 msgid "registrations:lists:th_created_by"
 msgstr "Created by"
+
+#: registrations/views/views.py:243
+msgid "registrations:views:involved_manager_title"
+msgstr "Information"
+
+#: registrations/views/views.py:244
+msgid "registrations:views:involved_manager_description"
+msgstr ""
