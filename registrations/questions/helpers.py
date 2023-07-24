@@ -60,6 +60,11 @@ class PlaceholderQuestion(RegistrationQuestionMixin, questions.Question):
         super().__init__(self)
         self.slug = slug
         self.disabled = True
+        from registrations.questions import QUESTIONS
+        if self.slug in QUESTIONS.keys():
+            # Copy information from uninstantiated question
+            source_question = QUESTIONS[self.slug]
+            self.title = source_question.title
 
     def get_edit_url(self):
         return False
