@@ -5,9 +5,9 @@ from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 
 class AttachmentsQuestion(
+        TemplatedFormMixin,
         RegistrationQuestionMixin,
         questions.Question,
-        TemplatedFormMixin,
 ):
     # Django ModelForm compatibility
     class Meta:
@@ -70,6 +70,7 @@ class NewAttachmentQuestion(
 
     slug = "new_attachment"
     model = Attachment
+    title = _("registrations:questions:new_attachment")
 
     class Meta:
         model = Attachment
