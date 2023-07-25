@@ -1,10 +1,11 @@
 from django.urls import reverse
-from django.template import loader
+from django.template import loader, Template
 
 from cdh.questions import questions
 
 from registrations.progress import ProgressItemMixin
 from registrations.models import Registration
+from registrations.utils import FAQList
 
 
 class RegistrationQuestionMixin(ProgressItemMixin):
@@ -14,7 +15,10 @@ class RegistrationQuestionMixin(ProgressItemMixin):
     
     # faqs contains (link, faq_title) pairs for in the
     # help sidebar
-    faqs = [] 
+    faqs = []
+    description = Template("")
+    faqs = FAQList()
+    help_text = Template("")
 
     def __init__(self, *args, **kwargs):
         self.blueprint = kwargs.pop("blueprint", None)

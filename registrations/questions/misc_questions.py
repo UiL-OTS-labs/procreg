@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
-from django.template import loader
+from django.template import loader, Template
 
 from cdh.core import forms as cdh_fields
 from cdh.questions import questions
@@ -78,7 +78,9 @@ class TraversalQuestion(RegistrationQuestionMixin, questions.Question):
         }
 
     title = _("registrations:forms:traversal_question_title")
-    description = _("registrations:forms:traversal_question_description")
+    description = Template(
+        _("registrations:forms:traversal_question_description")
+    )
     model = Registration
     slug = "traversal"
     is_editable = True
