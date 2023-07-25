@@ -25,31 +25,33 @@
     </li>
     <li>
       {% progress_item_from_slug "involved_manager" %}
-      <ul>
-        {% for group_type, data in blueprint.get_involved_groups.items %}
-        {% for involved in data.groups %}
-        {% involved_progress_items  %}
-        {% endfor %}
-        {% endfor %}
-      </ul>
+      {% if blueprint.any_involved_group_available %}
+        <ul>
+          {% for group_type, data in blueprint.get_involved_groups.items %}
+            {% for involved in data.groups %}
+              {% involved_progress_items  %}
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      {% endif %}
     </li>
     <li>
-        {% progress_item_from_slug "retention" %}
-      </li>
-      <li>
-        {% progress_item_from_slug "receivers" %}
-      </li>
-      <li>
-        {% progress_item_from_slug "software" %}
-      </li>
-      <li>
-        {% progress_item_from_slug "security" %}
-      </li>
-      <li>
-        {% progress_item_from_slug "attachments" %}
-      </li>
-      <li>
-        {% progress_item_from_slug "summary" %}
-      </li>
+      {% progress_item_from_slug "retention" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "receivers" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "software" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "security" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "attachments" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "summary" %}
+    </li>
   </ul>
 </div>
