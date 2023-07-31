@@ -13,7 +13,7 @@ class NewRegistrationQuestion(
         RegistrationQuestionMixin,
         questions.Question,
 ):
-    title = _("registrations:forms:registration_title")
+    title = _("questions:new_reg:question_title")
     description = Template(_("registrations:forms:registration_description"))
     model = Registration
     slug = 'new_reg'
@@ -22,7 +22,7 @@ class NewRegistrationQuestion(
     class Meta:
         model = Registration
         fields = [
-            'title',
+            'registration_title',
         ]
 
     fields = Meta.fields
@@ -31,7 +31,7 @@ class NewRegistrationQuestion(
     def get_segments(self):
 
         segments = []
-        segments.append(self._field_to_segment('title'))
+        segments.append(self._field_to_segment('registration_title'))
 
         return segments
 
@@ -49,8 +49,8 @@ class FacultyQuestion(
             'faculty',
         ]
 
-    title = _("registrations:forms:faculty_question_title")
-    description = Template(_("registrations:forms:faculty_question_description"))
+    title = _("questions:faculty:question_title")
+    description = Template(_("questions:faculty:question_description"))
     model = Registration
     slug = "faculty"
     is_editable = True
@@ -77,9 +77,9 @@ class TraversalQuestion(RegistrationQuestionMixin, questions.Question):
             'date_start': cdh_fields.DateInput,
         }
 
-    title = _("registrations:forms:traversal_question_title")
+    title = _("questions:traversal:question_title")
     description = Template(
-        _("registrations:forms:traversal_question_description")
+        _("questions:traversal:question_description")
     )
     model = Registration
     slug = "traversal"
@@ -102,8 +102,8 @@ class GoalQuestion(RegistrationQuestionMixin, questions.Question):
             "research_goal",
         ]
 
-    title = _("registrations:forms:goal_question_title")
-    description = Template(_("registrations:forms:goal_question_description"))
+    title = _("questions:goal:question_title")
+    description = Template(_("questions:goal:question_description"))
     model = Registration
     slug = "goal"
     is_editable = True
@@ -188,8 +188,8 @@ class RetentionQuestion(
             "audio_video_kept_details",
         ]
 
-    title = _("registrations:forms:storage_question_title")
-    description = Template(_("registrations:forms:storage_question_description"))
+    title = _("questions:retention:question_title")
+    description = Template(_("questions:retention:question_description"))
     model = Meta.model
     slug = "retention"
     is_editable = True
@@ -211,8 +211,8 @@ class ReceiverQuestion(RegistrationQuestionMixin, questions.Question):
         ]
     # Procreg question stuff
     model = Meta.model
-    title = _("registrations:forms:receiver_question_title")
-    description = Template(_("registrations:forms:receiver_question_description"))
+    title = _("questions:receivers:question_title")
+    description = Template(_("questions:receivers:question_description"))
     slug = "receivers"
     is_editable = True
     show_progress = True
@@ -344,8 +344,8 @@ class SoftwareQuestion(
             "uses_software",
         ]
     slug = "software"
-    description = Template(_("questions:software:description"))
-    title = _("questions:software:title")
+    description = Template(_("questions:software:question_description"))
+    title = _("questions:software:question_title")
     model = Meta.model
     # Custom template for Manager inclusion
     template_name = "forms/software_form.html"
@@ -464,8 +464,8 @@ class SecurityQuestion(
         ]
     model = Meta.model
     slug = "security"
-    description = Template(_("questions:security:description"))
-    title = _("questions:security:title")
+    description = Template(_("questions:security:question_description"))
+    title = _("questions:security:question_title")
 
     def get_segments(self):
         return self._fields_to_segments(self.fields)

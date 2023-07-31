@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-12 11:28+0000\n"
+"POT-Creation-Date: 2023-07-31 13:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,12 +52,12 @@ msgstr "Uitloggen"
 #: registrations/templates/registrations/base-no-sidebar.html:64
 #: registrations/templates/registrations/base.html:63
 msgid "site:header:title"
-msgstr ""
+msgstr "Verwerkingsregister voor GW en REBO"
 
 #. Translators: This is the title that will end up in the tab of the browser
 #: main/templates/base/site_title.html:5
 msgid "site:name"
-msgstr ""
+msgstr "Verwerkingsregister"
 
 #: main/templates/error/400.html:9
 msgid "main:error:400:title"
@@ -123,11 +123,11 @@ msgstr ""
 msgid "main:login:submit"
 msgstr ""
 
-#: procreg/settings.py:232
+#: procreg/settings.py:233
 msgid "lang:nl"
 msgstr ""
 
-#: procreg/settings.py:233
+#: procreg/settings.py:234
 msgid "lang:en"
 msgstr ""
 
@@ -183,145 +183,218 @@ msgstr ""
 
 #: registrations/questions/attachment_questions.py:20
 msgid "registrations:forms:attachments_question_title"
-msgstr ""
+msgstr "Documenten"
 
 #: registrations/questions/attachment_questions.py:21
 msgid "registrations:forms:attachments_question_description"
 msgstr ""
+"Indien een of meer van volgende documenten zijn opgesteld in het kader van "
+"dit onderzoek, kun je die hier uploaden"
 
-#: registrations/questions/involved_questions.py:23
-msgid "registrations:forms:involved_people_question_title"
-msgstr "Deelnemers"
+#: registrations/questions/attachment_questions.py:73
+#, fuzzy
+#| msgid "registrations:forms:goal_question_title"
+msgid "registrations:questions:new_attachment"
+msgstr "Onderzoeksdoel"
 
 #: registrations/questions/involved_questions.py:24
-msgid "registrations:forms:involved_people_question_description"
-msgstr ""
+#, fuzzy
+#| msgid "registrations:forms:involved_people_question_title"
+msgid "questions:involved_people:question_title"
+msgstr "Deelnemers"
 
-#: registrations/questions/involved_questions.py:49
-msgid "registrations:forms:involved:new_title"
-msgstr ""
+#: registrations/questions/involved_questions.py:25
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:involved_people:question_description"
+msgstr "Beveiliging"
 
 #: registrations/questions/involved_questions.py:50
-msgid "registrations:forms:involved:new_description"
-msgstr ""
+#, fuzzy
+#| msgid "questions:software:title"
+msgid "questions:new_involved:question_title"
+msgstr "Software"
 
-#: registrations/questions/involved_questions.py:115
-msgid "registrations:forms:purpose_question_title"
-msgstr ""
+#: registrations/questions/involved_questions.py:51
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:new_involved:question_description"
+msgstr "Beveiliging"
 
 #: registrations/questions/involved_questions.py:116
-msgid "registrations:forms:purpose_question_description"
-msgstr ""
+#, fuzzy
+#| msgid "registrations:forms:goal_question_title"
+msgid "questions:purpose:question_title"
+msgstr "Onderzoeksdoel"
 
-#: registrations/questions/involved_questions.py:145
-msgid "registrations:special_details_title"
-msgstr ""
+#: registrations/questions/involved_questions.py:117
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:purpose:question_description"
+msgstr "Beveiliging"
 
 #: registrations/questions/involved_questions.py:146
-msgid "registrations:forms:special_details_description"
-msgstr ""
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:special_details:question_title"
+msgstr "Beveiliging"
 
-#: registrations/questions/involved_questions.py:173
-msgid "registrations:sensitive_details_title"
-msgstr ""
+#: registrations/questions/involved_questions.py:147
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:special_details:question_description"
+msgstr "Beveiliging"
 
 #: registrations/questions/involved_questions.py:174
-msgid "registrations:forms:sensitive_details_description"
-msgstr ""
+#, fuzzy
+#| msgid "registrations:forms:receiver_question_title"
+msgid "questions:sensitive_details:question_title"
+msgstr "Ontvangers"
 
-#: registrations/questions/involved_questions.py:201
-msgid "registrations:regular_details_title"
-msgstr ""
+#: registrations/questions/involved_questions.py:175
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:sensitive_details:question_description"
+msgstr "Beveiliging"
 
-#: registrations/questions/involved_questions.py:202
-msgid "registrations:forms:regular_details_description"
+#: registrations/questions/involved_questions.py:203
+#: registrations/questions/involved_questions.py:219
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:regular_details:question_description"
+msgstr "Beveiliging"
+
+#: registrations/questions/involved_questions.py:205
+#, fuzzy
+#| msgid "registrations:forms:goal_question_title"
+msgid "questions:regular_details:question_title"
+msgstr "Onderzoeksdoel"
+
+#: registrations/questions/involved_questions.py:220
+msgid "global:possessive_preposition"
 msgstr ""
 
 #: registrations/questions/misc_questions.py:16
-msgid "registrations:forms:registration_title"
-msgstr "Titel"
+#, fuzzy
+#| msgid "questions:software:title"
+msgid "questions:new_reg:question_title"
+msgstr "Software"
 
 #: registrations/questions/misc_questions.py:17
 msgid "registrations:forms:registration_description"
 msgstr ""
 
 #: registrations/questions/misc_questions.py:52
-msgid "registrations:forms:faculty_question_title"
+#, fuzzy
+#| msgid "registrations:forms:faculty_question_title"
+msgid "questions:faculty:question_title"
 msgstr "Faculteit"
 
 #: registrations/questions/misc_questions.py:53
-msgid "registrations:forms:faculty_question_description"
-msgstr ""
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:faculty:question_description"
+msgstr "Beveiliging"
 
 #: registrations/questions/misc_questions.py:80
-msgid "registrations:forms:traversal_question_title"
+#, fuzzy
+#| msgid "registrations:forms:traversal_question_title"
+msgid "questions:traversal:question_title"
 msgstr "Doorlooptijd"
 
-#: registrations/questions/misc_questions.py:81
-msgid "registrations:forms:traversal_question_description"
-msgstr ""
+#: registrations/questions/misc_questions.py:82
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:traversal:question_description"
+msgstr "Beveiliging"
 
-#: registrations/questions/misc_questions.py:103
-msgid "registrations:forms:goal_question_title"
+#: registrations/questions/misc_questions.py:105
+#, fuzzy
+#| msgid "registrations:forms:goal_question_title"
+msgid "questions:goal:question_title"
 msgstr "Onderzoeksdoel"
 
-#: registrations/questions/misc_questions.py:104
-msgid "registrations:forms:goal_question_description"
-msgstr ""
+#: registrations/questions/misc_questions.py:106
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:goal:question_description"
+msgstr "Beveiliging"
 
-#: registrations/questions/misc_questions.py:123
-#: registrations/questions/misc_questions.py:124
+#: registrations/questions/misc_questions.py:125
+#: registrations/questions/misc_questions.py:126
 msgid "registrations:forms:uses_information_question_title"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:146
-#: registrations/questions/misc_questions.py:147
+#: registrations/questions/misc_questions.py:148
+#: registrations/questions/misc_questions.py:149
 msgid "registrations:forms:confirm_information_use_question_title"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:189
-msgid "registrations:forms:storage_question_title"
-msgstr "Opslag"
-
-#: registrations/questions/misc_questions.py:190
-msgid "registrations:forms:storage_question_description"
-msgstr ""
-
-#: registrations/questions/misc_questions.py:212
-msgid "registrations:forms:receiver_question_title"
+#: registrations/questions/misc_questions.py:191
+#, fuzzy
+#| msgid "registrations:forms:receiver_question_title"
+msgid "questions:retention:question_title"
 msgstr "Ontvangers"
 
-#: registrations/questions/misc_questions.py:213
-msgid "registrations:forms:receiver_question_description"
-msgstr ""
-
-#: registrations/questions/misc_questions.py:345
-msgid "questions:software:description"
-msgstr ""
-
-#: registrations/questions/misc_questions.py:346
-msgid "questions:software:title"
-msgstr "Software"
-
-#: registrations/questions/misc_questions.py:465
-msgid "questions:security:description"
+#: registrations/questions/misc_questions.py:192
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:retention:question_description"
 msgstr "Beveiliging"
 
-#: registrations/questions/misc_questions.py:466
-msgid "questions:security:title"
-msgstr ""
+#: registrations/questions/misc_questions.py:214
+#, fuzzy
+#| msgid "registrations:forms:receiver_question_title"
+msgid "questions:receivers:question_title"
+msgstr "Ontvangers"
 
-#: registrations/questions/misc_questions.py:481
+#: registrations/questions/misc_questions.py:215
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:receivers:question_description"
+msgstr "Beveiliging"
+
+#: registrations/questions/misc_questions.py:347
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:software:question_description"
+msgstr "Beveiliging"
+
+#: registrations/questions/misc_questions.py:348
+#, fuzzy
+#| msgid "questions:software:title"
+msgid "questions:software:question_title"
+msgstr "Software"
+
+#: registrations/questions/misc_questions.py:467
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:security:question_description"
+msgstr "Beveiliging"
+
+#: registrations/questions/misc_questions.py:468
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:security:question_title"
+msgstr "Beveiliging"
+
+#: registrations/questions/misc_questions.py:483
 msgid "registrations:forms:submit_question_title"
 msgstr "Versturen"
 
-#: registrations/questions/misc_questions.py:482
+#: registrations/questions/misc_questions.py:484
 msgid "registrations:forms:submit_question_description"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:500
+#: registrations/questions/misc_questions.py:502
 msgid "registrations:forms:confirm_information_use_paragraph"
 msgstr ""
+
+#: registrations/questions/misc_questions.py:522
+#, fuzzy
+#| msgid "registrations:forms:goal_question_title"
+msgid "registrations:forms:category_question_description"
+msgstr "Onderzoeksdoel"
 
 #: registrations/templates/registrations/base-form.html:35
 #: registrations/templates/registrations/base-form.html:36
@@ -567,3 +640,15 @@ msgstr "Gegevens"
 #| msgid "registrations:forms:involved_people_question_title"
 msgid "registrations:views:involved_manager_description"
 msgstr "Deelnemers"
+
+#~ msgid "registrations:forms:purpose_question_title"
+#~ msgstr "Onderzoeksdoel"
+
+#~ msgid "registrations:special_details_title"
+#~ msgstr "Bijzondere persoonsgegevens van "
+
+#~ msgid "registrations:forms:registration_title"
+#~ msgstr "Titel"
+
+#~ msgid "registrations:forms:storage_question_title"
+#~ msgstr "Opslag"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-12 11:28+0000\n"
+"POT-Creation-Date: 2023-07-31 13:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,11 +32,11 @@ msgstr "All registrations"
 
 #: main/menus.py:24
 msgid "main:footer:login"
-msgstr ""
+msgstr "Log in"
 
 #: main/menus.py:29
 msgid "main:footer:logout"
-msgstr ""
+msgstr "Log out"
 
 #: main/templates/base/login_header.html:6
 msgid "site:header:login"
@@ -52,12 +52,12 @@ msgstr ""
 #: registrations/templates/registrations/base-no-sidebar.html:64
 #: registrations/templates/registrations/base.html:63
 msgid "site:header:title"
-msgstr ""
+msgstr "Data Processing Register for GW and REBO"
 
 #. Translators: This is the title that will end up in the tab of the browser
 #: main/templates/base/site_title.html:5
 msgid "site:name"
-msgstr ""
+msgstr "Data Processing Register"
 
 #: main/templates/error/400.html:9
 msgid "main:error:400:title"
@@ -123,11 +123,11 @@ msgstr ""
 msgid "main:login:submit"
 msgstr ""
 
-#: procreg/settings.py:232
+#: procreg/settings.py:233
 msgid "lang:nl"
 msgstr ""
 
-#: procreg/settings.py:233
+#: procreg/settings.py:234
 msgid "lang:en"
 msgstr ""
 
@@ -189,56 +189,91 @@ msgstr ""
 msgid "registrations:forms:attachments_question_description"
 msgstr ""
 
-#: registrations/questions/involved_questions.py:23
-msgid "registrations:forms:involved_people_question_title"
-msgstr ""
+#: registrations/questions/attachment_questions.py:73
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "registrations:questions:new_attachment"
+msgstr "Title"
 
 #: registrations/questions/involved_questions.py:24
-msgid "registrations:forms:involved_people_question_description"
-msgstr ""
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "questions:involved_people:question_title"
+msgstr "Title"
 
-#: registrations/questions/involved_questions.py:49
-msgid "registrations:forms:involved:new_title"
-msgstr ""
+#: registrations/questions/involved_questions.py:25
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "questions:involved_people:question_description"
+msgstr "List for Privacy Officer"
 
 #: registrations/questions/involved_questions.py:50
-msgid "registrations:forms:involved:new_description"
-msgstr ""
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "questions:new_involved:question_title"
+msgstr "Title"
 
-#: registrations/questions/involved_questions.py:115
-msgid "registrations:forms:purpose_question_title"
-msgstr ""
+#: registrations/questions/involved_questions.py:51
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "questions:new_involved:question_description"
+msgstr "List for Privacy Officer"
 
 #: registrations/questions/involved_questions.py:116
-msgid "registrations:forms:purpose_question_description"
-msgstr ""
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "questions:purpose:question_title"
+msgstr "Title"
 
-#: registrations/questions/involved_questions.py:145
-msgid "registrations:special_details_title"
-msgstr ""
+#: registrations/questions/involved_questions.py:117
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "questions:purpose:question_description"
+msgstr "List for Privacy Officer"
 
 #: registrations/questions/involved_questions.py:146
-msgid "registrations:forms:special_details_description"
-msgstr ""
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "questions:special_details:question_title"
+msgstr "Title"
 
-#: registrations/questions/involved_questions.py:173
-msgid "registrations:sensitive_details_title"
-msgstr ""
+#: registrations/questions/involved_questions.py:147
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "questions:special_details:question_description"
+msgstr "List for Privacy Officer"
 
 #: registrations/questions/involved_questions.py:174
-msgid "registrations:forms:sensitive_details_description"
-msgstr ""
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "questions:sensitive_details:question_title"
+msgstr "Title"
 
-#: registrations/questions/involved_questions.py:201
-msgid "registrations:regular_details_title"
-msgstr ""
+#: registrations/questions/involved_questions.py:175
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "questions:sensitive_details:question_description"
+msgstr "List for Privacy Officer"
 
-#: registrations/questions/involved_questions.py:202
-msgid "registrations:forms:regular_details_description"
+#: registrations/questions/involved_questions.py:203
+#: registrations/questions/involved_questions.py:219
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "questions:regular_details:question_description"
+msgstr "List for Privacy Officer"
+
+#: registrations/questions/involved_questions.py:205
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "questions:regular_details:question_title"
+msgstr "Title"
+
+#: registrations/questions/involved_questions.py:220
+msgid "global:possessive_preposition"
 msgstr ""
 
 #: registrations/questions/misc_questions.py:16
-msgid "registrations:forms:registration_title"
+msgid "questions:new_reg:question_title"
 msgstr ""
 
 #: registrations/questions/misc_questions.py:17
@@ -246,82 +281,90 @@ msgid "registrations:forms:registration_description"
 msgstr ""
 
 #: registrations/questions/misc_questions.py:52
-msgid "registrations:forms:faculty_question_title"
-msgstr ""
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "questions:faculty:question_title"
+msgstr "Title"
 
 #: registrations/questions/misc_questions.py:53
-msgid "registrations:forms:faculty_question_description"
+msgid "questions:faculty:question_description"
 msgstr ""
 
 #: registrations/questions/misc_questions.py:80
-msgid "registrations:forms:traversal_question_title"
+msgid "questions:traversal:question_title"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:81
-msgid "registrations:forms:traversal_question_description"
+#: registrations/questions/misc_questions.py:82
+msgid "questions:traversal:question_description"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:103
-msgid "registrations:forms:goal_question_title"
+#: registrations/questions/misc_questions.py:105
+msgid "questions:goal:question_title"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:104
-msgid "registrations:forms:goal_question_description"
+#: registrations/questions/misc_questions.py:106
+msgid "questions:goal:question_description"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:123
-#: registrations/questions/misc_questions.py:124
+#: registrations/questions/misc_questions.py:125
+#: registrations/questions/misc_questions.py:126
 msgid "registrations:forms:uses_information_question_title"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:146
-#: registrations/questions/misc_questions.py:147
+#: registrations/questions/misc_questions.py:148
+#: registrations/questions/misc_questions.py:149
 msgid "registrations:forms:confirm_information_use_question_title"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:189
-msgid "registrations:forms:storage_question_title"
+#: registrations/questions/misc_questions.py:191
+msgid "questions:retention:question_title"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:190
-msgid "registrations:forms:storage_question_description"
+#: registrations/questions/misc_questions.py:192
+msgid "questions:retention:question_description"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:212
-msgid "registrations:forms:receiver_question_title"
+#: registrations/questions/misc_questions.py:214
+msgid "questions:receivers:question_title"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:213
-msgid "registrations:forms:receiver_question_description"
+#: registrations/questions/misc_questions.py:215
+msgid "questions:receivers:question_description"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:345
-msgid "questions:software:description"
+#: registrations/questions/misc_questions.py:347
+msgid "questions:software:question_description"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:346
-msgid "questions:software:title"
+#: registrations/questions/misc_questions.py:348
+msgid "questions:software:question_title"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:465
-msgid "questions:security:description"
+#: registrations/questions/misc_questions.py:467
+msgid "questions:security:question_description"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:466
-msgid "questions:security:title"
+#: registrations/questions/misc_questions.py:468
+msgid "questions:security:question_title"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:481
+#: registrations/questions/misc_questions.py:483
 msgid "registrations:forms:submit_question_title"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:482
+#: registrations/questions/misc_questions.py:484
 msgid "registrations:forms:submit_question_description"
 msgstr ""
 
-#: registrations/questions/misc_questions.py:500
+#: registrations/questions/misc_questions.py:502
 msgid "registrations:forms:confirm_information_use_paragraph"
 msgstr ""
+
+#: registrations/questions/misc_questions.py:522
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "registrations:forms:category_question_description"
+msgstr "List for Privacy Officer"
 
 #: registrations/templates/registrations/base-form.html:35
 #: registrations/templates/registrations/base-form.html:36
