@@ -21,7 +21,7 @@ YES_NO_NA = (
 class Registration(models.Model):
 
     # Meta information
-    title = models.CharField(
+    registration_title = models.CharField(
         max_length=200,
         help_text=_("models:registration_title_help_text"),
     )
