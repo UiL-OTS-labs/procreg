@@ -94,6 +94,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "DIRS": [
             BASE_DIR / "templates",
+            BASE_DIR / "registrations/questions/templates",
             BASE_DIR / "registrations/views",
         ],
         'OPTIONS': {
