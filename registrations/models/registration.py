@@ -187,7 +187,7 @@ class Registration(models.Model):
         group_dict = {
             'involves_knowingly': "knowingly",
             'involves_not_knowingly': "not_knowingly",
-            'involves_guardian': "guardian_consent",
+            'involves_guardian': "guardian",
             'involves_other': "other",
         }
         involved = filter(
