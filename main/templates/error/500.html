@@ -1,17 +1,16 @@
-{% extends "base/base.html" %}
+{% extends "base/procreg_base.html" %}
 
 {% load i18n %}
 
 {% block content %}
-    <div class="uu-inner-container">
+    <div class="uu-container">
         <div class="col-12">
-            <h2>
+            <h1>
                 {% trans 'main:error:500:title' %}
-            </h2>
+            </h1>
             <p>
                 {% trans 'main:error:500:text' %}
             </p>
-        </div>
         </div>
     </div>
 {% endblock %}

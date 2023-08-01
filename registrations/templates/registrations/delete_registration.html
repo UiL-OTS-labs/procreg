@@ -1,7 +1,7 @@
 {% extends "registrations/base.html" %}
 {% load i18n %}
 
-{% block main %}
+{% block main_content %}
 
 <form method="post">{% csrf_token %}
     <p>{% trans "registrations:delete:confirm_text" %} </p>
