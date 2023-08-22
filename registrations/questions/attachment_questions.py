@@ -3,6 +3,7 @@ from .helpers import TemplatedFormMixin, RegistrationQuestionMixin
 from registrations.models import Registration, Receiver, Attachment
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+from django.template import Template
 
 class AttachmentsQuestion(
         TemplatedFormMixin,
@@ -13,12 +14,11 @@ class AttachmentsQuestion(
     class Meta:
         model = Registration
         fields = [
-            "third_party_sharing",
         ]
     # Procreg question stuff
     model = Meta.model
-    title = _("registrations:forms:attachments_question_title")
-    description = _("registrations:forms:attachments_question_description")
+    title = _("questions:attachments:question_title")
+    description = Template(_("questions:attachments:question_description"))
     slug = "attachments"
     is_editable = True
     show_progress = True
@@ -75,7 +75,7 @@ class NewAttachmentQuestion(
     class Meta:
         model = Attachment
         fields = [
-            "description",
+            "file_description",
             "upload",
         ]
 

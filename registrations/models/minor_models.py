@@ -64,7 +64,7 @@ class Software(models.Model):
 
 class Attachment(models.Model):
 
-    description = models.CharField(
+    file_description = models.CharField(
         max_length=500,
         blank=True,
         default=""
