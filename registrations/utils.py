@@ -1,50 +1,45 @@
 from django.template import Template
 from django.forms.utils import RenderableMixin
+from django.template import loader
+from django.core.exceptions import ObjectDoesNotExist
 
-from registrations.models import Faq
+import logging
 
-class FAQList:
+from registrations.models import Faq, FaqList
 
-    template_name = "registrations/faqs.html"
+logger = logging.getLogger(__name__)
 
-    def __init__(self, question_slug=None, order=[]):
+class RenderableFaqList():
 
-        self.faqs = []
+    template_name = "registrations/faqlist.html"
 
-        for faq in self.from_order(order):
-            self.faqs.append(faq)
+    def __init__(self, slug=None, faqs=[]):
+        self.faqlist = None
+        self.faqs = set()
 
-        if question_slug is not None:
-            for faq in self.from_question_slug(question_slug):
-                if faq.pk not in self.faqs:
-                    self.faqs.append(faq)
+        # If given a slug, fetch the faqlist for that slug
+        if slug:
+            try:
+                self.faqlist = FaqList.objects.get(
+                    slug=slug,
+                )
+                self.faqs = set(self.faqlist.faqs.all())
+            except ObjectDoesNotExist as e:
+                logger.warning(
+                    f"Non-existent FAQList with slug {slug} was requested",
+                    e
+                )
+        # Add provided faqs to our list
+        for faq in faqs:
+            if type(faq) == str:
+                faq = Faq.objects.get(slug=faq)
+            self.faqs.add(faq)
 
-    def from_order(self, order):
-        """
-        Ingest a (mixed) list of FAQ PKs or slugs and yield FAQ
-        objects back
-        """
-        for x in order:
-            faq = None
-            if type(x) is Int:
-                try:
-                    faq = Faq.objects.get(pk=x)
-                except Exception as e:
-                    breakpoint()
-            elif type(x) is str:
-                try:
-                    faq = Faq.objects.get(slug=x)
-                except Exception as e:
-                    breakpoint()
-            if faq is not None:
-                yield faq
-
-    def from_question_slug(self, slug):
-        return Faq.objects.filter(
-            question_slugs__icontains="slug",
+    def render(self, context={}):
+        template = loader.get_template(self.template_name)
+        context.update(
+            {
+                "faqs": self.faqs,
+            },
         )
-
-    def get_context(self):
-        return {
-            "faqs": self.faqs,
-        }
+        return template.render(context.flatten())
