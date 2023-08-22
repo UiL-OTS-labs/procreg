@@ -12,7 +12,7 @@ from cdh.questions.views import BlueprintMixin, QuestionView, \
 
 
 from registrations.models import Registration, ParticipantCategory, Involved, \
-    Software, Receiver, Faq, Attachment
+    Software, Receiver, Faq, Attachment, Faq
 from registrations.questions import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
 from registrations.mixins import RegistrationMixin
 from registrations.progress import ProgressItemMixin
@@ -408,3 +408,11 @@ class MinimalDeleteView(QuestionDeleteView,
 
         context = super().get_context_data(*args, **kwargs)
 
+
+class FaqDetailView(
+        generic.DetailView,
+        ):
+
+    template_name = "registrations/display_faq.html"
+    model = Faq
+    context_object_name = "faq"
