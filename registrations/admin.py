@@ -3,7 +3,7 @@ from django.db.models import TextField
 
 from cdh.core.forms import TinyMCEWidget
 
-from .models import Registration, Involved, Faq
+from .models import Registration, Involved, FaqList, Faq
 
 # Register your models here.
 
@@ -34,3 +34,4 @@ class FaqAdmin(TinyMCEAdmin):
 
 
 admin.site.register(Faq, FaqAdmin)
+admin.site.register(FaqList)

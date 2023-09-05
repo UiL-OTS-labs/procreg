@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
 
 class Faq(models.Model):
@@ -15,7 +16,9 @@ class Faq(models.Model):
     )
     slug = models.CharField(
         max_length=100,
-        default="",
+        default=None,
+        unique=True,
+        null=True
     )
     front_page = models.BooleanField(
         default=False,
@@ -32,5 +35,32 @@ class Faq(models.Model):
     )
     question_slugs = models.TextField(
         verbose_name="Line-separated list of related question slugs",
-        default=""
+        default="",
+        blank=True,
     )
+
+    @property
+    def link(self):
+        return reverse(
+            "registrations:display_faq",
+            kwargs={
+                "pk": self.pk,
+            }
+        )
+
+    def __str__(self):
+        return self.slug
+
+
+class FaqList(models.Model):
+
+    slug = models.CharField(
+        max_length=100,
+        unique=True,
+    )
+    faqs = models.ManyToManyField(
+        "registrations.Faq",
+    )
+
+    def __str__(self):
+        return self.slug

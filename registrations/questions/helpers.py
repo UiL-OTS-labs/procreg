@@ -5,7 +5,7 @@ from cdh.questions import questions
 
 from registrations.progress import ProgressItemMixin
 from registrations.models import Registration
-from registrations.utils import FAQList
+from registrations.utils import RenderableFaqList
 
 
 class RegistrationQuestionMixin(ProgressItemMixin):
@@ -15,9 +15,8 @@ class RegistrationQuestionMixin(ProgressItemMixin):
     
     # faqs contains (link, faq_title) pairs for in the
     # help sidebar
-    faqs = []
+    faqs = RenderableFaqList("default")
     description = Template("")
-    faqs = FAQList()
     help_text = Template("")
 
     def __init__(self, *args, **kwargs):

@@ -69,10 +69,9 @@ urlpatterns = [
     # Misc
     path("faq/<int:pk>/",
          FaqDetailView.as_view(),
-         name="display_faq ",
+         name="display_faq",
          ),
-    
-    
+
     # Debug
     path('<int:reg_pk>/<str:question>/stepper/<int:question_pk>/',
          StepperView.as_view(
