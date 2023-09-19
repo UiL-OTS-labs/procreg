@@ -20,7 +20,7 @@ msgstr ""
 
 #: main/menus.py:5
 msgid "main:menu:home"
-msgstr ""
+msgstr "Home"
 
 #: main/menus.py:10
 msgid "main:menu:my_list"

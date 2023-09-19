@@ -20,7 +20,7 @@ msgstr ""
 
 #: main/menus.py:5
 msgid "main:menu:home"
-msgstr ""
+msgstr "Home"
 
 #: main/menus.py:10
 msgid "main:menu:my_list"
@@ -44,7 +44,7 @@ msgstr ""
 
 #: main/templates/base/login_header.html:7
 msgid "main:globals:logout"
-msgstr ""
+msgstr "Log out"
 
 #. Translators: This is the title that will end up in the header (in blue)
 #: main/templates/base/site_header.html:4
@@ -274,7 +274,7 @@ msgstr ""
 
 #: registrations/questions/misc_questions.py:16
 msgid "questions:new_reg:question_title"
-msgstr ""
+msgstr "Name of your study"
 
 #: registrations/questions/misc_questions.py:17
 msgid "registrations:forms:registration_description"
