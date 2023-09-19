@@ -2,6 +2,7 @@ from django.template import Template
 from django.forms.utils import RenderableMixin
 from django.template import loader
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.html import mark_safe
 
 import logging
 
@@ -13,27 +14,43 @@ class RenderableFaqList():
 
     template_name = "registrations/faqlist.html"
 
-    def __init__(self, slug=None, faqs=[]):
-        self.faqlist = None
-        self.faqs = set()
+    def __init__(self, slug, faqs=[]):
+        # We also accept extra faqs at init time
+        self.init_faqs = set(faqs)
+        # Retrieve FaqList object
+        try:
+            self.faqlist = FaqList.objects.get(
+                slug=slug,
+            )
+        except ObjectDoesNotExist as e:
+            logger.warning(
+                f"Non-existent FAQList with slug {slug} was requested",
+                e
+            )
+            self.faqlist = FaqList.objects.get(
+                slug="default",
+            )
+        # Add general helptext object
+        self.help_text = RenderableHelpText(self.faqlist)
 
-        # If given a slug, fetch the faqlist for that slug
-        if slug:
-            try:
-                self.faqlist = FaqList.objects.get(
-                    slug=slug,
-                )
-                self.faqs = set(self.faqlist.faqs.all())
-            except ObjectDoesNotExist as e:
-                logger.warning(
-                    f"Non-existent FAQList with slug {slug} was requested",
-                    e
-                )
-        # Add provided faqs to our list
-        for faq in faqs:
+    @property
+    def faqs(self):
+        faqs = set()
+        for faq in self.faqlist.faqs.all():
+            faqs.add(faq)
+        for faq in self.init_faqs:
             if type(faq) == str:
-                faq = Faq.objects.get(slug=faq)
-            self.faqs.add(faq)
+                # This must be a slug, convert it
+                # to a FAQ object first
+                try:
+                    faq = Faq.objects.get(slug=faq)
+                except ObjectDoesNotExist as e:
+                    logger.warning(
+                        f"Non-existent FAQList with slug {faq} was requested",
+                        e
+                    )
+            faqs.add(faq)
+        return faqs
 
     def render(self, context={}):
         template = loader.get_template(self.template_name)
@@ -43,3 +60,16 @@ class RenderableFaqList():
             },
         )
         return template.render(context.flatten())
+
+
+class RenderableHelpText():
+
+    def __init__(self, faqlist):
+        self.faqlist = faqlist
+
+    def render(self, context):
+        return mark_safe(
+            f"""<span class="procreg_helptext">"""
+            f"{self.faqlist.help_text}"
+            f"</span>"
+        )
