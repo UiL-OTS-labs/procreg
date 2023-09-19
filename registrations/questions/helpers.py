@@ -13,16 +13,27 @@ class RegistrationQuestionMixin(ProgressItemMixin):
     show_progress = True
     extra_form_kwargs = []
     
-    # faqs contains (link, faq_title) pairs for in the
-    # help sidebar
-    faqs = RenderableFaqList("default")
+    # The initials faqs variable can be a FAQList slug
+    # or other init argument to RenderableFAQList.
+    # At runtime self.faqs gets replaced by the
+    # RenderableFAQList object.
+    faqs = None
     description = Template("")
-    help_text = Template("")
 
     def __init__(self, *args, **kwargs):
+        # Required arguments for a Registration Question
         self.blueprint = kwargs.pop("blueprint", None)
         self.registration = kwargs.pop('registration', None)
         self.view_kwargs = kwargs.pop('view_kwargs', None)
+        # Initialize help text and FAQs
+        if not self.faqs:
+            # By default, get the FAQList associated with
+            # the question slug
+            self.faqs = self.slug
+        # A RenderableFaqList gathers the FAQ objects
+        # and help text to be rendered in the sidebar
+        # of this question.
+        self.faqs = RenderableFaqList(self.faqs)
         return super().__init__(*args, **kwargs)
 
     def get_registration(self):
