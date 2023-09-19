@@ -1,10 +1,11 @@
 from django.urls import reverse
-from django.template import loader
+from django.template import loader, Template
 
 from cdh.questions import questions
 
 from registrations.progress import ProgressItemMixin
 from registrations.models import Registration
+from registrations.utils import RenderableFaqList
 
 
 class RegistrationQuestionMixin(ProgressItemMixin):
@@ -12,14 +13,27 @@ class RegistrationQuestionMixin(ProgressItemMixin):
     show_progress = True
     extra_form_kwargs = []
     
-    # faqs contains (link, faq_title) pairs for in the
-    # help sidebar
-    faqs = [] 
+    # The initials faqs variable can be a FAQList slug
+    # or other init argument to RenderableFAQList.
+    # At runtime self.faqs gets replaced by the
+    # RenderableFAQList object.
+    faqs = None
+    description = Template("")
 
     def __init__(self, *args, **kwargs):
+        # Required arguments for a Registration Question
         self.blueprint = kwargs.pop("blueprint", None)
         self.registration = kwargs.pop('registration', None)
         self.view_kwargs = kwargs.pop('view_kwargs', None)
+        # Initialize help text and FAQs
+        if not self.faqs:
+            # By default, get the FAQList associated with
+            # the question slug
+            self.faqs = self.slug
+        # A RenderableFaqList gathers the FAQ objects
+        # and help text to be rendered in the sidebar
+        # of this question.
+        self.faqs = RenderableFaqList(self.faqs)
         return super().__init__(*args, **kwargs)
 
     def get_registration(self):
@@ -60,6 +74,11 @@ class PlaceholderQuestion(RegistrationQuestionMixin, questions.Question):
         super().__init__(self)
         self.slug = slug
         self.disabled = True
+        from registrations.questions import QUESTIONS
+        if self.slug in QUESTIONS.keys():
+            # Copy information from uninstantiated question
+            source_question = QUESTIONS[self.slug]
+            self.title = source_question.title
 
     def get_edit_url(self):
         return False

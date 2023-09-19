@@ -183,9 +183,9 @@ class InvolvedPeopleConsumer(BaseQuestionConsumer):
         managers = []
         consumer_dict = {
             'involves_knowingly':
-            (ConsentGroupConsumer, "consent"),
+            (KnowinglyGroupConsumer, "knowingly"),
             'involves_not_knowingly':
-            (NonConsentGroupConsumer, "non_consent"),
+            (NotKnowinglyGroupConsumer, "not_knowingly"),
             'involves_guardian':
             (GuardianGroupConsumer, "guardian_consent"),
             'involves_other':
@@ -303,19 +303,19 @@ class BaseGroupConsumer(BaseQuestionConsumer):
         return []
 
 
-class ConsentGroupConsumer(BaseGroupConsumer):
+class KnowinglyGroupConsumer(BaseGroupConsumer):
 
-    group_type = "consent"
+    group_type = "knowingly"
 
 
-class NonConsentGroupConsumer(BaseGroupConsumer):
+class NotKnowinglyGroupConsumer(BaseGroupConsumer):
 
-    group_type = "non_consent"
+    group_type = "not_knowingly"
 
 
 class GuardianGroupConsumer(BaseGroupConsumer):
 
-    group_type = "guardian_consent"
+    group_type = "guardian"
 
 
 class OtherGroupConsumer(BaseGroupConsumer):

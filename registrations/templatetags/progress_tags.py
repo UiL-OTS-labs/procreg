@@ -1,6 +1,7 @@
 from django import template
 import logging
 
+
 register = template.Library()
 
 
@@ -110,7 +111,10 @@ def progress_item_from_slug(context, slug, **kwargs):
     )
     if not question:
         question = PlaceholderQuestion(slug=slug)
-    return progress_item_from_question(context, question, number=number, **kwargs)
+    return progress_item_from_question(
+        context, question, number=number, **kwargs,
+    )
+
 
 @register.inclusion_tag(
     "registrations/templatetags/progress_items_involved.html",

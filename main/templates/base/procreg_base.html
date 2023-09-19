@@ -1,0 +1,65 @@
+{% extends 'base/tool_base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block html_head %}
+  {{ block.super }}
+  <style>
+  {# Why is this here? There already is a procreg.css that is included everywhere #}
+  div .uu-sidebar #non-existent {
+    --bs-uu-sidebar-background: var(--bs-green);
+  }
+  .uu-content #non-existent {
+    background-color: var(--bs-teal);
+  }
+  .uu-cover {
+    --bs-uu-cover-default-height: 250px;
+  }
+  </style>
+{% endblock %}
+
+{# Header blocks #}
+
+{% block uu-header-pre-menu %}
+    <div
+        class="navbar-text fs-5 text-black d-none d-lg-flex text-nowrap pe-4"
+    >
+        {% trans 'main:header:app_name' %}
+    </div>
+{% endblock %}
+
+{% block uu-header-post-menu %}
+    <div class="navbar-text border-left text-muted text-uppercase text-nowrap">
+        {% if request.user.is_authenticated %}
+            {% with request.user as user %}
+                <a href="{% url 'main:logout' %}" class="text-muted text-decoration-none">{% trans 'main:globals:logout' %}</a>
+            {% endwith %}
+        {% else %}
+            <a href="{% url 'main:login' %}" class="text-muted text-decoration-none">{% trans 'main:globals:login' %}</a>
+        {% endif %}
+    </div>
+    {% include 'base/tool_language_box.html' %}
+{% endblock %}
+
+{# Content blocks #}
+
+{% block pre-messages-content %}
+  {% block cover %}
+    <div class="uu-cover">
+      <img class="uu-cover-image" alt="cover" src="{% static 'procreg/img/ivar-pel-header.jpg' %}" />
+      <div class="uu-cover-copyright">
+        {% block cover_attribution %}Cover by Ivar Pel{% endblock %}
+      </div>
+    </div>
+  {% endblock %}
+
+  {% block hero %}
+    <header class="uu-hero">
+      <h1>
+        {% block hero_text %}
+          {% trans "site:hero:default_hero_text" %}
+        {% endblock %}
+      </h1>
+    </header>
+  {% endblock %}
+{% endblock %}

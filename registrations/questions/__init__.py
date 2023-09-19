@@ -22,6 +22,8 @@ Q_LIST = [
     SoftwareQuestion,
     ReceiverQuestion,
     NewReceiverQuestion,
+    AttachmentsQuestion,
+    SecurityQuestion,
 ]
 
 QUESTIONS = {q.slug: q for q in Q_LIST}

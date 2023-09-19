@@ -6,6 +6,10 @@
 {% load progress_tags %}
 {% load registration_tags %}
 
+{% block hero_text %}
+{{registration.registration_title}}
+{% endblock %}
+
 
 {% block stepper %}
 
@@ -18,11 +22,11 @@
 {% block form %}
   <div class="uu-form-text-row">
     <div class="uu-form-text">
-      <h2>Editing a question</h2>
-      <p>This page facilitates both the creation and editing of Questions. Now with progress bar.</p>
+      <h3> {{ question.title }} </h3>
+      {% include question.description %}
     </div>
     <div class="uu-form-text-aside">
-      <p>Top-level FAQ goes here</p>
+      {% include question.faqs %}
 
     </div>
   </div>
@@ -34,7 +38,7 @@
     </div>
     <div class="uu-form-help">
       <p>
-        Question help goes here.
+        {% include question.faqs.help_text %}
         </p>
     </div>
   </div>

@@ -1,0 +1,24 @@
+{% extends "registrations/base.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load question_tags %}
+{% load progress_tags %}
+{% load registration_tags %}
+
+{% block hero %}
+
+{% endblock %}
+
+
+{% block main_content %}
+
+<h2>{{faq.title}}</h2>
+
+{{ faq.answer|safe }}
+
+{% endblock %}
+
+{% block sidebar %}
+<h4>Meer vragen</h4>
+{% endblock %}
