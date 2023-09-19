@@ -32,6 +32,12 @@ class FaqAdmin(TinyMCEAdmin):
         }
     }
 
+class FaqListAdmin(TinyMCEAdmin):
+    formfield_overrides = {
+        TextField: {
+            "widget": TinyMCEWidget,
+        }
+    }
 
 admin.site.register(Faq, FaqAdmin)
-admin.site.register(FaqList)
+admin.site.register(FaqList, FaqListAdmin)
