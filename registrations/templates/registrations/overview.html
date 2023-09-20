@@ -3,9 +3,15 @@
 {% load question_tags %}
 {% load registration_tags %}
 
-{% block main %}
+{% block hero_text %}
 <h3>{% trans "registrations:overview:page_title" %}</h3>
+{% endblock %}
 
+{% block cover %}
+{% endblock %}
+
+
+{% block main_content %}
 <p>
     {% trans "registrations:overview:page_description" %}
 </p>
@@ -21,7 +27,7 @@
     <h3>{% trans "registrations:overview:progress_title" %}</h3>
     {% if blueprint.desired_next %}
     <p>Vervolg uw aanvraag hier:</p>
-    {% display_question_header blueprint.desired_next %}
+    {% display_question_header blueprint.get_desired_next %}
     <div class="buttons">
     <a href="{{blueprint.get_desired_next_url}}">
         <button>
@@ -52,12 +58,12 @@
 
 <ul>
     <li>
-        <a href="{% url "registrations:delete" reg_pk=view.object.pk %}">
+        <a href="{% url "registrations:delete" reg_pk=registration.pk %}">
             {% trans "registrations:actions:delete" %}
         </a>
     </li>
     <li>
-        <a href="{% url "registrations:create_question" reg_pk=view.object.pk question='category' %}">
+        <a href="{% url "registrations:edit_question" reg_pk=registration.pk question='category' %}">
             {% trans "registrations:actions:add_category" %}
         </a>
     </li>

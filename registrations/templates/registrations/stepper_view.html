@@ -1,0 +1,26 @@
+{% extends "registrations/base-form.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load question_tags %}
+{% load progress_tags %}
+{% load registration_tags %}
+
+
+{% block stepper %}
+
+  {% with current=form.slug %}
+    {% progress_bar blueprint form %}
+  {% endwith %}
+{% endblock %}
+{% block form %}
+  <div class="uu-form-text-row">
+    <div class="uu-form-text">
+    </div>
+    <div class="uu-form-text-aside">
+      <p>Top-level FAQ goes here</p>
+
+    </div>
+  </div>
+
+{% endblock %}

@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 from pathlib import Path
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -34,6 +33,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+
+    # Django model translation must come before admin
+    'modeltranslation',
+    
     # Django supplied apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,16 +49,13 @@ INSTALLED_APPS = [
     'django_extensions',
 
     # django-simple-menu
-    'menu',
+    'simple_menu',
 
     # DRF - Enable if using uil.rest and/or uil.vue.FancyList
     # 'rest_framework',
 
     # Impersonate
     'impersonate',
-
-    # Django model translation
-    'modeltranslation',
 
     # UiL Core libraries
     'cdh.core',
@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     # Local apps
     'main',
     'registrations',
+    "procreg",
 ]
 
 MIDDLEWARE = [
@@ -89,8 +90,12 @@ ROOT_URLCONF = 'procreg.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        "NAME": "app_dirs",
+        "APP_DIRS": True,
+        "DIRS": [
+            BASE_DIR / "templates",
+            BASE_DIR / "registrations/views",
+        ],
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -100,6 +105,24 @@ TEMPLATES = [
             ],
         },
     },
+    # {
+    #     'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    #     "NAME": "views_subdir",
+    #     'OPTIONS': {
+    #         'context_processors': [
+    #             'django.template.context_processors.debug',
+    #             'django.template.context_processors.request',
+    #             'django.contrib.auth.context_processors.auth',
+    #             'django.contrib.messages.context_processors.messages',
+    #         ],
+    #         'loaders': [
+    #             (
+    #                 'django.template.loaders.filesystem.Loader',
+    #                 [BASE_DIR / "registrations/views"],
+    #             ),
+    #         ]
+    #     },
+    # },
 ]
 
 WSGI_APPLICATION = 'procreg.wsgi.application'
@@ -147,7 +170,7 @@ LOGGING = {
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
     EMAIL_FILE_PATH = '/tmp/django-email'
-else:        
+else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = 'localhost'
     EMAIL_PORT = 2525
@@ -211,14 +234,6 @@ LANGUAGES = (
 )
 
 
-LOCALE_PATHS = (
-
-    # Merges all translations files into one
-    os.path.join(BASE_DIR, 'locale'),
-
-    # For per-app translations files
-    #'locale',
-)
 
 TIME_ZONE = 'UTC'
 
@@ -228,12 +243,19 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOCALE_PATHS = (
+    'locale',
+)
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = 'static/'
-
+STATIC_URL = '/static/'
+STATIC_ROOT = "static_root"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # Security
 # https://docs.djangoproject.com/en/2.0/topics/security/
@@ -246,7 +268,6 @@ SECURE_SSL_REDIRECT = not DEBUG
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 60 * 60 * 12  # 12 hours
-
 
 # Django CSP
 # http://django-csp.readthedocs.io/en/latest/index.html

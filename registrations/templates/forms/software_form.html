@@ -1,0 +1,41 @@
+{% load question_tags %}
+{% load registration_tags %}
+{% load i18n %}
+
+{% if editing %}
+  <form method="post" action="" class="uu-form uu-form-no-gap">{% csrf_token %}
+{% else %}
+    <div class="uu-form uu-form-no-gap">
+{% endif %}
+
+
+<section class="question">
+
+  {% for segment in question.get_segments %}
+    {% render_segment segment %}
+  {% endfor %}
+
+
+  {% if show_selector %}
+    {% display_loq source_question %}
+  {% endif %}
+  <div class="gt-right question-buttons">
+    {% if editing %}
+      <input type="submit" value="opslaan" class="btn btn-primary mt-4"/>
+    {% else %}
+      {% if question.is_deletable and not deleting %}
+        <a href="{{question.get_delete_url}}" value="Delete" class="button">Delete</a>
+      {% endif %}
+      {% if question.is_editable %}
+        <a href="{{question.get_edit_url}}" value="Bewerken" class="btn btn-primary">
+          Bewerken
+        </a>
+      {% endif %}
+    {% endif %}
+  </div>
+
+</section>
+
+{% if editing %}
+  </form>
+{% endif %}

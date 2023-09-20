@@ -1,25 +1,29 @@
 {% load question_tags %}
-{% for segment in question.segments %}
+{% for segment in segments %}
 
-<div class="question-display-small">
+  <div class="question-display-small d-flex justify-content-between p-2">
 
-    <div class="icon">
+    <div class="d-flex justify-content-start">
+      <div class="qd-icon mr-3">
         &nbsp;
-    </div>
-        <div class="content">
+      </div>
+      <div class="content">
         <h6>{{segment.field.label}}</h6>
         <p>{{segment.field.value}}</p>
+      </div>
+    </div>
+    <div>
+      {% if question.is_editable %}
+        <div class="d-flex flex-column justify-content-center h-100">
+          <a href="{{question.get_edit_url}}" class="btn btn-secondary">
+              edit
+          </a>
+      {% else %}
+          not editable
+      {% endif %}
         </div>
 
-        {% if question.is_editable %}
-        <div class="edit">
-            <a href="{{question.get_edit_url}}">
-                <button>
-                    edit
-                    </button>
-            </a>{% endif %}
-        </div>
-
-</div>
+    </div>
+    </div>
 {% empty %}Error! No segments
 {% endfor %}
