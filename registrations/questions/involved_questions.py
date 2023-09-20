@@ -1,5 +1,6 @@
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
+from django.template import Template
 
 from cdh.questions import questions
 
@@ -20,8 +21,8 @@ class InvolvedPeopleQuestion(
             'involves_other',
         ]
 
-    title = _("registrations:forms:involved_people_question_title")
-    description = _("registrations:forms:involved_people_question_description")
+    title = _("questions:involved_people:question_title")
+    description = Template(_("questions:involved_people:question_description"))
     model = Meta.model
     slug = "involved_people"
     is_editable = True
@@ -46,8 +47,8 @@ class NewInvolvedQuestion(
 
     is_editable = True
     slug = "new_involved"
-    title = _("registrations:forms:involved:new_title")
-    description = _("registrations:forms:involved:new_description")
+    title = _("questions:new_involved:question_title")
+    description = Template(_("questions:new_involved:question_description"))
     model = Meta.model
     view_arguments = ["group_type"]
 
@@ -112,8 +113,8 @@ class PurposeQuestion(RegistrationQuestionMixin,
             "process_purpose",
         ]
 
-    title = _("registrations:forms:purpose_question_title")
-    description = _("registrations:forms:purpose_question_description")
+    title = _("questions:purpose:question_title")
+    description = Template(_("questions:purpose:question_description"))
     model = Meta.model
     slug = "purpose"
     is_editable = True
@@ -142,8 +143,8 @@ class SpecialDetailsQuestion(
             "legal_grounds_details",
         ]
 
-    title = _("registrations:special_details_title")
-    description = _("registrations:forms:special_details_description")
+    title = _("questions:special_details:question_title")
+    description = Template(_("questions:special_details:question_description"))
     model = Meta.model
     slug = "special_details"
     is_editable = True
@@ -170,8 +171,8 @@ class SensitiveDetailsQuestion(
             "provides_no_sensitive_details",
         ]
 
-    title = _("registrations:sensitive_details_title")
-    description = _("registrations:forms:sensitive_details_description")
+    title = _("questions:sensitive_details:question_title")
+    description = Template(_("questions:sensitive_details:question_description"))
     model = Meta.model
     slug = "sensitive_details"
     is_editable = True
@@ -198,12 +199,27 @@ class RegularDetailsQuestion(
             "extra_details",
         ]
 
-    title = _("registrations:regular_details_title")
-    description = _("registrations:forms:regular_details_description")
+    description = Template(
+        _("questions:regular_details:question_description")
+    )
+    title = _("questions:regular_details:question_title")
     model = Meta.model
     slug = "regular_details"
     is_editable = True
     show_progress = True
+
+    def __init__(self, *args, **kwargs):
+        """
+        Include involved group name in description if an instance
+        is provided.
+        """
+        super().__init__(*args, **kwargs)
+        if hasattr(self, "instance"):
+            self.description = Template(
+                _("questions:regular_details:question_description")
+                + " " + _("global:possessive_preposition") + " "
+                + self.instance.name
+            )
 
     def get_segments(self):
 

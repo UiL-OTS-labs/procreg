@@ -21,9 +21,10 @@ YES_NO_NA = (
 class Registration(models.Model):
 
     # Meta information
-    title = models.CharField(max_length=200,
-                             help_text="models:registration_title_help_text",
-                             )
+    registration_title = models.CharField(
+        max_length=200,
+        help_text=_("models:registration_title_help_text"),
+    )
     created_by = models.ForeignKey(USER_MODEL,
                                    on_delete=models.SET_DEFAULT,
                                    related_name="registrations_created",
@@ -177,3 +178,20 @@ class Registration(models.Model):
         default="",
         blank=True,
     )
+
+    def list_involved_types(self):
+        """
+        Return a list of involved group types involved in this registration.
+        Group types are given in Involved.GROUP_TYPES style.
+        """
+        group_dict = {
+            'involves_knowingly': "knowingly",
+            'involves_not_knowingly': "not_knowingly",
+            'involves_guardian': "guardian",
+            'involves_other': "other",
+        }
+        involved = filter(
+            lambda key: getattr(self, key),
+            group_dict.keys(),
+        )
+        return [group_dict[t] for t in involved]

@@ -15,41 +15,43 @@
       {% endif %}
     </li>
     <li>
-      {% progress_item_from_slug "traversal" text="Traversal" %}
+      {% progress_item_from_slug "traversal" %}
     </li>
     <li>
-      {% progress_item_from_slug "goal" text="Goal" %}
+      {% progress_item_from_slug "goal" %}
     </li>
     <li>
-      {% progress_item_from_slug "involved_people" text="Involved people" %}
+      {% progress_item_from_slug "involved_people"  %}
     </li>
     <li>
-      {% progress_item_from_slug "involved_manager" text="Information" %}
-      <ul>
-        {% for group_type, data in blueprint.get_involved_groups.items %}
-        {% for involved in data.groups %}
-        {% involved_progress_items  %}
-        {% endfor %}
-        {% endfor %}
-      </ul>
+      {% progress_item_from_slug "involved_manager" %}
+      {% if blueprint.any_involved_group_available %}
+        <ul>
+          {% for group_type, data in blueprint.get_involved_groups.items %}
+            {% for involved in data.groups %}
+              {% involved_progress_items  %}
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      {% endif %}
     </li>
     <li>
-        {% progress_item_from_slug "retention" text="Retention" %}
-      </li>
-      <li>
-        {% progress_item_from_slug "receivers" text="Receivers" %}
-      </li>
-      <li>
-        {% progress_item_from_slug "software" text="Software" %}
-      </li>
-      <li>
-        {% progress_item_from_slug "security" text="Security" %}
-      </li>
-      <li>
-        {% progress_item_from_slug "attachments" text="Documents" %}
-      </li>
-      <li>
-        {% progress_item_from_slug "summary" text="Summary" %}
-      </li>
+      {% progress_item_from_slug "retention" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "receivers" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "software" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "security" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "attachments" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "summary" %}
+    </li>
   </ul>
 </div>
