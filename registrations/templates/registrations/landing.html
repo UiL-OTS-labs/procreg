@@ -12,7 +12,7 @@
 {% block content %}
 <div class="uu-container">
   <div class="col-4 p-3 border m-3 text-center">
-    <h1>{% trans "landing:call_to_action:h1" %}</h1>
+    <h2>{% trans "landing:call_to_action:h1" %}</h2>
     <a class="btn btn-primary mt-5 mb-5" href="{% url 'registrations:new_registration' %}">
       {% trans "landing:call_to_action:button" %}
     </a>
@@ -21,7 +21,7 @@
     </p>
   </div>
   <div class="p-3 border m-3 flex-fill text-center" >
-    <h1>{% trans "landing:video:video_h1" %}</h1>
+    <h2>{% trans "landing:video:video_h1" %}</h2>
     <img src="http://thecatapi.com/api/images/get?format=src"  style="max-height: 200px; width: auto;">
   </div>
 </div>
@@ -71,18 +71,18 @@
 </div>
 <div class="uu-container">
   <div class="p-3 border m-3 flex-fill" >
-    <h1 classs="mb-3">{% trans "landing:faq:faq_h1" %}</h1>
+    <h2 classs="mb-3">{% trans "landing:faq:faq_h1" %}</h2>
     {% for faq in faqs %}
       {% render_faq faq %}
     {% empty %}
     <p>{% trans "landing:faqs:no_faqs_yet" %}</p>
     {% endfor %}
-    <p class="text-end mt-3"><a href="#all_faqs">
+    <p class="text-end mt-3 mt-4"><a href="#all_faqs">
       {% trans "landing:faq:all_faqs_link" %}
     </a></p>
   </div>
   <div class="col-4 p-3 border m-3 text-center">
-    <h1>{% trans "landing:call_to_action:h1" %}</h1>
+    <h2>{% trans "landing:ask_a_question:h2" %}</h2>
     <a class="btn btn-primary mt-5 mb-5" href="{% url 'registrations:new_registration' %}">
       {% trans "landing:faqs:button" %}
     </a>
