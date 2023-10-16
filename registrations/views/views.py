@@ -73,18 +73,26 @@ class RegistrationOverview(RegistrationMixin,
         return context
 
 
+class SummaryForm(forms.ModelForm):
+
+    class Meta:
+        model = Registration
+        fields = ["submitter_comments"]
+
+    
 class RegistrationSummaryView(
         ProgressItemMixin,
         RegistrationMixin,
         BlueprintMixin,
-        generic.TemplateView,
+        generic.UpdateView,
 ):
 
     template_name = 'registrations/summary.html'
     extra_context = {"stepper": True}
-    title = "registrations:views:summary_title"
-    description = "registrations:views:summary_description"
+    title = _("registrations:views:summary_title")
+    description = _("registrations:views:summary_description")
     slug = "summary"
+    form_class = SummaryForm
 
     def get_object(self,):
         return self.get_registration()
