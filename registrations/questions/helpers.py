@@ -19,6 +19,7 @@ class RegistrationQuestionMixin(ProgressItemMixin):
     # RenderableFAQList object.
     faqs = None
     description = Template("")
+    summary_template = None
 
     def __init__(self, *args, **kwargs):
         # Required arguments for a Registration Question
@@ -59,6 +60,13 @@ class RegistrationQuestionMixin(ProgressItemMixin):
             'registrations:edit_question',
             kwargs=reverse_kwargs,
         )
+
+    def summary(self):
+        """Return a renderable Summary object to display the
+        current answers to this question, and its errors if any."""
+        summary = Summary(self)
+
+class Summary
 
 
 class PlaceholderQuestion(RegistrationQuestionMixin, questions.Question):
