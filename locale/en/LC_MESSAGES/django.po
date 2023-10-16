@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-31 13:05+0000\n"
+"POT-Creation-Date: 2023-10-09 13:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,21 +38,21 @@ msgstr "Log in"
 msgid "main:footer:logout"
 msgstr "Log out"
 
-#: main/templates/base/login_header.html:6
-msgid "site:header:login"
+#: main/templates/base/procreg_base.html:27
+msgid "main:header:app_name"
 msgstr ""
 
-#: main/templates/base/login_header.html:7
+#: main/templates/base/procreg_base.html:35
 msgid "main:globals:logout"
 msgstr "Log out"
 
-#. Translators: This is the title that will end up in the header (in blue)
-#: main/templates/base/site_header.html:4
-#: registrations/templates/registrations/base-form.html:64
-#: registrations/templates/registrations/base-no-sidebar.html:64
-#: registrations/templates/registrations/base.html:63
-msgid "site:header:title"
-msgstr "Data Processing Register for GW and REBO"
+#: main/templates/base/procreg_base.html:38
+msgid "main:globals:login"
+msgstr "Log in"
+
+#: main/templates/base/procreg_base.html:60
+msgid "site:hero:default_hero_text"
+msgstr ""
 
 #. Translators: This is the title that will end up in the tab of the browser
 #: main/templates/base/site_title.html:5
@@ -67,11 +67,11 @@ msgstr ""
 msgid "main:error:400:text"
 msgstr ""
 
-#: main/templates/error/403.html:9
+#: main/templates/error/403.html:8
 msgid "main:error:403:title"
 msgstr ""
 
-#: main/templates/error/403.html:12
+#: main/templates/error/403.html:14
 msgid "main:error:403:text"
 msgstr ""
 
@@ -91,11 +91,11 @@ msgstr ""
 msgid "main:error:500:text"
 msgstr ""
 
-#: main/templates/registration/logged_out.html:9
+#: main/templates/registration/logged_out.html:8
 msgid "main:logout:title"
 msgstr ""
 
-#: main/templates/registration/logged_out.html:12
+#: main/templates/registration/logged_out.html:14
 msgid "main:logout:text"
 msgstr ""
 
@@ -123,11 +123,11 @@ msgstr ""
 msgid "main:login:submit"
 msgstr ""
 
-#: procreg/settings.py:233
+#: procreg/settings.py:236
 msgid "lang:nl"
 msgstr ""
 
-#: procreg/settings.py:234
+#: procreg/settings.py:237
 msgid "lang:en"
 msgstr ""
 
@@ -165,29 +165,39 @@ msgstr ""
 msgid "models:registration_title_help_text"
 msgstr "Submitted"
 
-#: registrations/models/registration.py:61
+#: registrations/models/registration.py:27
+#, fuzzy
+#| msgid "lists:registrations:filter_label_submitted"
+msgid "models:registrations:title_verbose_name"
+msgstr "Submitted"
+
+#: registrations/models/registration.py:62
 msgid "models:registration:registration_uses_information_false"
 msgstr ""
 
-#: registrations/models/registration.py:62
+#: registrations/models/registration.py:63
 msgid "models:registration:registration_uses_information_true"
 msgstr ""
 
-#: registrations/models/registration.py:78
+#: registrations/models/registration.py:79
 msgid "models:registration:confirm_submission_false"
 msgstr ""
 
-#: registrations/models/registration.py:79
+#: registrations/models/registration.py:80
 msgid "models:registration:confirm_submission_true"
 msgstr ""
 
 #: registrations/questions/attachment_questions.py:20
-msgid "registrations:forms:attachments_question_title"
-msgstr ""
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "questions:attachments:question_title"
+msgstr "Title"
 
 #: registrations/questions/attachment_questions.py:21
-msgid "registrations:forms:attachments_question_description"
-msgstr ""
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "questions:attachments:question_description"
+msgstr "List for Privacy Officer"
 
 #: registrations/questions/attachment_questions.py:73
 #, fuzzy
@@ -196,10 +206,8 @@ msgid "registrations:questions:new_attachment"
 msgstr "Title"
 
 #: registrations/questions/involved_questions.py:24
-#, fuzzy
-#| msgid "registrations:lists:th_title"
 msgid "questions:involved_people:question_title"
-msgstr "Title"
+msgstr "Deelnemersgroepen"
 
 #: registrations/questions/involved_questions.py:25
 #, fuzzy
@@ -208,10 +216,8 @@ msgid "questions:involved_people:question_description"
 msgstr "List for Privacy Officer"
 
 #: registrations/questions/involved_questions.py:50
-#, fuzzy
-#| msgid "registrations:lists:th_title"
 msgid "questions:new_involved:question_title"
-msgstr "Title"
+msgstr "Deelnemersgroep"
 
 #: registrations/questions/involved_questions.py:51
 #, fuzzy
@@ -226,16 +232,12 @@ msgid "questions:purpose:question_title"
 msgstr "Title"
 
 #: registrations/questions/involved_questions.py:117
-#, fuzzy
-#| msgid "registrations:home:po_list_hero"
 msgid "questions:purpose:question_description"
-msgstr "List for Privacy Officer"
+msgstr ""
 
 #: registrations/questions/involved_questions.py:146
-#, fuzzy
-#| msgid "registrations:lists:th_title"
 msgid "questions:special_details:question_title"
-msgstr "Title"
+msgstr "Bijzondere persoonsgegevens"
 
 #: registrations/questions/involved_questions.py:147
 #, fuzzy
@@ -366,27 +368,6 @@ msgstr ""
 msgid "registrations:forms:category_question_description"
 msgstr "List for Privacy Officer"
 
-#: registrations/templates/registrations/base-form.html:35
-#: registrations/templates/registrations/base-form.html:36
-#: registrations/templates/registrations/base-no-sidebar.html:35
-#: registrations/templates/registrations/base-no-sidebar.html:36
-#: registrations/templates/registrations/base.html:34
-#: registrations/templates/registrations/base.html:35
-msgid "cdh.core:uu"
-msgstr ""
-
-#: registrations/templates/registrations/base-form.html:70
-#: registrations/templates/registrations/base-no-sidebar.html:70
-#: registrations/templates/registrations/base.html:69
-msgid "site:header:login_text"
-msgstr ""
-
-#: registrations/templates/registrations/base-form.html:98
-#: registrations/templates/registrations/base-no-sidebar.html:98
-#: registrations/templates/registrations/base.html:97
-msgid "site:hero:default_hero_text"
-msgstr ""
-
 #: registrations/templates/registrations/crud/delete_receiver.html:7
 msgid "views:delete_receiver:confirm_text"
 msgstr ""
@@ -400,12 +381,20 @@ msgid "registrations:delete:confirm_text"
 msgstr ""
 
 #: registrations/templates/registrations/delete_registration.html:17
-#: registrations/templates/registrations/overview.html:55
+#: registrations/templates/registrations/overview.html:50
 msgid "registrations:actions:header"
 msgstr ""
 
 #: registrations/templates/registrations/delete_registration.html:24
 msgid "registrations:actions:overview"
+msgstr ""
+
+#: registrations/templates/registrations/faqlist.html:3
+msgid "templates:sidebar:faqs_header"
+msgstr ""
+
+#: registrations/templates/registrations/faqlist.html:15
+msgid "templates:sidebar:no_faqs_available"
 msgstr ""
 
 #: registrations/templates/registrations/home.html:9
@@ -428,80 +417,83 @@ msgstr ""
 msgid "registrations:actions:new_registration"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:16
-#: registrations/templates/registrations/landing.html:83
+#: registrations/templates/registrations/landing.html:15
 msgid "landing:call_to_action:h1"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:18
+#: registrations/templates/registrations/landing.html:17
 msgid "landing:call_to_action:button"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:21
+#: registrations/templates/registrations/landing.html:20
 msgid "landing:call_to_action:subtext"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:25
+#: registrations/templates/registrations/landing.html:24
 msgid "landing:video:video_h1"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:31
+#: registrations/templates/registrations/landing.html:30
 msgid "landing:steps:h1"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:34
+#: registrations/templates/registrations/landing.html:33
 msgid "landing:steps:step1_title"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:37
+#: registrations/templates/registrations/landing.html:36
 msgid "landing:steps:step1"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:42
+#: registrations/templates/registrations/landing.html:43
 msgid "landing:steps:step2_title"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:45
+#: registrations/templates/registrations/landing.html:46
 msgid "landing:steps:step2"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:52
+#: registrations/templates/registrations/landing.html:53
 msgid "landing:steps:step3_title"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:55
+#: registrations/templates/registrations/landing.html:56
 msgid "landing:steps:step3"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:60
+#: registrations/templates/registrations/landing.html:63
 msgid "landing:steps:step4_title"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:63
+#: registrations/templates/registrations/landing.html:66
 msgid "landing:steps:step4"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:72
+#: registrations/templates/registrations/landing.html:74
 msgid "landing:faq:faq_h1"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:76
+#: registrations/templates/registrations/landing.html:78
 msgid "landing:faqs:no_faqs_yet"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:79
+#: registrations/templates/registrations/landing.html:81
 msgid "landing:faq:all_faqs_link"
 msgstr ""
 
 #: registrations/templates/registrations/landing.html:85
+msgid "landing:ask_a_question:h2"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:87
 msgid "landing:faqs:button"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:88
+#: registrations/templates/registrations/landing.html:90
 msgid "landing:faq:research_glossary_url"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:89
+#: registrations/templates/registrations/landing.html:91
 msgid "landing:faq:research_glossary_link_text"
 msgstr ""
 
@@ -509,36 +501,66 @@ msgstr ""
 msgid "registrations:new_registration:header_title"
 msgstr ""
 
-#: registrations/templates/registrations/overview.html:7
-msgid "registrations:overview:page_title"
-msgstr ""
+#: registrations/templates/registrations/new_registration.html:20
+#, fuzzy
+#| msgid "registrations:lists:th_created_by"
+msgid "registrations:create:h2"
+msgstr "Created by"
 
-#: registrations/templates/registrations/overview.html:16
-msgid "registrations:overview:page_description"
-msgstr ""
+#: registrations/templates/registrations/new_registration.html:21
+#, fuzzy
+#| msgid "registrations:lists:th_created_by"
+msgid "registrations:create:description"
+msgstr "Created by"
 
-#: registrations/templates/registrations/overview.html:27
+#: registrations/templates/registrations/overview.html:24
 msgid "registrations:overview:progress_title"
 msgstr ""
 
-#: registrations/templates/registrations/overview.html:34
+#: registrations/templates/registrations/overview.html:30
 msgid "registrations:actions:continue"
 msgstr ""
 
-#: registrations/templates/registrations/overview.html:62
+#: registrations/templates/registrations/overview.html:57
 msgid "registrations:actions:delete"
 msgstr ""
 
-#: registrations/templates/registrations/overview.html:67
+#: registrations/templates/registrations/overview.html:62
 msgid "registrations:actions:add_category"
 msgstr ""
 
-#: registrations/templates/registrations/summary.html:21
+#: registrations/templates/registrations/summary.html:26
 msgid "registrations:summary:page_title"
 msgstr ""
 
-#: registrations/templates/registrations/summary.html:24
+#: registrations/templates/registrations/summary.html:27
 msgid "registrations:summary:page_description"
+msgstr ""
+
+#: registrations/templates/registrations/summary.html:46
+msgid "questions:actions:edit"
+msgstr "Edit"
+
+#: registrations/templates/registrations/summary.html:62
+msgid "views:summary:submitter_comments_h3"
+msgstr ""
+
+#: registrations/templates/registrations/summary.html:72
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "views:summary:submitter_comments_description"
+msgstr "List for Privacy Officer"
+
+#: registrations/templates/registrations/summary.html:80
+msgid "views:summary:submit_h3"
+msgstr ""
+
+#: registrations/templates/registrations/summary.html:82
+msgid "views:summary:is_submittable"
+msgstr ""
+
+#: registrations/templates/registrations/summary.html:85
+msgid "views:summary:not_submittable"
 msgstr ""
 
 #: registrations/templates/registrations/templatetags/display_loq.html:27
@@ -596,10 +618,33 @@ msgstr "List for Privacy Officer"
 msgid "registrations:lists:th_created_by"
 msgstr "Created by"
 
-#: registrations/views/views.py:243
+#: registrations/views/views.py:92
+msgid "registrations:views:summary_title"
+msgstr "Summary"
+
+#: registrations/views/views.py:93
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "registrations:views:summary_description"
+msgstr "List for Privacy Officer"
+
+#: registrations/views/views.py:261
 msgid "registrations:views:involved_manager_title"
 msgstr "Information"
 
-#: registrations/views/views.py:244
+#: registrations/views/views.py:262
 msgid "registrations:views:involved_manager_description"
 msgstr ""
+
+#: src/cdh-django-core/src/cdh/federated_auth/saml/views.py:141
+msgid "Logged out"
+msgstr ""
+
+#: src/cdh-django-core/src/cdh/questions/templates/cdh.questions/tags/display_question_tag.html:32
+#, fuzzy
+#| msgid "questions:actions:edit"
+msgid "questions:buttons:save_and_next"
+msgstr "Edit"
+
+#~ msgid "site:header:title"
+#~ msgstr "Data Processing Register for GW and REBO"
