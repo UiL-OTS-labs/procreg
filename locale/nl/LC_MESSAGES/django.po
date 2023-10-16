@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-31 13:05+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2023-10-09 13:41+0000\n"
+"PO-Revision-Date: 2023-10-09 15:54+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -38,21 +38,21 @@ msgstr "Inloggen"
 msgid "main:footer:logout"
 msgstr "Uitloggen"
 
-#: main/templates/base/login_header.html:6
-msgid "site:header:login"
-msgstr "Inloggen"
+#: main/templates/base/procreg_base.html:27
+msgid "main:header:app_name"
+msgstr "Verwerkingsregister GW/REBO"
 
-#: main/templates/base/login_header.html:7
+#: main/templates/base/procreg_base.html:35
 msgid "main:globals:logout"
 msgstr "Uitloggen"
 
-#. Translators: This is the title that will end up in the header (in blue)
-#: main/templates/base/site_header.html:4
-#: registrations/templates/registrations/base-form.html:64
-#: registrations/templates/registrations/base-no-sidebar.html:64
-#: registrations/templates/registrations/base.html:63
-msgid "site:header:title"
-msgstr "Verwerkingsregister voor GW en REBO"
+#: main/templates/base/procreg_base.html:38
+msgid "main:globals:login"
+msgstr "Log in"
+
+#: main/templates/base/procreg_base.html:60
+msgid "site:hero:default_hero_text"
+msgstr "Uw registratie"
 
 #. Translators: This is the title that will end up in the tab of the browser
 #: main/templates/base/site_title.html:5
@@ -67,11 +67,11 @@ msgstr ""
 msgid "main:error:400:text"
 msgstr ""
 
-#: main/templates/error/403.html:9
+#: main/templates/error/403.html:8
 msgid "main:error:403:title"
 msgstr ""
 
-#: main/templates/error/403.html:12
+#: main/templates/error/403.html:14
 msgid "main:error:403:text"
 msgstr ""
 
@@ -91,11 +91,11 @@ msgstr ""
 msgid "main:error:500:text"
 msgstr ""
 
-#: main/templates/registration/logged_out.html:9
+#: main/templates/registration/logged_out.html:8
 msgid "main:logout:title"
 msgstr ""
 
-#: main/templates/registration/logged_out.html:12
+#: main/templates/registration/logged_out.html:14
 msgid "main:logout:text"
 msgstr ""
 
@@ -123,11 +123,11 @@ msgstr ""
 msgid "main:login:submit"
 msgstr ""
 
-#: procreg/settings.py:233
+#: procreg/settings.py:236
 msgid "lang:nl"
 msgstr ""
 
-#: procreg/settings.py:234
+#: procreg/settings.py:237
 msgid "lang:en"
 msgstr ""
 
@@ -165,31 +165,35 @@ msgstr ""
 msgid "models:registration_title_help_text"
 msgstr "Ingestuurd"
 
-#: registrations/models/registration.py:61
+#: registrations/models/registration.py:27
+msgid "models:registrations:title_verbose_name"
+msgstr "De titel van uw registratie"
+
+#: registrations/models/registration.py:62
 msgid "models:registration:registration_uses_information_false"
 msgstr ""
 
-#: registrations/models/registration.py:62
+#: registrations/models/registration.py:63
 msgid "models:registration:registration_uses_information_true"
 msgstr ""
 
-#: registrations/models/registration.py:78
+#: registrations/models/registration.py:79
 msgid "models:registration:confirm_submission_false"
 msgstr ""
 
-#: registrations/models/registration.py:79
+#: registrations/models/registration.py:80
 msgid "models:registration:confirm_submission_true"
 msgstr ""
 
 #: registrations/questions/attachment_questions.py:20
-msgid "registrations:forms:attachments_question_title"
+msgid "questions:attachments:question_title"
 msgstr "Documenten"
 
 #: registrations/questions/attachment_questions.py:21
-msgid "registrations:forms:attachments_question_description"
-msgstr ""
-"Indien een of meer van volgende documenten zijn opgesteld in het kader van "
-"dit onderzoek, kun je die hier uploaden"
+#, fuzzy
+#| msgid "questions:security:description"
+msgid "questions:attachments:question_description"
+msgstr "Beveiliging"
 
 #: registrations/questions/attachment_questions.py:73
 #, fuzzy
@@ -222,8 +226,6 @@ msgid "questions:new_involved:question_description"
 msgstr "Beveiliging"
 
 #: registrations/questions/involved_questions.py:116
-#, fuzzy
-#| msgid "registrations:forms:goal_question_title"
 msgid "questions:purpose:question_title"
 msgstr "Onderzoeksdoel"
 
@@ -234,10 +236,8 @@ msgid "questions:purpose:question_description"
 msgstr "Beveiliging"
 
 #: registrations/questions/involved_questions.py:146
-#, fuzzy
-#| msgid "questions:security:description"
 msgid "questions:special_details:question_title"
-msgstr "Beveiliging"
+msgstr "Bijzondere persoonsgegevens"
 
 #: registrations/questions/involved_questions.py:147
 #, fuzzy
@@ -246,10 +246,8 @@ msgid "questions:special_details:question_description"
 msgstr "Beveiliging"
 
 #: registrations/questions/involved_questions.py:174
-#, fuzzy
-#| msgid "registrations:forms:receiver_question_title"
 msgid "questions:sensitive_details:question_title"
-msgstr "Ontvangers"
+msgstr "Gevoelige persoonsgegevens"
 
 #: registrations/questions/involved_questions.py:175
 #, fuzzy
@@ -265,28 +263,22 @@ msgid "questions:regular_details:question_description"
 msgstr "Beveiliging"
 
 #: registrations/questions/involved_questions.py:205
-#, fuzzy
-#| msgid "registrations:forms:goal_question_title"
 msgid "questions:regular_details:question_title"
-msgstr "Onderzoeksdoel"
+msgstr "Reguliere persoonsgegevens"
 
 #: registrations/questions/involved_questions.py:220
 msgid "global:possessive_preposition"
 msgstr ""
 
 #: registrations/questions/misc_questions.py:16
-#, fuzzy
-#| msgid "questions:software:title"
 msgid "questions:new_reg:question_title"
-msgstr "Software"
+msgstr "Basisgegevens"
 
 #: registrations/questions/misc_questions.py:17
 msgid "registrations:forms:registration_description"
 msgstr ""
 
 #: registrations/questions/misc_questions.py:52
-#, fuzzy
-#| msgid "registrations:forms:faculty_question_title"
 msgid "questions:faculty:question_title"
 msgstr "Faculteit"
 
@@ -297,20 +289,14 @@ msgid "questions:faculty:question_description"
 msgstr "Beveiliging"
 
 #: registrations/questions/misc_questions.py:80
-#, fuzzy
-#| msgid "registrations:forms:traversal_question_title"
 msgid "questions:traversal:question_title"
 msgstr "Doorlooptijd"
 
 #: registrations/questions/misc_questions.py:82
-#, fuzzy
-#| msgid "questions:security:description"
 msgid "questions:traversal:question_description"
-msgstr "Beveiliging"
+msgstr "Geef de doorlooptijd van uw studie op"
 
 #: registrations/questions/misc_questions.py:105
-#, fuzzy
-#| msgid "registrations:forms:goal_question_title"
 msgid "questions:goal:question_title"
 msgstr "Onderzoeksdoel"
 
@@ -331,10 +317,8 @@ msgid "registrations:forms:confirm_information_use_question_title"
 msgstr ""
 
 #: registrations/questions/misc_questions.py:191
-#, fuzzy
-#| msgid "registrations:forms:receiver_question_title"
 msgid "questions:retention:question_title"
-msgstr "Ontvangers"
+msgstr "Bewaartermijn"
 
 #: registrations/questions/misc_questions.py:192
 #, fuzzy
@@ -343,8 +327,6 @@ msgid "questions:retention:question_description"
 msgstr "Beveiliging"
 
 #: registrations/questions/misc_questions.py:214
-#, fuzzy
-#| msgid "registrations:forms:receiver_question_title"
 msgid "questions:receivers:question_title"
 msgstr "Ontvangers"
 
@@ -361,8 +343,6 @@ msgid "questions:software:question_description"
 msgstr "Beveiliging"
 
 #: registrations/questions/misc_questions.py:348
-#, fuzzy
-#| msgid "questions:software:title"
 msgid "questions:software:question_title"
 msgstr "Software"
 
@@ -373,8 +353,6 @@ msgid "questions:security:question_description"
 msgstr "Beveiliging"
 
 #: registrations/questions/misc_questions.py:468
-#, fuzzy
-#| msgid "questions:security:description"
 msgid "questions:security:question_title"
 msgstr "Beveiliging"
 
@@ -396,27 +374,6 @@ msgstr ""
 msgid "registrations:forms:category_question_description"
 msgstr "Onderzoeksdoel"
 
-#: registrations/templates/registrations/base-form.html:35
-#: registrations/templates/registrations/base-form.html:36
-#: registrations/templates/registrations/base-no-sidebar.html:35
-#: registrations/templates/registrations/base-no-sidebar.html:36
-#: registrations/templates/registrations/base.html:34
-#: registrations/templates/registrations/base.html:35
-msgid "cdh.core:uu"
-msgstr ""
-
-#: registrations/templates/registrations/base-form.html:70
-#: registrations/templates/registrations/base-no-sidebar.html:70
-#: registrations/templates/registrations/base.html:69
-msgid "site:header:login_text"
-msgstr ""
-
-#: registrations/templates/registrations/base-form.html:98
-#: registrations/templates/registrations/base-no-sidebar.html:98
-#: registrations/templates/registrations/base.html:97
-msgid "site:hero:default_hero_text"
-msgstr ""
-
 #: registrations/templates/registrations/crud/delete_receiver.html:7
 msgid "views:delete_receiver:confirm_text"
 msgstr ""
@@ -430,12 +387,20 @@ msgid "registrations:delete:confirm_text"
 msgstr ""
 
 #: registrations/templates/registrations/delete_registration.html:17
-#: registrations/templates/registrations/overview.html:55
+#: registrations/templates/registrations/overview.html:50
 msgid "registrations:actions:header"
 msgstr ""
 
 #: registrations/templates/registrations/delete_registration.html:24
 msgid "registrations:actions:overview"
+msgstr ""
+
+#: registrations/templates/registrations/faqlist.html:3
+msgid "templates:sidebar:faqs_header"
+msgstr "Vragen?"
+
+#: registrations/templates/registrations/faqlist.html:15
+msgid "templates:sidebar:no_faqs_available"
 msgstr ""
 
 #: registrations/templates/registrations/home.html:9
@@ -458,85 +423,88 @@ msgstr ""
 msgid "registrations:actions:new_registration"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:16
-#: registrations/templates/registrations/landing.html:83
+#: registrations/templates/registrations/landing.html:15
 msgid "landing:call_to_action:h1"
 msgstr "Worden er binnen jouw studie persoonsgegevens* verwerkt?"
 
-#: registrations/templates/registrations/landing.html:18
+#: registrations/templates/registrations/landing.html:17
 msgid "landing:call_to_action:button"
 msgstr "Ja, registreer nu!"
 
-#: registrations/templates/registrations/landing.html:21
+#: registrations/templates/registrations/landing.html:20
 msgid "landing:call_to_action:subtext"
 msgstr "* Wat zijn persoonsgegevens?"
 
-#: registrations/templates/registrations/landing.html:25
+#: registrations/templates/registrations/landing.html:24
 msgid "landing:video:video_h1"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:31
+#: registrations/templates/registrations/landing.html:30
 msgid "landing:steps:h1"
 msgstr ""
 "Wat zijn de stappen van persoonsgegevens registreren voor jouw onderzoek?"
 
-#: registrations/templates/registrations/landing.html:34
+#: registrations/templates/registrations/landing.html:33
 msgid "landing:steps:step1_title"
 msgstr "Invullen"
 
-#: registrations/templates/registrations/landing.html:37
+#: registrations/templates/registrations/landing.html:36
 msgid "landing:steps:step1"
 msgstr ""
 "Jij registreert de onderzoeks activiteiten waarbij je persoonsgegevens gaat "
 "verzamelen"
 
-#: registrations/templates/registrations/landing.html:42
+#: registrations/templates/registrations/landing.html:43
 msgid "landing:steps:step2_title"
 msgstr "Valideren"
 
-#: registrations/templates/registrations/landing.html:45
+#: registrations/templates/registrations/landing.html:46
 msgid "landing:steps:step2"
 msgstr "De Privacy officer valideert je registratie."
 
-#: registrations/templates/registrations/landing.html:52
+#: registrations/templates/registrations/landing.html:53
 msgid "landing:steps:step3_title"
 msgstr "Afronden"
 
-#: registrations/templates/registrations/landing.html:55
+#: registrations/templates/registrations/landing.html:56
 msgid "landing:steps:step3"
 msgstr ""
 "De Privacy Officer bevestigt je je registratie per mail, of vraagt om "
 "aanpassingen."
 
-#: registrations/templates/registrations/landing.html:60
+#: registrations/templates/registrations/landing.html:63
 msgid "landing:steps:step4_title"
 msgstr "Afronden"
 
-#: registrations/templates/registrations/landing.html:63
+#: registrations/templates/registrations/landing.html:66
 msgid "landing:steps:step4"
 msgstr "Registratie loopt!"
 
-#: registrations/templates/registrations/landing.html:72
+#: registrations/templates/registrations/landing.html:74
 msgid "landing:faq:faq_h1"
 msgstr "Vragen die vaker gesteld worden."
 
-#: registrations/templates/registrations/landing.html:76
+#: registrations/templates/registrations/landing.html:78
 msgid "landing:faqs:no_faqs_yet"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:79
+#: registrations/templates/registrations/landing.html:81
 msgid "landing:faq:all_faqs_link"
 msgstr ""
 
 #: registrations/templates/registrations/landing.html:85
+msgid "landing:ask_a_question:h2"
+msgstr "Staat jouw vraag er niet tussen?"
+
+#: registrations/templates/registrations/landing.html:87
 msgid "landing:faqs:button"
 msgstr "Stel je vraag"
 
-#: registrations/templates/registrations/landing.html:88
+#: registrations/templates/registrations/landing.html:90
 msgid "landing:faq:research_glossary_url"
 msgstr ""
 
-#: registrations/templates/registrations/landing.html:89
+#: registrations/templates/registrations/landing.html:91
 msgid "landing:faq:research_glossary_link_text"
 msgstr "Bekijk ook de UU Research Glossary"
 
@@ -544,37 +512,74 @@ msgstr "Bekijk ook de UU Research Glossary"
 msgid "registrations:new_registration:header_title"
 msgstr ""
 
-#: registrations/templates/registrations/overview.html:7
-msgid "registrations:overview:page_title"
-msgstr ""
+#: registrations/templates/registrations/new_registration.html:20
+msgid "registrations:create:h2"
+msgstr "Nieuwe registratie"
 
-#: registrations/templates/registrations/overview.html:16
-msgid "registrations:overview:page_description"
-msgstr ""
+#: registrations/templates/registrations/new_registration.html:21
+msgid "registrations:create:description"
+msgstr "U staat op het punt om een registratie aan te maken."
 
-#: registrations/templates/registrations/overview.html:27
+#: registrations/templates/registrations/overview.html:24
 msgid "registrations:overview:progress_title"
 msgstr ""
 
-#: registrations/templates/registrations/overview.html:34
+#: registrations/templates/registrations/overview.html:30
 msgid "registrations:actions:continue"
-msgstr ""
+msgstr "Ga door"
 
-#: registrations/templates/registrations/overview.html:62
+#: registrations/templates/registrations/overview.html:57
 msgid "registrations:actions:delete"
 msgstr ""
 
-#: registrations/templates/registrations/overview.html:67
+#: registrations/templates/registrations/overview.html:62
 msgid "registrations:actions:add_category"
 msgstr ""
 
-#: registrations/templates/registrations/summary.html:21
+#: registrations/templates/registrations/summary.html:26
 msgid "registrations:summary:page_title"
 msgstr "Overzicht"
 
-#: registrations/templates/registrations/summary.html:24
+#: registrations/templates/registrations/summary.html:27
 msgid "registrations:summary:page_description"
 msgstr ""
+"Hier vind je een overzicht van alle tot zo ver ingevulde gegevens, en kun je "
+"eventuele opmerkingen voor de Privacy Officer toevoegen. Onderaan deze "
+"pagina vind je de optie om deze registratie op te sturen."
+
+#: registrations/templates/registrations/summary.html:46
+msgid "questions:actions:edit"
+msgstr "Bewerken"
+
+#: registrations/templates/registrations/summary.html:62
+msgid "views:summary:submitter_comments_h3"
+msgstr "Algemene opmerkingen"
+
+#: registrations/templates/registrations/summary.html:72
+msgid "views:summary:submitter_comments_description"
+msgstr ""
+"Deel hier algemene opmerkingen met betrekking tot je registratie. "
+"Bijvoorbeeld informatie die niet uitgevraagd is in de vorige stappen, maar "
+"je wel nuttig acht voor de Privacy Officer die je registratie zal verwerken."
+
+#: registrations/templates/registrations/summary.html:80
+msgid "views:summary:submit_h3"
+msgstr "Registratie versturen"
+
+#: registrations/templates/registrations/summary.html:82
+msgid "views:summary:is_submittable"
+msgstr ""
+"Alle verplichte vragen zijn volledig ingevuld, dus je kunt deze registratie "
+"nu versturen ter verwerking door de Privacy Officer. Voordat je dat doet, is "
+"het van belang dat je de hierboven ingevulde gegevens zorgvuldig "
+"controleert. Als je op \"versturen\" drukt wordt jouw registratie niet "
+"onmiddelijk verstuurd, er volgt nog een bevestigingsscherm."
+
+#: registrations/templates/registrations/summary.html:85
+msgid "views:summary:not_submittable"
+msgstr ""
+"Jouw registratie is nog niet compleet. Bekijk het overzicht hierboven en "
+"verbeter eventuele fouten, om je registratie te kunnen versturen."
 
 #: registrations/templates/registrations/templatetags/display_loq.html:27
 msgid "templatetags:loq:add_new"
@@ -631,15 +636,48 @@ msgstr "Lijst voor Privacy Officer"
 msgid "registrations:lists:th_created_by"
 msgstr "Aangemaakt door"
 
-#: registrations/views/views.py:243
+#: registrations/views/views.py:92
+msgid "registrations:views:summary_title"
+msgstr ""
+
+#: registrations/views/views.py:93
+msgid "registrations:views:summary_description"
+msgstr ""
+"Hier vind je een overzicht van alle tot zo ver ingevulde gegevens, en kun je "
+"eventuele opmerkingen voor de Privacy Officer toevoegen. Onderaan deze "
+"pagina vind je de optie om deze registratie te versturen."
+
+#: registrations/views/views.py:261
 msgid "registrations:views:involved_manager_title"
 msgstr "Gegevens"
 
-#: registrations/views/views.py:244
+#: registrations/views/views.py:262
 #, fuzzy
 #| msgid "registrations:forms:involved_people_question_title"
 msgid "registrations:views:involved_manager_description"
 msgstr "Deelnemers"
+
+#: src/cdh-django-core/src/cdh/federated_auth/saml/views.py:141
+msgid "Logged out"
+msgstr ""
+
+#: src/cdh-django-core/src/cdh/questions/templates/cdh.questions/tags/display_question_tag.html:32
+msgid "questions:buttons:save_and_next"
+msgstr "Opslaan en verder"
+
+#~ msgid "site:header:login"
+#~ msgstr "Inloggen"
+
+#~ msgid "site:header:title"
+#~ msgstr "Verwerkingsregister voor GW en REBO"
+
+#~ msgid "registrations:forms:attachments_question_title"
+#~ msgstr "Documenten"
+
+#~ msgid "registrations:forms:attachments_question_description"
+#~ msgstr ""
+#~ "Indien een of meer van volgende documenten zijn opgesteld in het kader "
+#~ "van dit onderzoek, kun je die hier uploaden"
 
 #~ msgid "registrations:forms:purpose_question_title"
 #~ msgstr "Onderzoeksdoel"

@@ -63,6 +63,9 @@ class NewRegistrationConsumer(RegistrationConsumer):
         self.blueprint.top_questions.append(
             self.question,
         )
+        self.blueprint.questions.append(
+            self.question,
+        )
         self.get_errors()
         self.blueprint.completed.append(self.question)
         # TopQuestionsConsumer checks for our errors, so we can just return
@@ -82,6 +85,9 @@ class FacultyConsumer(RegistrationConsumer):
 
     def consume(self):
         self.blueprint.top_questions.append(
+            self.question,
+        )
+        self.blueprint.questions.append(
             self.question,
         )
         self.get_errors()
@@ -111,6 +117,9 @@ class TraversalConsumer(BaseQuestionConsumer):
         self.blueprint.questions.append(
             self.question,
         )
+        self.blueprint.desired_next.append(
+            self.question,
+        )
         if self.no_errors():
             self.question.complete = True
             return [GoalConsumer]
@@ -125,7 +134,7 @@ class TraversalConsumer(BaseQuestionConsumer):
         return True
 
 
-class GoalConsumer(BaseQuestionConsumer):
+class GoalConsumer(RegistrationConsumer):
 
     question_class = GoalQuestion
 
@@ -135,6 +144,9 @@ class GoalConsumer(BaseQuestionConsumer):
         )
         if self.no_errors():
             self.question.complete = True
+            self.blueprint.completed.append(
+                self.question,
+            )
             return [InvolvedPeopleConsumer]
         self.question.incomplete = True
         return []

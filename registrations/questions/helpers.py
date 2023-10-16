@@ -3,6 +3,7 @@ from django.template import loader, Template
 
 from cdh.questions import questions
 
+from main.utils import Renderable
 from registrations.progress import ProgressItemMixin
 from registrations.models import Registration
 from registrations.utils import RenderableFaqList
@@ -19,6 +20,7 @@ class RegistrationQuestionMixin(ProgressItemMixin):
     # RenderableFAQList object.
     faqs = None
     description = Template("")
+    summary_template = None
 
     def __init__(self, *args, **kwargs):
         # Required arguments for a Registration Question
@@ -59,6 +61,41 @@ class RegistrationQuestionMixin(ProgressItemMixin):
             'registrations:edit_question',
             kwargs=reverse_kwargs,
         )
+
+    def summary(self):
+        """Return a renderable Summary object to display the
+        current answers to this question, and its errors if any."""
+        return Summary(self)
+
+class Summary(Renderable):
+
+    default_template = "forms/question_summary.html"
+
+    def __init__(self, question):
+        self.question = question
+
+    def get_errors(self):
+        return [
+            "error 1",
+            "error 2",
+        ]
+
+    def get_template_name(self):
+        if self.question.summary_template:
+            template_name = self.question.summary_template
+        else:
+            template_name = self.default_template
+        return template_name
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            {
+                "question": self.question,
+                "errors": self.get_errors(),
+            }
+        )
+        return context
 
 
 class PlaceholderQuestion(RegistrationQuestionMixin, questions.Question):

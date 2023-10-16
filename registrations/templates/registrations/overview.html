@@ -4,7 +4,7 @@
 {% load registration_tags %}
 
 {% block hero_text %}
-<h3>{% trans "registrations:overview:page_title" %}</h3>
+<h3>{{registration.registration_title}}</h3>
 {% endblock %}
 
 {% block cover %}
@@ -12,9 +12,6 @@
 
 
 {% block main_content %}
-<p>
-    {% trans "registrations:overview:page_description" %}
-</p>
 
 <div class="summary-questions">
 {% for question in top_questions %}
@@ -29,10 +26,8 @@
     <p>Vervolg uw aanvraag hier:</p>
     {% display_question_header blueprint.get_desired_next %}
     <div class="buttons">
-    <a href="{{blueprint.get_desired_next_url}}">
-        <button>
+    <a href="{{blueprint.get_desired_next_url}}" class="btn btn-primary">
             {% trans "registrations:actions:continue" %}
-        </button>
     </a>
     </div>
 

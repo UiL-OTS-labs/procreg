@@ -24,6 +24,7 @@ class Registration(models.Model):
     registration_title = models.CharField(
         max_length=200,
         help_text=_("models:registration_title_help_text"),
+        verbose_name=_("models:registrations:title_verbose_name"),
     )
     created_by = models.ForeignKey(USER_MODEL,
                                    on_delete=models.SET_DEFAULT,
@@ -176,6 +177,14 @@ class Registration(models.Model):
     policy_additions = models.TextField(
         max_length=2000,
         default="",
+        blank=True,
+    )
+
+    # Misc
+
+    submitter_comments = models.TextField(
+        max_length = 1000,
+        default = "",
         blank=True,
     )
 

@@ -10,11 +10,12 @@ from cdh.questions.views import BlueprintMixin, QuestionView, \
     QuestionDeleteView, QuestionCreateView, QuestionFromURLMixin, \
     QuestionEditView
 
+from django import forms
 
 from registrations.models import Registration, ParticipantCategory, Involved, \
     Software, Receiver, Faq, Attachment, Faq
 from registrations.questions import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
-from registrations.mixins import RegistrationMixin
+from registrations.mixins import RegistrationMixin, RegistrationQuestionMixin
 from registrations.progress import ProgressItemMixin
 from registrations.blueprints import RegistrationBlueprint
 
@@ -72,18 +73,26 @@ class RegistrationOverview(RegistrationMixin,
         return context
 
 
+class SummaryForm(forms.ModelForm):
+
+    class Meta:
+        model = Registration
+        fields = ["submitter_comments"]
+
+    
 class RegistrationSummaryView(
         ProgressItemMixin,
         RegistrationMixin,
         BlueprintMixin,
-        generic.TemplateView,
+        generic.UpdateView,
 ):
 
     template_name = 'registrations/summary.html'
     extra_context = {"stepper": True}
-    title = "registrations:views:summary_title"
-    description = "registrations:views:summary_description"
+    title = _("registrations:views:summary_title")
+    description = _("registrations:views:summary_description")
     slug = "summary"
+    form_class = SummaryForm
 
     def get_object(self,):
         return self.get_registration()
@@ -103,9 +112,18 @@ class RegistrationSummaryView(
             },
         )
 
+    def get_success_url(self,):
+        success_url = reverse(
+            "registrations:summary",
+            kwargs={
+                "reg_pk": self.get_registration().pk,
+            }
+        )
+        return success_url
+
 
 class BlueprintQuestionEditView(
-        RegistrationMixin,
+        RegistrationQuestionMixin,
         QuestionEditView,
 ):
 
@@ -146,7 +164,7 @@ class BlueprintQuestionEditView(
 
 class RegistrationQuestionEditView(
         QuestionFromURLMixin,
-        RegistrationMixin,
+        RegistrationQuestionMixin,
         QuestionEditView,
 ):
 
@@ -223,7 +241,7 @@ class RegistrationCreateView(
 
 class RegistrationDeleteView(
         generic.DeleteView,
-        RegistrationMixin,
+        RegistrationQuestionMixin,
 ):
 
     "Basic Django delete view for Registrations"
@@ -236,7 +254,7 @@ class RegistrationDeleteView(
 
 class InvolvedManager(
         ProgressItemMixin,
-        RegistrationMixin,
+        RegistrationQuestionMixin,
         generic.TemplateView,
 ):
 
@@ -296,7 +314,7 @@ class InvolvedManager(
 
 class DocumentsManager(
         ProgressItemMixin,
-        RegistrationMixin,
+        RegistrationQuestionMixin,
         generic.TemplateView,
 ):
     pass
@@ -376,37 +394,6 @@ class StepperView(RegistrationQuestionEditView):
 
     def get_template_names(self):
         return [self.template_name]
-
-
-# Minimal views for HTMX testing
-
-class MinimalCategoryView(generic.TemplateView,
-                          RegistrationMixin):
-
-    template_name = "registrations/minimal/categories.html"
-
-    def get_context_data(self, *args, **kwargs):
-
-        context = super().get_context_data(*args, **kwargs)
-        registration = self.get_registration()
-        cat_qs = ParticipantCategory.objects.filter(
-            registration=registration)
-
-        context['categories'] = cat_qs
-        return context
-
-
-class MinimalDeleteView(QuestionDeleteView,
-                        RegistrationMixin,
-                        ):
-
-    model = ParticipantCategory
-    template_name = "registrations/minimal/delete.html"
-    success_url = reverse_lazy('main:empty')
-
-    def get_context_data(self, *args, **kwargs):
-
-        context = super().get_context_data(*args, **kwargs)
 
 
 class FaqDetailView(

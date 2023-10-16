@@ -76,7 +76,6 @@ class CompletedList(list):
         self.blueprint = blueprint
 
     def append(self, item):
-        self.blueprint.questions.append(item)
         return super().append(item)
 
 
