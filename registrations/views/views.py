@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views import generic
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.translation import gettext_lazy as _
 
 from cdh.questions.views import BlueprintMixin, QuestionView, \
     QuestionDeleteView, QuestionCreateView, QuestionFromURLMixin, \
@@ -11,7 +12,7 @@ from cdh.questions.views import BlueprintMixin, QuestionView, \
 
 
 from registrations.models import Registration, ParticipantCategory, Involved, \
-    Software, Receiver, Faq
+    Software, Receiver, Faq, Attachment, Faq
 from registrations.questions import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
 from registrations.mixins import RegistrationMixin
 from registrations.progress import ProgressItemMixin
@@ -195,8 +196,10 @@ class RegistrationQuestionEditView(
         return super().form_invalid()
 
 
-class RegistrationCreateView(generic.CreateView,
-                             LoginRequiredMixin):
+class RegistrationCreateView(
+        LoginRequiredMixin,
+        generic.CreateView,
+):
 
     "Create a new Registration object using the title question."
 
@@ -209,6 +212,13 @@ class RegistrationCreateView(generic.CreateView,
         """Set creator of registration."""
         form.instance.created_by = self.request.user
         return super().form_valid(form)
+
+    def get_success_url(self):
+        registration = self.object
+        return reverse(
+            "registrations:overview",
+            kwargs={"reg_pk": registration.pk},
+        )
 
 
 class RegistrationDeleteView(
@@ -230,8 +240,8 @@ class InvolvedManager(
         generic.TemplateView,
 ):
 
-    title = "registrations:views:involved_manager_title"
-    description = "registrations:views:involved_manager_description"
+    title = _("registrations:views:involved_manager_title")
+    description = _("registrations:views:involved_manager_description")
     template_name = "registrations/involved_manager.html"
     slug = "involved_manager"
     extra_context = {
@@ -333,6 +343,27 @@ class SoftwareDeleteView(
             })
 
 
+class AttachmentDeleteView(
+        generic.DeleteView,
+        BlueprintMixin,
+):
+
+    template_name = "registrations/crud/delete_software.html"
+    blueprint_class = RegistrationBlueprint
+    blueprint_pk_kwarg = "reg_pk"
+    pk_url_kwarg = "attachment_pk"
+    model = Attachment
+
+    def get_success_url(self):
+        return reverse(
+            "registrations:edit_question",
+            kwargs={
+                "reg_pk": self.get_blueprint().object.pk,
+                "question": "attachments",
+                "question_pk": self.get_blueprint().object.pk,
+            })
+
+
 class StepperView(RegistrationQuestionEditView):
     template_name = "registrations/stepper_view.html"
 
@@ -377,3 +408,11 @@ class MinimalDeleteView(QuestionDeleteView,
 
         context = super().get_context_data(*args, **kwargs)
 
+
+class FaqDetailView(
+        generic.DetailView,
+        ):
+
+    template_name = "registrations/display_faq.html"
+    model = Faq
+    context_object_name = "faq"

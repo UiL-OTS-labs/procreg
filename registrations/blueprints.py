@@ -175,17 +175,25 @@ class RegistrationBlueprint(Blueprint):
         else:
             return match
 
-    def get_involved_groups(self, group_type=None):
+    def get_involved_groups(
+            self,
+            group_type=None,
+            hide_unselected=True,
+    ):
         """
         Return a dict of group types to list of involved
         group instances.
         """
-        group_types = [
-            "knowingly",
-            "not_knowingly",
-            "guardian",
-            "other",
-        ]
+
+        if hide_unselected is True:
+            group_types = self.object.list_involved_types()
+        else:
+            group_types = [
+                "knowingly",
+                "not_knowingly",
+                "guardian",
+                "other",
+            ]
 
         def make_question_filter(our_involved):
             """Return a filtering function determining if given question
@@ -235,6 +243,14 @@ class RegistrationBlueprint(Blueprint):
             always_list=True,
         )
 
+    def any_involved_group_available(self):
+        """Return True if there is any involved group available to populate
+        that section of the progress bar."""
+        for inv_type in self.get_involved_groups().values():
+            if len(inv_type["groups"]) > 0:
+                return True
+        return False
+
     def instantiate_question(self, question_or_list, **kwargs):
         """
         Return an instantiated question.
@@ -245,7 +261,7 @@ class RegistrationBlueprint(Blueprint):
         if type(question_or_list) == list:
             return [self.instantiate_question(q) for q in question_or_list]
         question = question_or_list
-        
+
         if question.model == Registration:
             q_object = self.object
         else:

@@ -1,0 +1,605 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-31 13:05+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: main/menus.py:5
+msgid "main:menu:home"
+msgstr "Home"
+
+#: main/menus.py:10
+msgid "main:menu:my_list"
+msgstr "My registrations"
+
+#: main/menus.py:15
+msgid "main:menu:po_list"
+msgstr "All registrations"
+
+#: main/menus.py:24
+msgid "main:footer:login"
+msgstr "Log in"
+
+#: main/menus.py:29
+msgid "main:footer:logout"
+msgstr "Log out"
+
+#: main/templates/base/login_header.html:6
+msgid "site:header:login"
+msgstr ""
+
+#: main/templates/base/login_header.html:7
+msgid "main:globals:logout"
+msgstr "Log out"
+
+#. Translators: This is the title that will end up in the header (in blue)
+#: main/templates/base/site_header.html:4
+#: registrations/templates/registrations/base-form.html:64
+#: registrations/templates/registrations/base-no-sidebar.html:64
+#: registrations/templates/registrations/base.html:63
+msgid "site:header:title"
+msgstr "Data Processing Register for GW and REBO"
+
+#. Translators: This is the title that will end up in the tab of the browser
+#: main/templates/base/site_title.html:5
+msgid "site:name"
+msgstr "Data Processing Register"
+
+#: main/templates/error/400.html:9
+msgid "main:error:400:title"
+msgstr ""
+
+#: main/templates/error/400.html:12
+msgid "main:error:400:text"
+msgstr ""
+
+#: main/templates/error/403.html:9
+msgid "main:error:403:title"
+msgstr ""
+
+#: main/templates/error/403.html:12
+msgid "main:error:403:text"
+msgstr ""
+
+#: main/templates/error/404.html:9
+msgid "main:error:404:title"
+msgstr ""
+
+#: main/templates/error/404.html:12
+msgid "main:error:404:text"
+msgstr ""
+
+#: main/templates/error/500.html:9
+msgid "main:error:500:title"
+msgstr ""
+
+#: main/templates/error/500.html:12
+msgid "main:error:500:text"
+msgstr ""
+
+#: main/templates/registration/logged_out.html:9
+msgid "main:logout:title"
+msgstr ""
+
+#: main/templates/registration/logged_out.html:12
+msgid "main:logout:text"
+msgstr ""
+
+#: main/templates/registration/login.html:9
+msgid "main:login:title"
+msgstr ""
+
+#: main/templates/registration/login.html:12
+msgid "main:login:text"
+msgstr ""
+
+#: main/templates/registration/login.html:16
+msgid "main:login:error"
+msgstr ""
+
+#: main/templates/registration/login.html:20
+msgid "main:login:username"
+msgstr ""
+
+#: main/templates/registration/login.html:21
+msgid "main:login:password"
+msgstr ""
+
+#: main/templates/registration/login.html:22
+msgid "main:login:submit"
+msgstr ""
+
+#: procreg/settings.py:233
+msgid "lang:nl"
+msgstr ""
+
+#: procreg/settings.py:234
+msgid "lang:en"
+msgstr ""
+
+#: registrations/models/involved.py:20
+msgid "models:involved:knowingly"
+msgstr ""
+
+#: registrations/models/involved.py:21
+msgid "models:involved:not_knowingly"
+msgstr ""
+
+#: registrations/models/involved.py:22
+msgid "models:involved:guardian"
+msgstr ""
+
+#: registrations/models/involved.py:23
+msgid "models:involved:other"
+msgstr ""
+
+#: registrations/models/involved.py:56
+msgid "models:involved:public_grounds"
+msgstr ""
+
+#: registrations/models/involved.py:57
+msgid "models:involved:algemeen_belang"
+msgstr ""
+
+#: registrations/models/involved.py:58
+msgid "models:involved:legal_grounds"
+msgstr ""
+
+#: registrations/models/registration.py:26
+#, fuzzy
+#| msgid "lists:registrations:filter_label_submitted"
+msgid "models:registration_title_help_text"
+msgstr "Submitted"
+
+#: registrations/models/registration.py:61
+msgid "models:registration:registration_uses_information_false"
+msgstr ""
+
+#: registrations/models/registration.py:62
+msgid "models:registration:registration_uses_information_true"
+msgstr ""
+
+#: registrations/models/registration.py:78
+msgid "models:registration:confirm_submission_false"
+msgstr ""
+
+#: registrations/models/registration.py:79
+msgid "models:registration:confirm_submission_true"
+msgstr ""
+
+#: registrations/questions/attachment_questions.py:20
+msgid "registrations:forms:attachments_question_title"
+msgstr ""
+
+#: registrations/questions/attachment_questions.py:21
+msgid "registrations:forms:attachments_question_description"
+msgstr ""
+
+#: registrations/questions/attachment_questions.py:73
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "registrations:questions:new_attachment"
+msgstr "Title"
+
+#: registrations/questions/involved_questions.py:24
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "questions:involved_people:question_title"
+msgstr "Title"
+
+#: registrations/questions/involved_questions.py:25
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "questions:involved_people:question_description"
+msgstr "List for Privacy Officer"
+
+#: registrations/questions/involved_questions.py:50
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "questions:new_involved:question_title"
+msgstr "Title"
+
+#: registrations/questions/involved_questions.py:51
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "questions:new_involved:question_description"
+msgstr "List for Privacy Officer"
+
+#: registrations/questions/involved_questions.py:116
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "questions:purpose:question_title"
+msgstr "Title"
+
+#: registrations/questions/involved_questions.py:117
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "questions:purpose:question_description"
+msgstr "List for Privacy Officer"
+
+#: registrations/questions/involved_questions.py:146
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "questions:special_details:question_title"
+msgstr "Title"
+
+#: registrations/questions/involved_questions.py:147
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "questions:special_details:question_description"
+msgstr "List for Privacy Officer"
+
+#: registrations/questions/involved_questions.py:174
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "questions:sensitive_details:question_title"
+msgstr "Title"
+
+#: registrations/questions/involved_questions.py:175
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "questions:sensitive_details:question_description"
+msgstr "List for Privacy Officer"
+
+#: registrations/questions/involved_questions.py:203
+#: registrations/questions/involved_questions.py:219
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "questions:regular_details:question_description"
+msgstr "List for Privacy Officer"
+
+#: registrations/questions/involved_questions.py:205
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "questions:regular_details:question_title"
+msgstr "Title"
+
+#: registrations/questions/involved_questions.py:220
+msgid "global:possessive_preposition"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:16
+msgid "questions:new_reg:question_title"
+msgstr "Name of your study"
+
+#: registrations/questions/misc_questions.py:17
+msgid "registrations:forms:registration_description"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:52
+#, fuzzy
+#| msgid "registrations:lists:th_title"
+msgid "questions:faculty:question_title"
+msgstr "Title"
+
+#: registrations/questions/misc_questions.py:53
+msgid "questions:faculty:question_description"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:80
+msgid "questions:traversal:question_title"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:82
+msgid "questions:traversal:question_description"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:105
+msgid "questions:goal:question_title"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:106
+msgid "questions:goal:question_description"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:125
+#: registrations/questions/misc_questions.py:126
+msgid "registrations:forms:uses_information_question_title"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:148
+#: registrations/questions/misc_questions.py:149
+msgid "registrations:forms:confirm_information_use_question_title"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:191
+msgid "questions:retention:question_title"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:192
+msgid "questions:retention:question_description"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:214
+msgid "questions:receivers:question_title"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:215
+msgid "questions:receivers:question_description"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:347
+msgid "questions:software:question_description"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:348
+msgid "questions:software:question_title"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:467
+msgid "questions:security:question_description"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:468
+msgid "questions:security:question_title"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:483
+msgid "registrations:forms:submit_question_title"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:484
+msgid "registrations:forms:submit_question_description"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:502
+msgid "registrations:forms:confirm_information_use_paragraph"
+msgstr ""
+
+#: registrations/questions/misc_questions.py:522
+#, fuzzy
+#| msgid "registrations:home:po_list_hero"
+msgid "registrations:forms:category_question_description"
+msgstr "List for Privacy Officer"
+
+#: registrations/templates/registrations/base-form.html:35
+#: registrations/templates/registrations/base-form.html:36
+#: registrations/templates/registrations/base-no-sidebar.html:35
+#: registrations/templates/registrations/base-no-sidebar.html:36
+#: registrations/templates/registrations/base.html:34
+#: registrations/templates/registrations/base.html:35
+msgid "cdh.core:uu"
+msgstr ""
+
+#: registrations/templates/registrations/base-form.html:70
+#: registrations/templates/registrations/base-no-sidebar.html:70
+#: registrations/templates/registrations/base.html:69
+msgid "site:header:login_text"
+msgstr ""
+
+#: registrations/templates/registrations/base-form.html:98
+#: registrations/templates/registrations/base-no-sidebar.html:98
+#: registrations/templates/registrations/base.html:97
+msgid "site:hero:default_hero_text"
+msgstr ""
+
+#: registrations/templates/registrations/crud/delete_receiver.html:7
+msgid "views:delete_receiver:confirm_text"
+msgstr ""
+
+#: registrations/templates/registrations/crud/delete_software.html:7
+msgid "views:delete_software:confirm_text"
+msgstr ""
+
+#: registrations/templates/registrations/delete_registration.html:7
+msgid "registrations:delete:confirm_text"
+msgstr ""
+
+#: registrations/templates/registrations/delete_registration.html:17
+#: registrations/templates/registrations/overview.html:55
+msgid "registrations:actions:header"
+msgstr ""
+
+#: registrations/templates/registrations/delete_registration.html:24
+msgid "registrations:actions:overview"
+msgstr ""
+
+#: registrations/templates/registrations/home.html:9
+msgid "registrations:main:home"
+msgstr ""
+
+#: registrations/templates/registrations/home.html:20
+msgid "registration:actions:overview"
+msgstr ""
+
+#: registrations/templates/registrations/home.html:23
+msgid "registration:actions:delete"
+msgstr ""
+
+#: registrations/templates/registrations/home.html:30
+msgid "registrations:home:list_empty"
+msgstr ""
+
+#: registrations/templates/registrations/home.html:43
+msgid "registrations:actions:new_registration"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:16
+#: registrations/templates/registrations/landing.html:83
+msgid "landing:call_to_action:h1"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:18
+msgid "landing:call_to_action:button"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:21
+msgid "landing:call_to_action:subtext"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:25
+msgid "landing:video:video_h1"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:31
+msgid "landing:steps:h1"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:34
+msgid "landing:steps:step1_title"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:37
+msgid "landing:steps:step1"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:42
+msgid "landing:steps:step2_title"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:45
+msgid "landing:steps:step2"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:52
+msgid "landing:steps:step3_title"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:55
+msgid "landing:steps:step3"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:60
+msgid "landing:steps:step4_title"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:63
+msgid "landing:steps:step4"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:72
+msgid "landing:faq:faq_h1"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:76
+msgid "landing:faqs:no_faqs_yet"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:79
+msgid "landing:faq:all_faqs_link"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:85
+msgid "landing:faqs:button"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:88
+msgid "landing:faq:research_glossary_url"
+msgstr ""
+
+#: registrations/templates/registrations/landing.html:89
+msgid "landing:faq:research_glossary_link_text"
+msgstr ""
+
+#: registrations/templates/registrations/new_registration.html:10
+msgid "registrations:new_registration:header_title"
+msgstr ""
+
+#: registrations/templates/registrations/overview.html:7
+msgid "registrations:overview:page_title"
+msgstr ""
+
+#: registrations/templates/registrations/overview.html:16
+msgid "registrations:overview:page_description"
+msgstr ""
+
+#: registrations/templates/registrations/overview.html:27
+msgid "registrations:overview:progress_title"
+msgstr ""
+
+#: registrations/templates/registrations/overview.html:34
+msgid "registrations:actions:continue"
+msgstr ""
+
+#: registrations/templates/registrations/overview.html:62
+msgid "registrations:actions:delete"
+msgstr ""
+
+#: registrations/templates/registrations/overview.html:67
+msgid "registrations:actions:add_category"
+msgstr ""
+
+#: registrations/templates/registrations/summary.html:21
+msgid "registrations:summary:page_title"
+msgstr ""
+
+#: registrations/templates/registrations/summary.html:24
+msgid "registrations:summary:page_description"
+msgstr ""
+
+#: registrations/templates/registrations/templatetags/display_loq.html:27
+msgid "templatetags:loq:add_new"
+msgstr ""
+
+#: registrations/views/lists/listview.py:53
+#: registrations/views/lists/my_registrations.html:87
+msgid "lists:registrations:filter_label_drafts"
+msgstr "Drafts"
+
+#: registrations/views/lists/listview.py:58
+#: registrations/views/lists/my_registrations.html:94
+msgid "lists:registrations:filter_label_submitted"
+msgstr "Submitted"
+
+#: registrations/views/lists/listview.py:63
+#: registrations/views/lists/my_registrations.html:101
+msgid "lists:registrations:filter_label_registered"
+msgstr "Registered"
+
+#: registrations/views/lists/listview.py:68
+#: registrations/views/lists/my_registrations.html:80
+msgid "lists:registrations:filter_label_favourites"
+msgstr "Favourites"
+
+#: registrations/views/lists/listview.py:82
+msgid "lists:registrations:placeholder_search"
+msgstr "Search..."
+
+#: registrations/views/lists/my_registrations.html:6
+msgid "registrations:home:registration_list_hero"
+msgstr "My Registrations"
+
+#: registrations/views/lists/my_registrations.html:17
+#: registrations/views/lists/po_list.html:14
+msgid "registrations:lists:th_title"
+msgstr "Title"
+
+#: registrations/views/lists/my_registrations.html:20
+#: registrations/views/lists/po_list.html:20
+msgid "registrations:lists:th_status"
+msgstr "State"
+
+#: registrations/views/lists/my_registrations.html:23
+#: registrations/views/lists/po_list.html:23
+msgid "registrations:lists:th_start"
+msgstr "Start date"
+
+#: registrations/views/lists/po_list.html:5
+msgid "registrations:home:po_list_hero"
+msgstr "List for Privacy Officer"
+
+#: registrations/views/lists/po_list.html:17
+msgid "registrations:lists:th_created_by"
+msgstr "Created by"
+
+#: registrations/views/views.py:243
+msgid "registrations:views:involved_manager_title"
+msgstr "Information"
+
+#: registrations/views/views.py:244
+msgid "registrations:views:involved_manager_description"
+msgstr ""

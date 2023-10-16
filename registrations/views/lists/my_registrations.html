@@ -3,7 +3,7 @@
 {% load procreg_helpers %}
 
 {% block hero_text %}
-  registrations:home:registration_list_hero
+{% trans "registrations:home:registration_list_hero" %}
 {% endblock %}
 
 {% block main_content %}
@@ -28,7 +28,7 @@
             <tr>
               <td>
           <a href="{% url 'registrations:overview' object.pk %}">
-                {{object.title}}
+                {{object.registration_title}}
           </a>
               </td>
               <td>
@@ -71,27 +71,31 @@
   <h3>Filters</h3>
   <br />
   <section class="">
-    <form>
+    <form method="GET">
       <div class="mb-2">{{form.search}}</div>
       <div class="form-check mb-2">
+        <input type="hidden" name="{{form.include_favourites.html_name}}" value="">
         {{form.include_favourites}}
         <label class="form-check-label" for="{{form.include_favourites.id_for_label}}">
           {% trans "lists:registrations:filter_label_favourites" %}
         </label>
       </div>
       <div class="form-check mb-2">
+        <input type="hidden" name="{{form.include_drafts.html_name}}" value="">
         {{form.include_drafts}}
         <label class="form-check-label" for="{{form.include_drafts.id_for_label}}">
           {% trans "lists:registrations:filter_label_drafts" %}
         </label>
       </div>
       <div class="form-check mb-2">
+        <input type="hidden" name="{{form.include_submitted.html_name}}" value="">
         {{form.include_submitted}}
         <label class="form-check-label" for="{{form.include_submitted.id_for_label}}">
           {% trans "lists:registrations:filter_label_submitted" %}
         </label>
       </div>
       <div class="form-check mb-2">
+        <input type="hidden" name="{{form.include_registered.html_name}}" value="">
         {{form.include_registered}}
         <label class="form-check-label" for="{{form.include_registered.id_for_label}}">
           {% trans "lists:registrations:filter_label_registered" %}

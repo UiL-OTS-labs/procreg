@@ -1,0 +1,35 @@
+
+{% for attachment in existing %}
+<div class="border container bg-body">
+  <div class="p-2 d-flex justify-content-between">
+    <div class="col flex-fill w-100 d-flex flex-column justify-content-center pl-2">
+      <div>
+        <pre class="m-0">{{attachment.instance.upload.name}}</pre>
+      </div>
+      <div>{{attachment.instance.file_description}}</div>
+    </div>
+    <div class="flex-shrink-1 align-self-center p-2">
+      <div>
+        <a class="btn btn-primary" href="{{attachment.get_edit_url}}">Edit</a>
+      </div>
+    </div>
+    <div class="flex-shrink-1 align-self-center p-2">
+      <div>
+        <a class="btn btn-danger" href="{{attachment.get_edit_url}}">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+{% if new %}
+<div class="border container bg-body">
+  <div class="p-2 d-flex justify-content-center">
+    <div class="flex-shrink-1 align-self-center p-2">
+      <div>
+        <a class="btn btn-secondary" href="{{new.get_edit_url}}">Add file</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
