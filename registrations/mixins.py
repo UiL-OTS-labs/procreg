@@ -151,7 +151,6 @@ class GroupTypeMixin():
 
 class RegistrationMixin(
         GroupTypeMixin,
-        QuestionFromBlueprintMixin,
         BlueprintMixin,
         UsersOrGroupsAllowedMixin,
 ):
@@ -178,3 +177,9 @@ class RegistrationMixin(
         context = super().get_context_data(*args, **kwargs)
         context['registration'] = self.get_registration()
         return context
+
+class RegistrationQuestionMixin(
+        RegistrationMixin,
+        QuestionFromBlueprintMixin,
+):
+    pass
