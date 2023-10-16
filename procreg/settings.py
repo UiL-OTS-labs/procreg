@@ -36,6 +36,13 @@ INSTALLED_APPS = [
 
     # Django model translation must come before admin
     'modeltranslation',
+
+    # CDH Core libraries
+    'cdh.core',
+    'cdh.questions',
+    "cdh.files",
+    # 'uil.rest', # Rest client
+    # 'uil.vue',  # Vue support
     
     # Django supplied apps
     'django.contrib.admin',
@@ -56,12 +63,6 @@ INSTALLED_APPS = [
 
     # Impersonate
     'impersonate',
-
-    # UiL Core libraries
-    'cdh.core',
-    'cdh.questions',
-    # 'uil.rest', # Rest client
-    # 'uil.vue',  # Vue support
 
     # Local apps
     'main',
@@ -211,7 +212,7 @@ PASSWORD_HASHERS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = "en" "nl"
 LANGUAGES = (
     ('nl', _('lang:nl')),
     ('en', _('lang:en')),
@@ -227,9 +228,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOCALE_PATHS = (
-    'locale',
-)
+# LOCALE_PATHS = (
+#     'locale',
+#     (BASE_DIR / "locale"),
+# )
 
 
 # Static files (CSS, JavaScript, Images)
@@ -271,7 +273,6 @@ CSP_IMG_SRC = ["'self'", 'data:', "*"]  # Remove the last one if you
 
 MENU_SELECT_PARENTS = True
 MENU_HIDE_EMPTY = False
-
 
 # Default media directory (served statically!)
 MEDIA_ROOT = 'media'
