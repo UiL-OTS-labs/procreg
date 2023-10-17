@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import RegistrationsHomeView, RegistrationCreateView, \
     RegistrationOverview, RegistrationQuestionEditView, RegistrationDeleteView, \
-    MinimalCategoryView, MinimalDeleteView, RegistrationSummaryView, \
+    RegistrationSummaryView, \
     InvolvedManager, StepperView, BlueprintQuestionEditView, \
     ReceiverDeleteView, SoftwareDeleteView, LandingView, MyRegistrationsList, \
     PORegistrationsList, AttachmentDeleteView, FaqDetailView
@@ -47,12 +47,6 @@ urlpatterns = [
     # Cruddy stuff
     path('delete/<int:reg_pk>/', RegistrationDeleteView.as_view(),
          name='delete'),
-    path('delete/category/<int:pk>/',
-         MinimalDeleteView.as_view(
-             model=ParticipantCategory),
-         # parent_pk_arg='reg_pk',
-         name='minimal_delete',
-         ),
     path("<int:reg_pk>/delete/receiver/<int:receiver_pk>",
          ReceiverDeleteView.as_view(),
          name="delete_receiver",

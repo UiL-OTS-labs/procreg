@@ -2,7 +2,7 @@
 
 from .views import RegistrationCreateView, LandingView, RegistrationsHomeView, \
     RegistrationOverview, RegistrationQuestionEditView, RegistrationDeleteView, \
-    RegistrationSummaryView, MinimalDeleteView, MinimalCategoryView, \
+    RegistrationSummaryView, \
     InvolvedManager, StepperView, BlueprintQuestionEditView, ReceiverDeleteView, \
     SoftwareDeleteView, AttachmentDeleteView, FaqDetailView
 from .lists.listview import MyRegistrationsList, PORegistrationsList

@@ -14,27 +14,27 @@ bpython==0.24
     # via
     #   -r requirements.in
     #   cdh-django-core
-build==0.10.0
+build==1.0.3
     # via pip-tools
 certifi==2023.7.22
     # via requests
-cffi==1.15.1
+cffi==1.16.0
     # via cryptography
-charset-normalizer==3.2.0
+charset-normalizer==3.3.0
     # via requests
-click==8.1.6
+click==8.1.7
     # via pip-tools
 closure==20191111
     # via cdh-django-core
-cryptography==41.0.2
+cryptography==41.0.4
     # via
     #   -r requirements.in
     #   cdh-django-core
     #   pyopenssl
     #   pysaml2
-curtsies==0.4.1
+curtsies==0.4.2
     # via bpython
-cwcwidth==0.1.8
+cwcwidth==0.1.9
     # via
     #   bpython
     #   curtsies
@@ -44,7 +44,7 @@ defusedxml==0.7.1
     #   pysaml2
 deprecated==1.2.14
     # via cdh-django-core
-django==4.2.3
+django==4.2.6
     # via
     #   -r requirements.in
     #   cdh-django-core
@@ -64,7 +64,7 @@ django-csp==3.7
     # via
     #   -r requirements.in
     #   cdh-django-core
-django-debug-toolbar==4.1.0
+django-debug-toolbar==4.2.0
     # via
     #   -r requirements.in
     #   cdh-django-core
@@ -80,7 +80,7 @@ django-modeltranslation==0.18.11
     # via
     #   -r requirements.in
     #   cdh-django-core
-django-simple-menu==2.1.2.post1
+django-simple-menu==2.1.3
     # via
     #   -r requirements.in
     #   cdh-django-core
@@ -88,19 +88,21 @@ djangorestframework==3.14.0
     # via cdh-django-core
 djangosaml2==1.7.0
     # via cdh-django-core
-elementpath==4.1.4
+elementpath==4.1.5
     # via xmlschema
-greenlet==2.0.2
+greenlet==3.0.0
     # via bpython
 idna==3.4
     # via requests
+importlib-metadata==6.8.0
+    # via build
 lesscpy==0.15.1
     # via cdh-django-core
 mysqlclient==2.2.0
     # via -r requirements.in
-packaging==23.1
+packaging==23.2
     # via build
-pip-tools==7.1.0
+pip-tools==7.3.0
     # via -r requirements.in
 ply==3.11
     # via lesscpy
@@ -108,7 +110,7 @@ pscript==0.7.7
     # via vbuild
 pycparser==2.21
     # via cffi
-pygments==2.15.1
+pygments==2.16.1
     # via bpython
 pyjwt==2.8.0
     # via cdh-django-core
@@ -124,7 +126,7 @@ python-dateutil==2.8.2
     # via pysaml2
 python-magic==0.4.27
     # via cdh-django-core
-pytz==2023.3
+pytz==2023.3.post1
     # via
     #   djangorestframework
     #   pysaml2
@@ -149,22 +151,24 @@ tomli==2.0.1
     #   build
     #   pip-tools
     #   pyproject-hooks
-typing-extensions==4.7.1
+typing-extensions==4.8.0
     # via
     #   asgiref
     #   django-modeltranslation
-urllib3==2.0.4
+urllib3==2.0.6
     # via requests
-vbuild==0.8.1
+vbuild==0.8.2
     # via cdh-django-core
-wcwidth==0.2.6
+wcwidth==0.2.8
     # via blessed
-wheel==0.41.0
+wheel==0.41.2
     # via pip-tools
 wrapt==1.15.0
     # via deprecated
-xmlschema==2.3.1
+xmlschema==2.5.0
     # via pysaml2
+zipp==3.17.0
+    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip
