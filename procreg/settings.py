@@ -14,6 +14,8 @@ from pathlib import Path
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
+from .utils import discover
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -21,14 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-lb=q@u4df-x0th(5u%$eye_ti#etst+5z+%2=lrh$$le3&v_y$'
+SECRET_KEY = discover("django_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ENABLE_DEBUG_TOOLBAR = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
