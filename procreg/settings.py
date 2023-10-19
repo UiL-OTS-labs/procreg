@@ -92,7 +92,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         "NAME": "app_dirs",
-        "APP_DIRS": True,
+#        "APP_DIRS": True,
         "DIRS": [
             BASE_DIR / "templates",
             BASE_DIR / "registrations/questions/templates",
@@ -241,7 +241,7 @@ PASSWORD_HASHERS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = "en" "nl"
+LANGUAGE_CODE = "en"
 LANGUAGES = (
     ('nl', _('lang:nl')),
     ('en', _('lang:en')),
@@ -267,7 +267,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = "static_root"
+STATIC_ROOT = "/var/www/static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
