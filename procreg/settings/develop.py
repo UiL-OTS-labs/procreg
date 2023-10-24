@@ -215,6 +215,8 @@ except Exception as e:
             'NAME': '/persistent/db.sqlite',
         }
     }
+else:
+    print("Proceeding with mysqld...")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
