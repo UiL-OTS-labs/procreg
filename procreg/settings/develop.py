@@ -7,7 +7,6 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
 import os
 from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -17,7 +16,6 @@ from django.utils.translation import gettext_lazy as _
 from .utils import discover
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -192,12 +190,31 @@ else:
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+try:
+    # If we get MySQL / MariaDB credentials, attempt to connect to mysqld
+    if not os.path.exists("/var/run/mysqld",):
+        raise Exception("Mysqld socket not found!")
+    db_name = discover("db_name")
+    db_user = discover("db_user")
+    db_password = discover("db_password")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            "PASSWORD": db_password,
+            "USER": db_user,
+            "NAME": db_name,
+        }
     }
-}
+except Exception as e:
+    # Otherwise, fall back to the default SQLite
+    print(e)
+    print("Proceeding with SQLite3...")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': '/persistent/db.sqlite',
+        }
+    }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
