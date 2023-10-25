@@ -8,5 +8,5 @@ def discover(key):
     elif key in os.environ:
         return os.environ.get(key)
     else:
-        raise Exception("FATAL: " + key + ' not found')
+        raise Exception("Failure: " + key + ' not found')
 
