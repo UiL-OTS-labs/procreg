@@ -27,7 +27,24 @@ SECRET_KEY = discover("django_key")
 DEBUG = True
 ENABLE_DEBUG_TOOLBAR = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+]
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    # None currently added in dev.py
+]
+
+# Only trust the following origins if DEBUG = True!!!
+if DEBUG is True:
+    CSRF_TRUSTED_ORIGINS += [
+        'http://127.0.0.1:9000',
+        'http://localhost:9000',
+    ]
 
 # Application definition
 
