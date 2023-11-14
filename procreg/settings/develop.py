@@ -337,3 +337,21 @@ MENU_HIDE_EMPTY = False
 # Default media directory (served statically!)
 MEDIA_ROOT = 'media'
 MEDIA_URL = '/media/'
+
+
+try:
+    from .saml_settings import *
+
+    # Only add stuff to settings if we actually have SAML settings
+    INSTALLED_APPS += SAML_APPS
+    MIDDLEWARE += SAML_MIDDLEWARE
+
+    LOGIN_URL = reverse_lazy('saml-login')
+    SHOW_SAML_LOGIN = True
+
+    # Custom proxy model for SAML attribute processing
+    SAML_USER_MODEL = 'main.SamlUserProxy'
+
+except Exception as e:
+    print("SAML:", e)
+    print('Proceeding without SAML settings')
