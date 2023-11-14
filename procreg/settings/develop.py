@@ -229,7 +229,7 @@ except Exception as e:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': '/persistent/db.sqlite',
+            'NAME': '/persistent/db.sqlite3',
         }
     }
 else:
