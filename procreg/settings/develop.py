@@ -7,28 +7,44 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
 import os
 from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+from .utils import discover
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-lb=q@u4df-x0th(5u%$eye_ti#etst+5z+%2=lrh$$le3&v_y$'
+SECRET_KEY = discover("django_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ENABLE_DEBUG_TOOLBAR = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+]
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    # None currently added in dev.py
+]
+
+# Only trust the following origins if DEBUG = True!!!
+if DEBUG is True:
+    CSRF_TRUSTED_ORIGINS += [
+        'http://127.0.0.1:9000',
+        'http://localhost:9000',
+    ]
 
 # Application definition
 
@@ -92,7 +108,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         "NAME": "app_dirs",
-        "APP_DIRS": True,
+#        "APP_DIRS": True,
         "DIRS": [
             BASE_DIR / "templates",
             BASE_DIR / "registrations/questions/templates",
@@ -191,12 +207,33 @@ else:
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+try:
+    # If we get MySQL / MariaDB credentials, attempt to connect to mysqld
+    if not os.path.exists("/var/run/mysqld",):
+        raise Exception("Mysqld socket not found!")
+    db_name = discover("db_name")
+    db_user = discover("db_user")
+    db_password = discover("db_password")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            "PASSWORD": db_password,
+            "USER": db_user,
+            "NAME": db_name,
+        }
     }
-}
+except Exception as e:
+    # Otherwise, fall back to the default SQLite
+    print(e)
+    print("Proceeding with SQLite3...")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': '/persistent/db.sqlite3',
+        }
+    }
+else:
+    print("Proceeding with mysqld...")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -241,33 +278,27 @@ PASSWORD_HASHERS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = "en" "nl"
+LANGUAGE_CODE = "en"
 LANGUAGES = (
     ('nl', _('lang:nl')),
     ('en', _('lang:en')),
 )
 
-
+LOCALE_PATHS = (
+    'locale',
+)
 
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
-
-# LOCALE_PATHS = (
-#     'locale',
-#     (BASE_DIR / "locale"),
-# )
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = "static_root"
+STATIC_ROOT = "/var/www/static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
@@ -306,3 +337,21 @@ MENU_HIDE_EMPTY = False
 # Default media directory (served statically!)
 MEDIA_ROOT = 'media'
 MEDIA_URL = '/media/'
+
+
+try:
+    from .saml_settings import *
+
+    # Only add stuff to settings if we actually have SAML settings
+    INSTALLED_APPS += SAML_APPS
+    MIDDLEWARE += SAML_MIDDLEWARE
+
+    LOGIN_URL = reverse_lazy('saml-login')
+    SHOW_SAML_LOGIN = True
+
+    # Custom proxy model for SAML attribute processing
+    SAML_USER_MODEL = 'main.SamlUserProxy'
+
+except Exception as e:
+    print("SAML:", e)
+    print('Proceeding without SAML settings')

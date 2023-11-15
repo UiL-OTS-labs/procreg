@@ -17,28 +17,46 @@ Procreg provides a browser-based portal in which guided questions help researche
 
 # Development
 
-## Requirements
+## Setting up
 
-* Python 3.9+
-* Pip (for installing dependencies, see requirements.txt for details)
-* A SQL database (tested with SQLite and MySQL)
+It is not recommended to run or develop this application as-is. Please see the `procreg-deploy` repo (available on GitLab) for the recommended Docker deployment. The following steps create an environment that can be inserted into the Docker container for live development
 
-## Installation
+### Grab the source
 
-* Clone this repository
-* Install the dependencies using pip (it is recommended to use a virtual 
-  environment!). ``pip install -r requirements.txt``
-* Run all DB migrations ``python manage.py migrate``
-* Edit ``procreg/settings.py`` to suit your needs.
-* Create a super user using ``python manage.py createsuperuser``
-* Compile the translation files using ``python manage.py compilemessages``
-* You can now run a development server with ``python manage.py runserver``
+Simply clone it from this repo. Put it in the `./source/` directory found in the top level of `procreg-deploy`.
 
+```bash
+git clone git@github.com:DH-IT-Portal-Development/grant-tool.git grant
+cd grant
+git checkout acc
+```
 
-## A note on dependencies
-We use pip-tools to manage our dependencies (mostly to freeze the versions 
-used). It's listed as a dependency, so it will be installed automatically.
+### Create virtual environment and install sources
 
-``requirements.in`` lists the actual dependency and their version constraints. 
-To update ``requirements.txt`` just run ``pip-compile -U``. Don't forget to test 
-with the new versions!
+For virtual environment management, pipenv is recommended. The Python version used is not of great importance but 3.9 is what is used in deployments, so it's best to stick with that if possible. If Python 3.9 can't be found on your system, pipenv will suggest steps to install it using Pyenv.
+
+The following should be run in the top level of `procreg` sources, where we left off in the previous step.
+
+```bash
+pipenv shell --python=3.9
+pip install requirements.txt
+```
+
+Note that this is not the same environment as the container uses. The container simply uses the root-level Python environment and site-packages inside the container. The container does not see the virtualenv, except for `src/cdh-django-core`. The development virtualenv simply exists to give your IDE something to work with.
+
+As such, when there are inconsistencies with code inside and outside the container, the virtual env is a good place to look.
+
+### Install Django Shared Core into the local dev environment
+
+The development container looks for DSC within this source directory. Therefore paths and directory names below should be followed exactly.
+
+Once again, from the top level of `procreg` sources, with your virtual environment active. If following directories are already present, you may overwrite them.
+
+```bash
+mkdir src
+cd src
+git clone --branch questions git@github.com:DH-IT-Portal-Development/django-shared-core.git cdh-django-core
+pip install -e ./cdh-django-core
+```
+
+DSC should already have been installed when installing requirements. However, using an editable local version allows for reference and development of both projects.

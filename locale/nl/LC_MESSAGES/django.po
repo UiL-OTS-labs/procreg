@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-09 13:41+0000\n"
+"POT-Creation-Date: 2023-11-06 17:17+0000\n"
 "PO-Revision-Date: 2023-10-09 15:54+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -123,11 +123,11 @@ msgstr ""
 msgid "main:login:submit"
 msgstr ""
 
-#: procreg/settings.py:236
+#: procreg/settings/develop.py:283
 msgid "lang:nl"
 msgstr ""
 
-#: procreg/settings.py:237
+#: procreg/settings/develop.py:284
 msgid "lang:en"
 msgstr ""
 
@@ -657,10 +657,12 @@ msgstr "Gegevens"
 msgid "registrations:views:involved_manager_description"
 msgstr "Deelnemers"
 
+#: src/cdh-django-core/build/lib/cdh/federated_auth/saml/views.py:141
 #: src/cdh-django-core/src/cdh/federated_auth/saml/views.py:141
 msgid "Logged out"
 msgstr ""
 
+#: src/cdh-django-core/build/lib/cdh/questions/templates/cdh.questions/tags/display_question_tag.html:32
 #: src/cdh-django-core/src/cdh/questions/templates/cdh.questions/tags/display_question_tag.html:32
 msgid "questions:buttons:save_and_next"
 msgstr "Opslaan en verder"
