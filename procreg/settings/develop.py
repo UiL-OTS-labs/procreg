@@ -13,7 +13,7 @@ from pathlib import Path
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
-from .utils import discover
+from .utils import discover, discover_list
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -30,7 +30,8 @@ ENABLE_DEBUG_TOOLBAR = True
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-]
+] + discover_list("allowed_hosts", default=[])
+
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
