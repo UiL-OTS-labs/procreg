@@ -352,6 +352,7 @@ try:
 
     # Custom proxy model for SAML attribute processing
     SAML_USER_MODEL = 'main.SamlUserProxy'
+    print('SAML is enabled')
 
 except Exception as e:
     print("SAML:", e)
