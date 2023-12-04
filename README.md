@@ -15,6 +15,14 @@ Procreg is a Django application making use of the DH-IT [Django Shared Core](htt
 
 Procreg provides a browser-based portal in which guided questions help researchers register exactly what is necessary to fulfill their requirements under the AVG. It requires no prior knowledge on personal data collection for the end-user and therefore contains an educational component.
 
+### Blueprint and consumers
+
+Most of the application revolves around building a Registration object. This is a complex object that sprawls in many sub-objects, therefore its logic and validation are contained in a Blueprint.
+
+Check it out in: `registrations/blueprints.py`
+
+The Blueprint, and with it the registration in question, is validated by recursively running so-called consumers. Each consumers tends to validate a certain form question, but there isn't a strict one-on-one relationship between the two. If succesful, a consumer will return a list of further consumers to run which represent the next steps in validation.
+
 # Development
 
 ## Setting up
@@ -26,8 +34,8 @@ It is not recommended to run or develop this application as-is. Please see the `
 Simply clone it from this repo. Put it in the `./source/` directory found in the top level of `procreg-deploy`.
 
 ```bash
-git clone git@github.com:DH-IT-Portal-Development/grant-tool.git grant
-cd grant
+git clone git@github.com:CentreForDigitalHumanities/procreg.git source
+cd source
 git checkout acc
 ```
 
@@ -55,7 +63,7 @@ Once again, from the top level of `procreg` sources, with your virtual environme
 ```bash
 mkdir src
 cd src
-git clone --branch questions git@github.com:DH-IT-Portal-Development/django-shared-core.git cdh-django-core
+git clone --branch questions git@github.com:CentreForDigitalHumanities/django-shared-core.git cdh-django-core
 pip install -e ./cdh-django-core
 ```
 
