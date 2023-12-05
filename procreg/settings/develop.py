@@ -351,7 +351,7 @@ try:
     SHOW_SAML_LOGIN = True
 
     # Custom proxy model for SAML attribute processing
-    SAML_USER_MODEL = 'main.SamlUserProxy'
+    SAML_USER_MODEL = 'main.User'
     print('SAML is enabled')
 
 except Exception as e:
