@@ -8,13 +8,14 @@ from django.utils.translation import gettext_lazy as _
 
 from cdh.questions.views import BlueprintMixin, QuestionView, \
     QuestionDeleteView, QuestionCreateView, QuestionFromURLMixin, \
-    QuestionEditView
+    QuestionEditView, SingleQuestionMixin
 
 from django import forms
 
 from registrations.models import Registration, ParticipantCategory, Involved, \
     Software, Receiver, Faq, Attachment, Faq
-from registrations.questions import NewRegistrationQuestion, FacultyQuestion, CategoryQuestion
+from registrations.questions import NewRegistrationQuestion, FacultyQuestion, \
+    CategoryQuestion, NewResponseQuestion
 from registrations.mixins import RegistrationMixin, RegistrationQuestionMixin
 from registrations.progress import ProgressItemMixin
 from registrations.blueprints import RegistrationBlueprint
@@ -121,7 +122,6 @@ class RegistrationSummaryView(
         )
         return success_url
 
-
 class BlueprintQuestionEditView(
         RegistrationQuestionMixin,
         QuestionEditView,
@@ -213,6 +213,34 @@ class RegistrationQuestionEditView(
         #  breakpoint()
         return super().form_invalid()
 
+
+class RegistrationResponseView(
+    RegistrationQuestionEditView,
+):
+    template_name = "registrations/response.html"
+    model = Registration
+    question_class = NewResponseQuestion
+    pk_url_kwarg = 'reg_pk'
+
+    def get_context_data(self, *args, **kwargs):
+        # context = super().get_context_data(**kwargs)
+        context = {}
+        blueprint = self.get_blueprint()
+        context['completed'] = blueprint.completed
+        return context
+    
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        user = self.request.user
+        kwargs.update({"user": user})
+        return kwargs
+    
+    def get_allowed_users(self):
+        user = self.request.user
+        allowed = []
+        if "PO" in [g.name for g in user.groups.all()]:
+            allowed.append(user)
+        return allowed
 
 class RegistrationCreateView(
         LoginRequiredMixin,

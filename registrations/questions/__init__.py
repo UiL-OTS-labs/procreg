@@ -7,6 +7,7 @@ from .misc_questions import NewRegistrationQuestion, FacultyQuestion, \
     NewSoftwareQuestion, RetentionQuestion, ReceiverQuestion, \
     NewReceiverQuestion, SecurityQuestion
 from .attachment_questions import AttachmentsQuestion, NewAttachmentQuestion
+from .response_questions import NewResponseQuestion
 
 Q_LIST = [
     NewRegistrationQuestion,
@@ -24,6 +25,7 @@ Q_LIST = [
     NewReceiverQuestion,
     AttachmentsQuestion,
     SecurityQuestion,
+    NewResponseQuestion,
 ]
 
 QUESTIONS = {q.slug: q for q in Q_LIST}

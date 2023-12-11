@@ -74,7 +74,9 @@ class NewRegistrationConsumer(RegistrationConsumer):
     def get_errors(self):
         self.errors = self.get_django_errors()
         for f in self.empty_fields:
-            self.errors.append(f"Field {f} is empty")
+            #NOTE: this was trying to append to a dict. Let's rethink the key
+            #later, or whether it should be a dict.
+            self.errors[f] = f"Field {f} is empty"
         for field, error in self.errors.items():
             self.blueprint.errors.add(self.question.slug, field, error)
 
@@ -140,6 +142,9 @@ class GoalConsumer(RegistrationConsumer):
 
     def consume(self):
         self.blueprint.questions.append(
+            self.question,
+        )
+        self.blueprint.desired_next.append(
             self.question,
         )
         if self.no_errors():

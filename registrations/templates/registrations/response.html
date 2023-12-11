@@ -1,0 +1,57 @@
+{% extends "registrations/base-form.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load question_tags %}
+{% load registration_tags %}
+{% load progress_tags %}
+
+{% block hero %}
+  
+{% endblock %}
+
+{% block form %}
+  <div class="col-12">
+
+    <div id="response_top">
+      <div class="uu-form-row">
+        <div class="uu-form-field bg-transparent">
+          <h3>{% trans "registrations:response:page_title" %}</h3>
+          <p>{% trans "registrations:response:page_description" %}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-top">
+      {% for question in completed %}
+        <div class="uu-form">
+          <div class="uu-form-field">
+            <div class="d-flex justify-content-between">
+              <h4 class="d-inline">{{question.title}}</h4>
+            </div>
+          {% include question.summary %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <hr />
+
+    <div class="uu-form-text-row">
+      <div class="uu-form-text">
+        <h3> {{ question.title }} </h3>
+        {% include question.description %}
+      </div>
+
+    </div>
+    <div class="uu-form-row">
+      <div class="uu-form-field">
+        <br />
+        {% ask_question question %}
+        <br />
+      </div>
+    </div>
+
+    <hr />
+
+  </div>
+{% endblock %}

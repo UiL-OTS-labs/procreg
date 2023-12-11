@@ -25,7 +25,6 @@ class RenderableFaqList():
         except ObjectDoesNotExist as e:
             logger.warning(
                 f"Non-existent FAQList with slug {slug} was requested",
-                e
             )
             self.faqlist = FaqList.objects.get(
                 slug="default",
