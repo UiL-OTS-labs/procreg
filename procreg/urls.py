@@ -36,6 +36,11 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
 ]
 
+if hasattr(settings, 'SAML_CONFIG'):
+    urlpatterns.append(
+        path('saml/', include('djangosaml2.urls')),
+    )
+
 
 admin.site.site_header = ''
 admin.site.site_title = ''

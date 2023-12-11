@@ -64,11 +64,14 @@ for p in (saml_key_path, saml_cert_path):
 # Use the helper function to generate the SAML_CONFIG.
 # This is the main setting used to set up SAML
 SAML_CONFIG = create_saml_config(
-    # This should be the URL of the VWRG app (with protocol). Currently
-    # localhost, port 8000. Please change if you run the app on a different
-    # hostname/port
-    # Note that localhost and 127.0.0.1 are not interchangeable here
-    base_url='http://localhost:8000/',
+    # This should be the URL on which the VWRG app (with protocol) can
+    # be accessed by the IdP. That depends on your current setup. Here,
+    # we presume a docker-compose setup with containers called idp and django
+    # running their respective services.
+    # If running everything on a single machine, localhost suffices here.
+    # In a production environment, you would need to use a full externally
+    # available URL.
+    base_url='http://django:9000/',
     # The name of the app, does not _really_ matter
     name=saml_name,
     # The full location of the private key of the cert, currently
@@ -81,7 +84,7 @@ SAML_CONFIG = create_saml_config(
     # The current value is valid for the Development IdP, if run at port 7000
     # If you run it in a different place/port, please update
     # If you use a different IdP, find its metadata URL and copy/paste it here
-    idp_metadata='http://localhost:7000/saml/idp/metadata/',
+    idp_metadata='http://idp:7000/saml/idp/metadata/',
     # If set to True, the app will allow login attempts not requested by the app
     # This _can_ happen if a user logs in directly from the IdP. Currently set
     # to true, as the DevIdP can sometimes do funky stuff with the session ID
