@@ -215,7 +215,8 @@ class RegistrationQuestionEditView(
 
 
 class RegistrationResponseView(
-    RegistrationQuestionEditView,
+    RegistrationMixin,
+    QuestionEditView,
 ):
     template_name = "registrations/response.html"
     model = Registration
@@ -223,24 +224,30 @@ class RegistrationResponseView(
     pk_url_kwarg = 'reg_pk'
 
     def get_context_data(self, *args, **kwargs):
-        # context = super().get_context_data(**kwargs)
-        context = {}
+        context = super().get_context_data(**kwargs)
         blueprint = self.get_blueprint()
         context['completed'] = blueprint.completed
+        breakpoint()
         return context
-    
+
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super().get_form_kwargs(*args, **kwargs)
         user = self.request.user
         kwargs.update({"user": user})
         return kwargs
-    
+
     def get_allowed_users(self):
         user = self.request.user
         allowed = []
         if "PO" in [g.name for g in user.groups.all()]:
             allowed.append(user)
         return allowed
+
+    def get_question_object(self):
+        return self.get_blueprint().object
+
+    def get_question_class(self):
+        return self.question_class
 
 class RegistrationCreateView(
         LoginRequiredMixin,

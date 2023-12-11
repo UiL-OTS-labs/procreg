@@ -22,11 +22,11 @@ class NewResponseQuestion(
         ]
     slug = "new_response"
     model = Meta.model
+#    description = Template("response desc")
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
-        self.user = kwargs.get('user')
-        kwargs.pop('user')
 
     # def get_create_url(self):
     #     return reverse(

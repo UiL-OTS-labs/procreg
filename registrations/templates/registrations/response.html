@@ -10,7 +10,7 @@
   
 {% endblock %}
 
-{% block form %}
+{% block content %}
   <div class="col-12">
 
     <div id="response_top">
@@ -23,13 +23,13 @@
     </div>
 
     <div class="space-top">
-      {% for question in completed %}
+      {% for q in completed %}
         <div class="uu-form">
           <div class="uu-form-field">
             <div class="d-flex justify-content-between">
               <h4 class="d-inline">{{question.title}}</h4>
             </div>
-          {% include question.summary %}
+          {% include q.summary %}
         </div>
       {% endfor %}
     </div>
