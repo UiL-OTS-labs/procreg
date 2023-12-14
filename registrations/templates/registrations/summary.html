@@ -37,42 +37,53 @@
 
 
     <div class="space-top">
-      {% for question in completed %}
+      {% for q in completed %}
         <div class="uu-form-row">
           <div class="uu-form-field">
             <div class="d-flex justify-content-between">
-              <h4 class="d-inline">{{question.title}}</h4>
-              <a href="{{question.get_edit_url}}">
+              <h4 class="d-inline">{{q.title}}</h4>
+              <a href="{{q.get_edit_url}}">
                 {% trans "questions:actions:edit" %}
               </a></div>
-            {% include question.summary %}
+            {% include q.summary %}
           </div>
           <div class="uu-form-help">
             <p>
-              {% include question.faqs.help_text %}
+              {% include q.faqs.help_text %}
             </p>
           </div>
         </div>
       {% endfor %}
     </div>
 
+    <div class="space-top">
+      {% for r in responses %}
+        <div class="uu-form">
+          <div class="uu-form-field">
+            <div class="d-flex justify-content-between">
+              <h4 class="d-inline">Response</h4>
+            </div>
+          {% include r.summary %}
+        </div>
+      {% endfor %}
+    </div>
+
     <hr />
 
-    <div id="submitter_comments">
-      <h3 class="mt-3">{% trans "views:summary:submitter_comments_h3" %}</h3>
-      <div class="uu-form-row mt-4">
-        <div class="uu-form-field">
-          <form action="" method="POST">
-            {% csrf_token %}
-            <p>{{form.submitter_comments}}</p>
-            <input class="btn btn-primary" type="submit" value="Opmerkingen opslaan"></input>
-          </form>
-        </div>
-        <div class="uu-form-help">
-          <p>{% trans "views:summary:submitter_comments_description" %}</p>
-        </div>
+    <div class="uu-form-text-row">
+      <div class="uu-form-text">
+        <h3> {{ question.title }} </h3>
+        {% include question.description %}
       </div>
+
     </div>
+    <div class="uu-form-row">
+      <div class="uu-form-field">
+        <br />
+        {% ask_question question %}
+        <br />
+      </div>
+    </div> 
 
     <hr />
     

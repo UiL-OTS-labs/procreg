@@ -1,22 +1,32 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext as _
-from .registration import YES_NO, YES_NO_NA, Registration
+from registrations.models import Registration
 
 
 USER_MODEL = get_user_model()
 
 
 class Response(models.Model):
-    approved = models.BooleanField(
-        help_text=_("models:response:approved_help_text"),
-        verbose_name=_("models:response:approved_verbose_name"),
+    STATUSES = (
+        ("draft", "models:response:status_draft"),
+        ("submitted", "models:response:status_submitted"),
+        ("registered", "models:response:status_registered"),
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUSES,
+        default="draft",
+        help_text=_("models:response:status_help_text"),
+        verbose_name=_("models:response:status_verbose_name"),
     )
 
     comments = models.CharField(
         max_length=1000,
         help_text=_("models:response:comments_help_text"),
         verbose_name=_("models:response:comments_verbose_name"),
+        default="",
         blank=True,
     )
 
@@ -32,4 +42,16 @@ class Response(models.Model):
     registration = models.ForeignKey(
         Registration,
         on_delete=models.CASCADE,
+    )
+
+    RESPONSE_TYPES = (
+        ("PO", "PO Response"),
+        ("USER", "User Response"),
+    )
+
+    type = models.CharField(
+        max_length=20,
+        choices=RESPONSE_TYPES,
+        blank=True,
+        default="",
     )

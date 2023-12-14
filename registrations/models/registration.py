@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import OuterRef, Subquery, Q, Case, When, F, Value
+
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext as _
 
@@ -18,7 +20,41 @@ YES_NO_NA = (
     ('', "models:choices:please_specify"),
 )
 
+class RegistrationManager(models.Manager):
+    def get_queryset(self):
+        """This returns an annotated qs, with a status attribute derived from
+        the latest, related Response objects. If there is no related Response
+        object, status becomes 'draft'.
+
+        This is currently the base Queryset for registrations. So status will 
+        be included for any QS operations.
+        """
+        from registrations.models import Response
+
+        return (
+            super(RegistrationManager, self)
+            .get_queryset()
+            .annotate(
+                status=Subquery(
+                    # find all related response objects
+                    Response.objects.filter(registration=OuterRef("pk"))
+                    # reverse order by pk to get the latest one, and slice its
+                    # value to use as the value of status
+                    .order_by("-pk").values("status")[:1]
+                )
+            )
+            .annotate(
+                # Registrations with no response will get None as a status.
+                # this gets updated to 'draft' here.
+                status=Case(
+                    When(status__isnull=True, then=Value("draft")), default=F("status")
+                )
+            )
+        )
+    
 class Registration(models.Model):
+
+    objects = RegistrationManager()
 
     # Meta information
     registration_title = models.CharField(
@@ -34,16 +70,21 @@ class Registration(models.Model):
                                    default=None,
                                    )
     created_on = models.DateTimeField(auto_now=True)
-    STATUSES = (
-        ("draft", "models:registration:status_draft"),
-        ("submitted", "models:registration:status_submitted"),
-        ("registered", "models:registration:status_registered"),
-    )
-    status = models.CharField(
-        max_length=20,
-        choices=STATUSES,
-        default="draft",
-    )
+
+    @property
+    def registration_status(self):
+        """A property method to retrieve the status of a registration from
+        its latest related Response. 
+        
+        NOTE: this is not called status, to avoid confusion with the 
+        RegistrationManager method. Use registration_status when working
+        with single objects, and status when working with querysets.
+        """
+        latest_response = self.response_set.last()
+        if not latest_response:
+            return "draft"
+        else: 
+            return latest_response.status
 
     # Blueprint information
     applicants = models.ManyToManyField(USER_MODEL,
@@ -181,12 +222,6 @@ class Registration(models.Model):
     )
 
     # Misc
-
-    submitter_comments = models.TextField(
-        max_length = 1000,
-        default = "",
-        blank=True,
-    )
 
     def list_involved_types(self):
         """

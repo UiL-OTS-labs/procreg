@@ -6,8 +6,9 @@ from registrations.questions import NewRegistrationQuestion, FacultyQuestion, \
     TraversalQuestion, GoalQuestion, ReceiverQuestion, SecurityQuestion, \
     NewReceiverQuestion, SoftwareQuestion, NewSoftwareQuestion, \
     RegularDetailsQuestion, SpecialDetailsQuestion, SensitiveDetailsQuestion, \
-    AttachmentsQuestion, NewAttachmentQuestion
-from .models import Involved, Receiver, Software, Attachment
+    AttachmentsQuestion, NewAttachmentQuestion, PoResponseQuestion, \
+    UserResponseQuestion
+from .models import Involved, Receiver, Software, Attachment, Response
 
 
 class RegistrationConsumer(BaseQuestionConsumer):
@@ -585,3 +586,43 @@ class AttachmentsConsumer(RegistrationConsumer):
         if len(self.empty_fields) == 0:
             return []
         return []
+
+class ResponseConsumer(BaseConsumer):
+
+    def consume(self):
+        if self.at_least_one_created():
+            self.instantiate_all()
+        return []
+
+    
+    def instantiate_all(self):
+        """Populate self.questions with all Responses plus one
+        empty one"""
+        self.questions = []
+        for response in self.get_queryset():
+            if response.type == 'PO':
+                self.questions.append(
+                    PoResponseQuestion(
+                        blueprint=self.blueprint,
+                        instance=response,
+                    )
+                )
+            elif response.type == 'USER':
+                self.questions.append(
+                    UserResponseQuestion(
+                        blueprint=self.blueprint,
+                        instance=response,
+                    )
+                )
+        self.blueprint.responses += self.questions
+
+    def at_least_one_created(self):
+        return self.get_queryset().count() > 0
+
+    def get_queryset(self):
+        return Response.objects.filter(
+            registration=self.blueprint.object,
+        )
+
+    def no_errors(self):
+        return True

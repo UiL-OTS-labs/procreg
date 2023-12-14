@@ -123,10 +123,11 @@ class MyRegistrationsList(
             name: form[name].value() for name in filters.keys()
         }
         to_be_applied = [
-            filters[f](qs) for f in filters if checkboxes[f] is not None
+            filters[f](qs) for f in filters if checkboxes[f]
         ]
 
         output_qs = Registration.objects.none()
+
         while to_be_applied != []:
             f = to_be_applied.pop()
             output_qs = output_qs | f

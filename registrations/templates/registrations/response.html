@@ -27,9 +27,21 @@
         <div class="uu-form">
           <div class="uu-form-field">
             <div class="d-flex justify-content-between">
-              <h4 class="d-inline">{{question.title}}</h4>
+              <h4 class="d-inline">{{q.title}}</h4>
             </div>
           {% include q.summary %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="space-top">
+      {% for r in responses %}
+        <div class="uu-form">
+          <div class="uu-form-field">
+            <div class="d-flex justify-content-between">
+              <h4 class="d-inline">Response</h4>
+            </div>
+          {% include r.summary %}
         </div>
       {% endfor %}
     </div>

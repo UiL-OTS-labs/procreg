@@ -15,7 +15,7 @@ from django import forms
 from registrations.models import Registration, ParticipantCategory, Involved, \
     Software, Receiver, Faq, Attachment, Faq
 from registrations.questions import NewRegistrationQuestion, FacultyQuestion, \
-    CategoryQuestion, NewResponseQuestion
+    CategoryQuestion, PoResponseQuestion, UserResponseQuestion
 from registrations.mixins import RegistrationMixin, RegistrationQuestionMixin
 from registrations.progress import ProgressItemMixin
 from registrations.blueprints import RegistrationBlueprint
@@ -72,55 +72,6 @@ class RegistrationOverview(RegistrationMixin,
         top_questions = self.blueprint.top_questions
         context['top_questions'] = top_questions
         return context
-
-
-class SummaryForm(forms.ModelForm):
-
-    class Meta:
-        model = Registration
-        fields = ["submitter_comments"]
-
-    
-class RegistrationSummaryView(
-        ProgressItemMixin,
-        RegistrationMixin,
-        BlueprintMixin,
-        generic.UpdateView,
-):
-
-    template_name = 'registrations/summary.html'
-    extra_context = {"stepper": True}
-    title = _("registrations:views:summary_title")
-    description = _("registrations:views:summary_description")
-    slug = "summary"
-    form_class = SummaryForm
-
-    def get_object(self,):
-        return self.get_registration()
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['completed'] = self.blueprint.completed
-
-        return context
-
-    def get_edit_url(self,):
-        reg_pk = self.reg_pk
-        return reverse(
-            "registrations:summary",
-            kwargs={
-                "reg_pk": reg_pk,
-            },
-        )
-
-    def get_success_url(self,):
-        success_url = reverse(
-            "registrations:summary",
-            kwargs={
-                "reg_pk": self.get_registration().pk,
-            }
-        )
-        return success_url
 
 class BlueprintQuestionEditView(
         RegistrationQuestionMixin,
@@ -191,11 +142,6 @@ class RegistrationQuestionEditView(
             }
         )
 
-    def get_form_kwargs(self):
-        form_kwargs = super().get_form_kwargs()
-        form_kwargs["blueprint"] = self.get_blueprint()
-        return form_kwargs
-
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["stepper"] = self.get_question_class().show_progress
@@ -212,7 +158,56 @@ class RegistrationQuestionEditView(
     def form_invalid(self):
         #  breakpoint()
         return super().form_invalid()
+    
+class RegistrationSummaryView(
+        ProgressItemMixin,
+        RegistrationMixin,
+        BlueprintMixin,
+        QuestionEditView,
+):
 
+    template_name = 'registrations/summary.html'
+    extra_context = {"stepper": True}
+    title = _("registrations:views:summary_title")
+    description = _("registrations:views:summary_description")
+    slug = "summary"
+    question_class = UserResponseQuestion
+    model = Registration
+    pk_url_kwarg = 'reg_pk'
+
+    def get_object(self,):
+        return self.get_registration()
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['completed'] = self.blueprint.completed
+        context['responses'] = self.blueprint.responses
+
+        return context
+    
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        user = self.request.user
+        kwargs.update({"user": user})
+        return kwargs
+
+    def get_edit_url(self,):
+        reg_pk = self.reg_pk
+        return reverse(
+            "registrations:summary",
+            kwargs={
+                "reg_pk": reg_pk,
+            },
+        )
+
+    def get_success_url(self,):
+        success_url = reverse(
+            "registrations:summary",
+            kwargs={
+                "reg_pk": self.get_registration().pk,
+            }
+        )
+        return success_url
 
 class RegistrationResponseView(
     RegistrationMixin,
@@ -220,14 +215,14 @@ class RegistrationResponseView(
 ):
     template_name = "registrations/response.html"
     model = Registration
-    question_class = NewResponseQuestion
+    question_class = PoResponseQuestion
     pk_url_kwarg = 'reg_pk'
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         blueprint = self.get_blueprint()
         context['completed'] = blueprint.completed
-        breakpoint()
+        context['responses'] = blueprint.responses
         return context
 
     def get_form_kwargs(self, *args, **kwargs):
@@ -243,11 +238,13 @@ class RegistrationResponseView(
             allowed.append(user)
         return allowed
 
-    def get_question_object(self):
-        return self.get_blueprint().object
-
-    def get_question_class(self):
-        return self.question_class
+    def get_object(self):
+        return self.get_question_object()
+    
+    def get_success_url(self):
+        return reverse(
+            "registrations:po_list",
+            )
 
 class RegistrationCreateView(
         LoginRequiredMixin,

@@ -4,59 +4,71 @@ from django.template import loader, Template
 
 from cdh.core import forms as cdh_fields
 from cdh.questions import questions
-from registrations.models import Registration, Response
+from registrations.models import Response
 
 from .helpers import RegistrationQuestionMixin
 
-class NewResponseQuestion(
-        RegistrationQuestionMixin,
-        questions.Question,
+
+class PoResponseQuestion(
+    RegistrationQuestionMixin,
+    questions.Question,
 ):
-    """Question that creates a new response and adds them to a registration"""
+    """Question that creates a new PO response and
+    adds them to a registration"""
 
     class Meta:
         model = Response
         fields = [
-            'comments',
-            'approved',
+            "comments",
+            "status",
         ]
-    slug = "new_response"
+
+    slug = "PO_response"
     model = Meta.model
-#    description = Template("response desc")
 
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user')
+        if 'user' in kwargs:
+            self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
 
-    # def get_create_url(self):
-    #     return reverse(
-    #         "registrations:edit_question",
-    #         kwargs={
-    #             "question": "new_receiver",
-    #             "reg_pk": self.blueprint.object.pk,
-    #         },
-    #     )
-
-    # def get_delete_url(self):
-    #     return reverse(
-    #         "registrations:delete_receiver",
-    #         kwargs={
-    #             "reg_pk": self.get_registration().pk,
-    #             "receiver_pk": self.instance.pk,
-    #         }
-    #     )
-
-    def get_success_url(self):
-        return reverse(
-            "registrations:response",
-            )
-
     def get_segments(self):
-        return self._fields_to_segments(
-            self.fields
-        )
+        return self._fields_to_segments(self.fields)
 
     def save(self):
-        self.instance.registration = self.get_registration()
+        registration = self.get_registration()
+        self.instance.registration = registration
         self.instance.created_by = self.user
+        self.instance.response_type = "PO"
+        return super().save()
+
+
+class UserResponseQuestion(
+    RegistrationQuestionMixin,
+    questions.Question,
+):
+    """Question that creates a new user response and
+    adds them to a registration"""
+
+    class Meta:
+        model = Response
+        fields = [
+            "comments",
+        ]
+
+    slug = "User_response"
+    model = Meta.model
+
+    def __init__(self, *args, **kwargs):
+        if 'user' in kwargs:
+            self.user = kwargs.pop("user")
+        super().__init__(*args, **kwargs)
+
+    def get_segments(self):
+        return self._fields_to_segments(self.fields)
+
+    def save(self):
+        registration = self.get_registration()
+        self.instance.registration = registration
+        self.instance.created_by = self.user
+        self.instance.response_type = "USER"
         return super().save()
