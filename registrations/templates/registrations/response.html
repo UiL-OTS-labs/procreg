@@ -34,20 +34,20 @@
       {% endfor %}
     </div>
 
-    <div class="space-top">
-      {% for r in responses %}
-        <div class="uu-form">
-          <div class="uu-form-field">
-            <div class="d-flex justify-content-between">
-              <h4 class="d-inline">Response</h4>
-            </div>
-          {% include r.summary %}
-        </div>
-      {% endfor %}
-    </div>
+      <div class="space-top">
+        {% for r in responses %}
+          <div class="uu-form">
+            <div class="uu-form-field">
+              <div class="d-flex justify-content-between">
+                <h4 class="d-inline">Response</h4>
+              </div>
+            {% include r.summary %}
+          </div>
+        {% endfor %}
+      </div>
 
     <hr />
-
+    {% if registration.status == "submitted" %}
     <div class="uu-form-text-row">
       <div class="uu-form-text">
         <h3> {{ question.title }} </h3>
@@ -62,6 +62,7 @@
         <br />
       </div>
     </div>
+    {% endif %}
 
     <hr />
 

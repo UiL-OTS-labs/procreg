@@ -71,4 +71,5 @@ class UserResponseQuestion(
         self.instance.registration = registration
         self.instance.created_by = self.user
         self.instance.response_type = "USER"
+        self.instance.status = "submitted"
         return super().save()
