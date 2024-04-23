@@ -1,0 +1,64 @@
+{% extends "registrations/question_progress.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load question_tags %}
+{% load progress_tags %}
+{% load registration_tags %}
+
+
+{% block stepper %}
+
+  {% with current=view.slug %}
+    {% progress_bar blueprint view %}
+  {% endwith %}
+
+  <h4 class="mt-4">Completed</h4>
+  <ul>
+    {% for q in blueprint.completed %}
+      <li>{{q.slug}} (<a href="{{q.get_edit_url}}">edit</a>)</li>
+    {% endfor %}
+  </ul>
+  <ul>
+    {% for q in blueprint.available %}
+      <li>{{q.slug}} (<a href="{{q.get_edit_url}}">edit</a>)</li>
+    {% endfor %}
+  </ul>
+
+  <h4>All available</h4>
+{% endblock %}
+
+
+{% block form %}
+  <div class="uu-form-text-row">
+    <div class="uu-form-text">
+      <h2>Editing a question</h2>
+      <p>This page facilitates both the creation and editing of Questions. Now with progress bar.</p>
+    </div>
+    <div class="uu-form-text-aside">
+      <p>Top-level FAQ goes here</p>
+
+    </div>
+  </div>
+  <div class="uu-form-row">
+    <div class="uu-form-field">
+      {% for group_type, data in questions.items %}
+        <h3>{{group_type}}</h3>
+        <ul>
+        {% for eq in data.existing %}
+          <li><a href="{{eq.get_edit_url}}">Existing: {{eq.instance.name}}</a></li>
+        {% endfor %}
+        <li><a href="{{data.new.get_edit_url}}">Make new</a></li>
+        </ul>
+          {% empty %}
+        <h3>No groups selected?</h3>
+      {% endfor %}
+    </div>
+    <div class="uu-form-help">
+      <p>
+        Question help goes here.
+      </p>
+    </div>
+  </div>
+
+{% endblock %}

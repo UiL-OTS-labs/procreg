@@ -14,3 +14,57 @@ Procreg *does* record meta-information on data collected during research activit
 Procreg is a Django application making use of the DH-IT [Django Shared Core](https://github.com/DH-IT-Portal-Development/django-shared-core) and [Portaldev Bootstrap theme](https://github.com/DH-IT-Portal-Development/bootstrap-theme).
 
 Procreg provides a browser-based portal in which guided questions help researchers register exactly what is necessary to fulfill their requirements under the AVG. It requires no prior knowledge on personal data collection for the end-user and therefore contains an educational component.
+
+### Blueprint and consumers
+
+Most of the application revolves around building a Registration object. This is a complex object that sprawls in many sub-objects, therefore its logic and validation are contained in a Blueprint.
+
+Check it out in: `registrations/blueprints.py`
+
+The Blueprint, and with it the registration in question, is validated by recursively running so-called consumers. Each consumers tends to validate a certain form question, but there isn't a strict one-on-one relationship between the two. If succesful, a consumer will return a list of further consumers to run which represent the next steps in validation.
+
+# Development
+
+## Setting up
+
+It is not recommended to run or develop this application as-is. Please see the `procreg-deploy` repo (available on GitLab) for the recommended Docker deployment. The following steps create an environment that can be inserted into the Docker container for live development
+
+### Grab the source
+
+Simply clone it from this repo. Put it in the `./source/` directory found in the top level of `procreg-deploy`.
+
+```bash
+git clone git@github.com:CentreForDigitalHumanities/procreg.git source
+cd source
+git checkout acc
+```
+
+### Create virtual environment and install sources
+
+For virtual environment management, pipenv is recommended. The Python version used is not of great importance but 3.9 is what is used in deployments, so it's best to stick with that if possible. If Python 3.9 can't be found on your system, pipenv will suggest steps to install it using Pyenv.
+
+The following should be run in the top level of `procreg` sources, where we left off in the previous step.
+
+```bash
+pipenv shell --python=3.9
+pip install requirements.txt
+```
+
+Note that this is not the same environment as the container uses. The container simply uses the root-level Python environment and site-packages inside the container. The container does not see the virtualenv, except for `src/cdh-django-core`. The development virtualenv simply exists to give your IDE something to work with.
+
+As such, when there are inconsistencies with code inside and outside the container, the virtual env is a good place to look.
+
+### Install Django Shared Core into the local dev environment
+
+The development container looks for DSC within this source directory. Therefore paths and directory names below should be followed exactly.
+
+Once again, from the top level of `procreg` sources, with your virtual environment active. If following directories are already present, you may overwrite them.
+
+```bash
+mkdir src
+cd src
+git clone --branch questions git@github.com:CentreForDigitalHumanities/django-shared-core.git cdh-django-core
+pip install -e ./cdh-django-core
+```
+
+DSC should already have been installed when installing requirements. However, using an editable local version allows for reference and development of both projects.

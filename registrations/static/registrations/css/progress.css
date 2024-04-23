@@ -1,11 +1,29 @@
 #progress li {
     border-left-width: 0.5rem;
-    border-left-color: grey;
+    border-left-color: lightgrey;
     border-left-style: solid;
+    padding: 0.5rem;
+    padding-right: 0px;
+}
+
+#progress {
+    list-style-type: none;
+    margin-left: none;
+    padding-left: 0px;
+    overflow-wrap: break-word;
 }
 
 #progress li.completed {
     border-left-color: yellow;
+}
+
+
+#progress li.current {
+    font-weight: 700;
+}
+
+#progress li.current.completed {
+    border-left-color: gold;
 }
 
 

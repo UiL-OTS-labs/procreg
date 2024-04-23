@@ -1,13 +1,57 @@
+{% load progress_tags %}
 
-
-
-<ul id="progress">
-  {% with progress=blueprint.progress_bar.make_progress_dict %}
-  {% for question, data in progress.items %}
-  
-  <li class={{data.status}}>
-    <a href="#">{{data.name}}</a>
-  </li>
-  {% endfor %}
-  {% endwith %}
-</ul>
+<div class="stepper">
+  <ul>
+    <li>
+      {% if current_question.slug in group_one %}
+        {% progress_item_from_slug "new_reg" %}
+        <ul>
+          <li>
+            {% progress_item_from_slug "faculty" number="" size="large" %}
+          </li>
+        </ul>
+      {% else %}
+        {% progress_item_from_slug "new_reg" incomplete=blueprint.top_questions_incomplete %}
+      {% endif %}
+    </li>
+    <li>
+      {% progress_item_from_slug "traversal" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "goal" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "involved_people"  %}
+    </li>
+    <li>
+      {% progress_item_from_slug "involved_manager" %}
+      {% if blueprint.any_involved_group_available %}
+        <ul>
+          {% for group_type, data in blueprint.get_involved_groups.items %}
+            {% for involved in data.groups %}
+              {% involved_progress_items  %}
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </li>
+    <li>
+      {% progress_item_from_slug "retention" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "receivers" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "software" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "security" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "attachments" %}
+    </li>
+    <li>
+      {% progress_item_from_slug "summary" %}
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,25 @@
+{% load progress_tags %}
+{% load i18n %}
+
+
+<li>
+  {% progress_item_from_slug "new_involved" question_pk=involved.pk text=involved.name size="large" %}
+  
+{% if expand %}
+    <ul>
+      <li>
+        {% progress_item_from_slug "purpose" question_pk=involved.pk text="Purpose" size="medium" %}
+      </li>
+      <li>
+        {% progress_item_from_slug "special_details" question_pk=involved.pk text="Special details" size="medium" %}
+      </li>
+      <li>
+        {% progress_item_from_slug "sensitive_details" question_pk=involved.pk text="Sensitive details" size="medium" %}
+      </li>
+      <li>
+        {% progress_item_from_slug "regular_details" question_pk=involved.pk text="Regular details" size="medium" %}
+      </li>
+    </ul>
+    {% endif %}
+
+</li>

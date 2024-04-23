@@ -1,0 +1,17 @@
+{% extends "base/procreg_base.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load include_if_exists %}
+{% load menu %}
+{% load messages %}
+
+{% block html_head %}
+  {{ block.super }}
+
+  <link href="{% static 'cdh.core/questions.css' %}" rel="stylesheet" />
+  <link href="{% static 'cdh.core/prereg.css' %}" rel="stylesheet" />
+  <link href="{% static 'registrations/css/procreg.css' %}" rel="stylesheet" />
+  <link href="{% static 'registrations/css/progress.css' %}" rel="stylesheet" />
+
+{% endblock %}

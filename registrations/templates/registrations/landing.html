@@ -1,0 +1,96 @@
+{% extends "registrations/base-no-sidebar.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load faq_tags %}
+
+{% block cover %}
+{% endblock %}
+{% block hero %}
+  {% endblock %}
+
+{% block content %}
+<div class="uu-container">
+  <div class="col-4 p-3 border m-3 text-center">
+    <h2>{% trans "landing:call_to_action:h1" %}</h2>
+    <a class="btn btn-primary mt-5 mb-5" href="{% url 'registrations:new_registration' %}">
+      {% trans "landing:call_to_action:button" %}
+    </a>
+    <p>
+      {% trans "landing:call_to_action:subtext" %}
+    </p>
+  </div>
+  <div class="p-3 border m-3 flex-fill text-center" >
+    <h2>{% trans "landing:video:video_h1" %}</h2>
+    <img src="http://thecatapi.com/api/images/get?format=src"  style="max-height: 200px; width: auto;">
+  </div>
+</div>
+<div class="uu-container">
+  <div class="p-3 border m-3 flex-fill">
+    <h1>{% trans "landing:steps:h1" %}</h1>
+    <div class="d-flex justify-content-around">
+      <div class="col text-center">
+        <h3>{% trans "landing:steps:step1_title" %}</h3>
+        <img class="m-3" src="{% static "registrations/placeholder.svg" %}" >
+        <p class="text-start ps-2">
+          {% trans "landing:steps:step1" %}
+        </p>
+      </div>
+      <div class="col text-center flex-grow-0">
+        <h2 style="margin-top: 5rem;">&gt;</h2>
+      </div>
+      <div class="col text-center">
+        <h3>{% trans "landing:steps:step2_title" %}</h3>
+        <img class="m-3" src="{% static "registrations/placeholder.svg" %}" >
+        <p class="text-start ps-2">
+          {% trans "landing:steps:step2" %}
+        </p>
+      </div>
+      <div class="col text-center flex-grow-0">
+        <h2 style="margin-top: 5rem;">&gt;</h2>
+      </div>
+      <div class="col text-center">
+        <h3>{% trans "landing:steps:step3_title" %}</h3>
+        <img class="m-3" src="{% static "registrations/placeholder.svg" %}" >
+        <p class="text-start ps-2">
+          {% trans "landing:steps:step3" %}
+        </p>
+      </div>
+      <div class="col text-center flex-grow-0">
+        <h2 style="margin-top: 5rem;">&lt;&gt;</h2>
+      </div>
+      <div class="col text-center">
+        <h3>{% trans "landing:steps:step4_title" %}</h3>
+        <img class="m-3" src="{% static "registrations/placeholder.svg" %}" >
+        <p class="text-start ps-2">
+          {% trans "landing:steps:step4" %}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="uu-container">
+  <div class="p-3 border m-3 flex-fill" >
+    <h2 classs="mb-3">{% trans "landing:faq:faq_h1" %}</h2>
+    {% for faq in faqs %}
+      {% render_faq faq %}
+    {% empty %}
+    <p>{% trans "landing:faqs:no_faqs_yet" %}</p>
+    {% endfor %}
+    <p class="text-end mt-3 mt-4"><a href="#all_faqs">
+      {% trans "landing:faq:all_faqs_link" %}
+    </a></p>
+  </div>
+  <div class="col-4 p-3 border m-3 text-center">
+    <h2>{% trans "landing:ask_a_question:h2" %}</h2>
+    <a class="btn btn-primary mt-5 mb-5" href="{% url 'registrations:new_registration' %}">
+      {% trans "landing:faqs:button" %}
+    </a>
+    <p>
+      <a href="{% trans "landing:faq:research_glossary_url" %}">
+        {% trans "landing:faq:research_glossary_link_text" %}
+      </a>
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% load i18n %}
+
+<h4>{% trans "templates:sidebar:faqs_header" %}</h4>
+
+{% for faq in faqs %}
+
+<p>
+  <a href="{{faq.link}}">{{faq.title}}</a>
+</p>
+
+
+{% empty %}
+
+<p>
+  {% trans "templates:sidebar:no_faqs_available" %}
+</p>
+
+{% endfor %}

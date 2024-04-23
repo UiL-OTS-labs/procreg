@@ -1,4 +1,4 @@
-Django>=3.2,<3.3
+Django>=4,<5
 django-braces
 django-modeltranslation
 django-impersonate
@@ -9,5 +9,5 @@ django-extensions
 cryptography # Not needed if not using encrypted DB fields
 pip-tools
 mysqlclient
--e git+https://github.com/UiL-OTS-labs/django-shared-core.git@questions#egg=uil-django-core
+-e git+https://github.com/DH-IT-Portal-Development/django-shared-core.git@questions#egg=cdh-django-core[all]
 bpython

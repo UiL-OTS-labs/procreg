@@ -1,0 +1,48 @@
+{% extends "lists/my_registrations.html" %}
+{% load i18n %}
+
+{% block hero_text %}
+  {% trans "registrations:home:po_list_hero" %}
+{% endblock %}
+
+{% block projects_list %}
+
+  <div class="projects_list">
+    <table class="table">
+      <thead>
+        <th>
+          {% trans "registrations:lists:th_title" %}
+        </th>
+        <th>
+          {% trans "registrations:lists:th_created_by" %}
+        </th>
+        <th>
+          {% trans "registrations:lists:th_status" %}
+        </th>
+        <th>
+          {% trans "registrations:lists:th_start" %}
+        </th>
+      </thead>
+      <tbody>
+        {% for object in results %}
+            <tr>
+              <td>
+                <a href="{% url 'registrations:overview' object.pk %}">
+                  {{object.registration_title}}
+                </a>
+              </td>
+              <td>
+                {{object.created_by}}
+              </td>
+              <td>
+                {{object.status}}
+              </td>
+              <td>
+                {{object.date_start}}
+              </td>
+            </tr>
+            {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endblock %}

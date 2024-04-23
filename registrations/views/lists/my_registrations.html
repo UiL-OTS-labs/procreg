@@ -1,0 +1,109 @@
+{% extends "registrations/base.html" %}
+{% load i18n %}
+{% load procreg_helpers %}
+
+{% block hero_text %}
+{% trans "registrations:home:registration_list_hero" %}
+{% endblock %}
+
+{% block main_content %}
+
+<div class="d-flex flex-column justify-content-between">
+  {% block projects_list %}
+  <div class="projects_list">
+    <table class="table">
+      <thead>
+        <th>
+          {% trans "registrations:lists:th_title" %}
+        </th>
+        <th>
+          {% trans "registrations:lists:th_status" %}
+        </th>
+        <th>
+          {% trans "registrations:lists:th_start" %}
+        </th>
+      </thead>
+      <tbody>
+        {% for object in results %}
+            <tr>
+              <td>
+          <a href="{% url 'registrations:overview' object.pk %}">
+                {{object.registration_title}}
+          </a>
+              </td>
+              <td>
+                {{object.status}}
+              </td>
+              <td>
+                {{object.date_start}}
+              </td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endblock %}
+
+    <div class="pagination mt-4">
+      <h4 class="step-links">
+        {% if page_obj.has_previous %}
+          <a href="{% concat_get_params page=1 %}">&laquo; first</a>
+          <a href="{% concat_get_params page=page_obj.previous_page_number %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+          {% with num_next=page_obj.next_page_number %}
+            <a href="{% concat_get_params page=num_next %}">next</a>
+            <a href="{% concat_get_params page=page_obj.paginator.num_pages %}">last &raquo;</a>
+          {% endwith %}
+        {% endif %}
+      </h4>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block sidebar %}
+  <h3>Filters</h3>
+  <br />
+  <section class="">
+    <form method="GET">
+      <div class="mb-2">{{form.search}}</div>
+      <div class="form-check mb-2">
+        <input type="hidden" name="{{form.include_favourites.html_name}}" value="">
+        {{form.include_favourites}}
+        <label class="form-check-label" for="{{form.include_favourites.id_for_label}}">
+          {% trans "lists:registrations:filter_label_favourites" %}
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input type="hidden" name="{{form.include_drafts.html_name}}" value="">
+        {{form.include_drafts}}
+        <label class="form-check-label" for="{{form.include_drafts.id_for_label}}">
+          {% trans "lists:registrations:filter_label_drafts" %}
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input type="hidden" name="{{form.include_submitted.html_name}}" value="">
+        {{form.include_submitted}}
+        <label class="form-check-label" for="{{form.include_submitted.id_for_label}}">
+          {% trans "lists:registrations:filter_label_submitted" %}
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input type="hidden" name="{{form.include_registered.html_name}}" value="">
+        {{form.include_registered}}
+        <label class="form-check-label" for="{{form.include_registered.id_for_label}}">
+          {% trans "lists:registrations:filter_label_registered" %}
+        </label>
+      </div>
+      <input type="submit" class="btn btn-primary mt-3" />
+    </form>
+  </section>
+
+
+{% endblock %}

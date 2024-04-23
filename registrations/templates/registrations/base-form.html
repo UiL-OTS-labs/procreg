@@ -1,0 +1,24 @@
+{% extends "base/procreg_base.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load include_if_exists %}
+{% load menu %}
+{% load messages %}
+
+{% block content %}
+  <div class="uu-container">
+    {% if stepper %}
+      <div class="col-3 d-lg-block d-none">
+        <div class="" style="overflow-wrap: anywhere; padding-right: 2rem;">
+          {% block stepper %}{% endblock %}
+        </div>
+      </div>
+    {% endif %}
+    <div class="d-flex flex-column col-12 {% if stepper %}col-lg-9{% endif %}">
+      <div class="uu-form">
+        {% block form %}{% endblock %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

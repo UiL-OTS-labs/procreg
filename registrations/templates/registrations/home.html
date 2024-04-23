@@ -1,7 +1,11 @@
 {% extends "registrations/base.html" %}
 {% load i18n %}
 
-{% block main %}
+{% block hero_text %}
+registrations:home:registration_list_hero
+{% endblock %}
+
+{% block main_content %}
 <h2>{% trans "registrations:main:home" %}</h2>
 
 
@@ -34,12 +38,10 @@
 {% endblock %}
 
 {% block sidebar %}
-<h6>sidebar</h6>
+<h4>sidebar</h4>
 <a href="{% url 'registrations:new_registration' %}">
     {% trans "registrations:actions:new_registration" %}
 </a>
-
-<p>Objects:{{object_list}}</p>
 
 
 
