@@ -23,8 +23,11 @@ class PoResponseQuestion(
             "status",
         ]
 
-    slug = "PO_response"
+    title = _("questions:response:po_response")
+    description = Template(_("questions:response:po_response_desc"))
+    slug = "po_response"
     model = Meta.model
+    is_editable = True
 
     def __init__(self, *args, **kwargs):
         if 'user' in kwargs:
@@ -38,7 +41,7 @@ class PoResponseQuestion(
         registration = self.get_registration()
         self.instance.registration = registration
         self.instance.created_by = self.user
-        self.instance.response_type = "PO"
+        self.instance.type = "PO"
         return super().save()
 
 
@@ -55,8 +58,11 @@ class UserResponseQuestion(
             "comments",
         ]
 
-    slug = "User_response"
+    title = _("questions:response:user_response")
+    description = Template(_("questions:response:user_response_desc"))
+    slug = "user_response"
     model = Meta.model
+    is_editable = True
 
     def __init__(self, *args, **kwargs):
         if 'user' in kwargs:
@@ -70,6 +76,6 @@ class UserResponseQuestion(
         registration = self.get_registration()
         self.instance.registration = registration
         self.instance.created_by = self.user
-        self.instance.response_type = "USER"
+        self.instance.type = "USER"
         self.instance.status = "submitted"
         return super().save()

@@ -13,7 +13,7 @@ from cdh.questions.views import BlueprintMixin, QuestionView, \
 from django import forms
 
 from registrations.models import Registration, ParticipantCategory, Involved, \
-    Software, Receiver, Faq, Attachment, Faq
+    Software, Receiver, Faq, Attachment, Faq, Response
 from registrations.questions import NewRegistrationQuestion, FacultyQuestion, \
     CategoryQuestion, PoResponseQuestion, UserResponseQuestion
 from registrations.mixins import RegistrationMixin, RegistrationQuestionMixin
@@ -172,11 +172,11 @@ class RegistrationSummaryView(
     description = _("registrations:views:summary_description")
     slug = "summary"
     question_class = UserResponseQuestion
-    model = Registration
+    model = Response
     pk_url_kwarg = 'reg_pk'
 
     def get_object(self,):
-        return self.get_registration()
+        return self.get_question_object()
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -188,7 +188,10 @@ class RegistrationSummaryView(
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super().get_form_kwargs(*args, **kwargs)
         user = self.request.user
-        kwargs.update({"user": user})
+        blueprint = self.get_blueprint()
+        kwargs.update({"user": user,
+                       "blueprint": blueprint,
+                       })
         return kwargs
 
     def get_edit_url(self,):
@@ -214,7 +217,7 @@ class RegistrationResponseView(
     QuestionEditView,
 ):
     template_name = "registrations/response.html"
-    model = Registration
+    model = Response
     question_class = PoResponseQuestion
     pk_url_kwarg = 'reg_pk'
 
@@ -228,7 +231,10 @@ class RegistrationResponseView(
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super().get_form_kwargs(*args, **kwargs)
         user = self.request.user
-        kwargs.update({"user": user})
+        blueprint = self.get_blueprint()
+        kwargs.update({"user": user,
+                       "blueprint": blueprint,
+                       })
         return kwargs
 
     def get_allowed_users(self):
