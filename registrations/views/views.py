@@ -175,8 +175,6 @@ class RegistrationSummaryView(
     model = Response
     pk_url_kwarg = 'reg_pk'
 
-    def get_object(self,):
-        return self.get_question_object()
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -202,6 +200,9 @@ class RegistrationSummaryView(
                 "reg_pk": reg_pk,
             },
         )
+    
+    def get_object(self,):
+        return self.get_question_object()
 
     def get_success_url(self,):
         success_url = reverse(
