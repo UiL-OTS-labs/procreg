@@ -6,8 +6,9 @@ from registrations.questions import NewRegistrationQuestion, FacultyQuestion, \
     TraversalQuestion, GoalQuestion, ReceiverQuestion, SecurityQuestion, \
     NewReceiverQuestion, SoftwareQuestion, NewSoftwareQuestion, \
     RegularDetailsQuestion, SpecialDetailsQuestion, SensitiveDetailsQuestion, \
-    AttachmentsQuestion, NewAttachmentQuestion
-from .models import Involved, Receiver, Software, Attachment
+    AttachmentsQuestion, NewAttachmentQuestion, PoResponseQuestion, \
+    UserResponseQuestion
+from .models import Involved, Receiver, Software, Attachment, Response
 
 
 class RegistrationConsumer(BaseQuestionConsumer):
@@ -74,7 +75,9 @@ class NewRegistrationConsumer(RegistrationConsumer):
     def get_errors(self):
         self.errors = self.get_django_errors()
         for f in self.empty_fields:
-            self.errors.append(f"Field {f} is empty")
+            #NOTE: this was trying to append to a dict. Let's rethink the key
+            #later, or whether it should be a dict.
+            self.errors[f] = f"Field {f} is empty"
         for field, error in self.errors.items():
             self.blueprint.errors.add(self.question.slug, field, error)
 
@@ -140,6 +143,9 @@ class GoalConsumer(RegistrationConsumer):
 
     def consume(self):
         self.blueprint.questions.append(
+            self.question,
+        )
+        self.blueprint.desired_next.append(
             self.question,
         )
         if self.no_errors():
@@ -580,3 +586,43 @@ class AttachmentsConsumer(RegistrationConsumer):
         if len(self.empty_fields) == 0:
             return []
         return []
+
+class ResponseConsumer(BaseConsumer):
+
+    def consume(self):
+        if self.at_least_one_created():
+            self.instantiate_all()
+        return []
+
+    
+    def instantiate_all(self):
+        """Populate self.questions with all Responses plus one
+        empty one"""
+        self.questions = []
+        for response in self.get_queryset():
+            if response.type == 'PO':
+                self.questions.append(
+                    PoResponseQuestion(
+                        blueprint=self.blueprint,
+                        instance=response,
+                    )
+                )
+            elif response.type == 'USER':
+                self.questions.append(
+                    UserResponseQuestion(
+                        blueprint=self.blueprint,
+                        instance=response,
+                    )
+                )
+        self.blueprint.responses += self.questions
+
+    def at_least_one_created(self):
+        return self.get_queryset().count() > 0
+
+    def get_queryset(self):
+        return Response.objects.filter(
+            registration=self.blueprint.object,
+        )
+
+    def no_errors(self):
+        return True

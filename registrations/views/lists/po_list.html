@@ -27,7 +27,7 @@
         {% for object in results %}
             <tr>
               <td>
-                <a href="{% url 'registrations:overview' object.pk %}">
+                <a href="{% url 'registrations:response' object.pk %}">
                   {{object.registration_title}}
                 </a>
               </td>

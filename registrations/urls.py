@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import RegistrationsHomeView, RegistrationCreateView, \
     RegistrationOverview, RegistrationQuestionEditView, RegistrationDeleteView, \
-    RegistrationSummaryView, \
+    RegistrationSummaryView, RegistrationResponseView, \
     InvolvedManager, StepperView, BlueprintQuestionEditView, \
     ReceiverDeleteView, SoftwareDeleteView, LandingView, MyRegistrationsList, \
     PORegistrationsList, AttachmentDeleteView, FaqDetailView
@@ -22,7 +22,7 @@ urlpatterns = [
          InvolvedManager.as_view(),
          name='involved_manager',
          ),
-
+     
     # Question edit views
     path('<int:reg_pk>/<str:question>/edit/<int:question_pk>/',
          BlueprintQuestionEditView.as_view(
@@ -41,6 +41,10 @@ urlpatterns = [
     path('<int:reg_pk>/summary/',
          RegistrationSummaryView.as_view(),
          name='summary',
+         ),
+    path('<int:reg_pk>/response/', 
+         RegistrationResponseView.as_view(),
+         name = 'response',
          ),
     path('new/', RegistrationCreateView.as_view(), name='new_registration'),
     

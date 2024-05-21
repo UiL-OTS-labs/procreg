@@ -9,7 +9,7 @@ from cdh.questions.blueprints import Blueprint
 from .models import Registration, Involved
 # from .progress import RegistrationProgressBar
 from .consumers import TopQuestionsConsumer, NewRegistrationConsumer, \
-    FacultyConsumer
+    FacultyConsumer, ResponseConsumer
 
 
 info = logging.info
@@ -91,6 +91,7 @@ class RegistrationBlueprint(Blueprint):
         NewRegistrationConsumer,
         FacultyConsumer,
         TopQuestionsConsumer,
+        ResponseConsumer
     ]
 
     def __init__(self, registration):
@@ -105,6 +106,7 @@ class RegistrationBlueprint(Blueprint):
         # Completed is the list of items which are considered
         # correctly filled in. They show up on the summary page.
         self.completed = CompletedList(self)
+        self.responses = []
         self.questions = []
         self.errors = BlueprintErrors()
         self.start()
