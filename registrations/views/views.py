@@ -220,6 +220,7 @@ class RegistrationResponseView(
     model = Response
     question_class = PoResponseQuestion
     pk_url_kwarg = 'reg_pk'
+    group_required = ("PO",) 
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -236,13 +237,11 @@ class RegistrationResponseView(
                        "blueprint": blueprint,
                        })
         return kwargs
-
+    
     def get_allowed_users(self):
-        user = self.request.user
-        allowed = []
-        if "PO" in [g.name for g in user.groups.all()]:
-            allowed.append(user)
-        return allowed
+        """Override get_allowed_user from RegistrationMixin to make sure
+        it wil check for group_required"""
+        return []
 
     def get_object(self):
         return self.get_question_object()
